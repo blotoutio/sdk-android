@@ -28,7 +28,7 @@ public class BlotoutAnalytics_Internal {
     public boolean isDeveloperEventsEnabled = true;
     public boolean isDataCollectionEnabled = true;
     public boolean isNetworkSyncEnabled = true;
-    public boolean isDataEncryptionEnabled = false;
+    public boolean isDataEncryptionEnabled = true;
     public boolean isSDKLogEnabled = false;
 
     public String testBlotoutKey ;
