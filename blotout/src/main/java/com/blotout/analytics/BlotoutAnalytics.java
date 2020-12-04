@@ -20,6 +20,7 @@ import com.blotout.events.BOLifeTimeAllEvent;
 import com.blotout.events.BORetentionEvents;
 import com.blotout.eventsExecutor.BODeviceOperationExecutorHelper;
 import com.blotout.eventsExecutor.BOGeoRetentionOperationExecutorHelper;
+import com.blotout.eventsExecutor.BOInitializationExecutorHelper;
 import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
 import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.eventsExecutor.BONetworkSegmentExecutorHelper;
@@ -836,69 +837,75 @@ public class BlotoutAnalytics {
     private void initializeEngine(@NonNull Context context) {
         try {
 
-            BOAEvents.initDefaultConfigurationWithHandler(context, new BOHandlerMessage() {
-                @SuppressLint("MissingPermission")
+            BOInitializationExecutorHelper.getInstance().post(new Runnable() {
                 @Override
-                public void handleMessage(@NonNull BOMessage msg) {
-
-                    setupManifestValues();
-
-                    BOLifetimeOperationExecutorHelper.getInstance().post(new Runnable() {
+                public void run() {
+                    BOAEvents.initDefaultConfigurationWithHandler(context, new BOHandlerMessage() {
+                        @SuppressLint("MissingPermission")
                         @Override
-                        public void run() {
+                        public void handleMessage(@NonNull BOMessage msg) {
+
+                            setupManifestValues();
+
+                            BOLifetimeOperationExecutorHelper.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        BOLifeTimeAllEvent.getInstance().setAppLifeTimeSystemInfoOnAppLaunch();
+                                    } catch (Exception e) {
+                                        Logger.INSTANCE.e(TAG, e.toString());
+                                    }
+                                }
+                            });
+
+                            BOAppSessionEvents.getInstance().postInitLaunchEventsRecording();
+
+                            BOGeoRetentionOperationExecutorHelper.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        BORetentionEvents.getInstance().recordDAUWithPayload(null);
+                                        BORetentionEvents.getInstance().recordDPUWithPayload(null);
+                                        BORetentionEvents.getInstance().recordAppInstalledWithPayload(true, null);
+                                        BORetentionEvents.getInstance().recordNewUserWithPayload(true, null);
+                                    } catch (Exception e) {
+                                        Logger.INSTANCE.e(TAG, e.toString());
+                                    }
+                                }
+                            });
+
+
+                            BONetworkSegmentExecutorHelper.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BOSegmentsSyncController.getInstance().prepareSegmentsSyncAndAnalyser();
+                                }
+                            });
+
+                            BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BOFunnelSyncController.getInstance().prepareFunnnelSyncAndAnalyser();
+                                }
+                            });
+
                             try {
-                                BOLifeTimeAllEvent.getInstance().setAppLifeTimeSystemInfoOnAppLaunch();
-                            } catch (Exception e) {
+                                BOPiiEvents.getInstance().isEnabled = true;
+                                BOPiiEvents.getInstance().startCollectingUserLocationEvent();
+                            } catch (SecurityException e) {
+                                //Location Permission is not there
                                 Logger.INSTANCE.e(TAG, e.toString());
                             }
+
+                            recordingDeviceEvents();
+
+                            postPendingEvents();
+
                         }
                     });
-
-                    BOAppSessionEvents.getInstance().postInitLaunchEventsRecording();
-
-                    BOGeoRetentionOperationExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                BORetentionEvents.getInstance().recordDAUWithPayload(null);
-                                BORetentionEvents.getInstance().recordDPUWithPayload(null);
-                                BORetentionEvents.getInstance().recordAppInstalledWithPayload(true, null);
-                                BORetentionEvents.getInstance().recordNewUserWithPayload(true, null);
-                            } catch (Exception e) {
-                                Logger.INSTANCE.e(TAG, e.toString());
-                            }
-                        }
-                    });
-
-
-                    BONetworkSegmentExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            BOSegmentsSyncController.getInstance().prepareSegmentsSyncAndAnalyser();
-                        }
-                    });
-
-                    BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            BOFunnelSyncController.getInstance().prepareFunnnelSyncAndAnalyser();
-                        }
-                    });
-
-                    try {
-                        BOPiiEvents.getInstance().isEnabled = true;
-                        BOPiiEvents.getInstance().startCollectingUserLocationEvent();
-                    } catch (SecurityException e) {
-                        //Location Permission is not there
-                        Logger.INSTANCE.e(TAG, e.toString());
-                    }
-
-                    recordingDeviceEvents();
-
-                    postPendingEvents();
-
                 }
             });
+
 
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
