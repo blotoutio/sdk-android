@@ -209,48 +209,52 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
     }
 
     private void recordAppNavigation() {
-        BOAppSessionDataModel appSessionData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null);
-        BOSharedManager extentionManager = BOSharedManager.getInstance();
+        try {
+            BOAppSessionDataModel appSessionData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null);
+            BOSharedManager extentionManager = BOSharedManager.getInstance();
 
-        if (extentionManager.currentNavigation != null) {
-            List<BOAppNavigation> appNavigationArray = appSessionData.getSingleDaySessions().getUbiAutoDetected().getAppNavigation();
-            if (extentionManager.currentTime > 0.0) {
-                if (extentionManager.currentTimer != null) {
-                    extentionManager.currentTimer.cancel();
+            if (extentionManager.currentNavigation != null) {
+                List<BOAppNavigation> appNavigationArray = appSessionData.getSingleDaySessions().getUbiAutoDetected().getAppNavigation();
+                if (extentionManager.currentTime > 0.0) {
+                    if (extentionManager.currentTimer != null) {
+                        extentionManager.currentTimer.cancel();
+                    }
+                    extentionManager.currentNavigation.setTimeSpent(extentionManager.currentTime);
                 }
-                extentionManager.currentNavigation.setTimeSpent(extentionManager.currentTime);
+
+                appNavigationArray.add(extentionManager.currentNavigation);
+
+                appSessionData.getSingleDaySessions().getUbiAutoDetected().setAppNavigation(appNavigationArray);
             }
 
-            appNavigationArray.add(extentionManager.currentNavigation);
+            BOAppNavigation navObject = new BOAppNavigation();
+            if(extentionManager.currentNavigation != null) {
+                navObject.setFrom(extentionManager.currentNavigation.getTo()!= null ? extentionManager.currentNavigation.getTo() : this.activityName);
+            } else {
+                navObject.setFrom(this.activityName);
+            }
 
-            appSessionData.getSingleDaySessions().getUbiAutoDetected().setAppNavigation(appNavigationArray);
+            navObject.setTo(this.activityName);
+            extentionManager.currentNavigation = navObject;
+
+
+            if (extentionManager.currentTimer != null) {
+                extentionManager.currentTimer.cancel();
+            }
+            extentionManager.currentTimer = createTimer();
+            extentionManager.currentTime = 1;
+
+            //Funnel execution and testing based
+            BOFunnelSyncController.getInstance().recordNavigationEventFrom(navObject.getFrom(), navObject.getTo(), new HashMap<>());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
-
-        BOAppNavigation navObject = new BOAppNavigation();
-        if(extentionManager.currentNavigation != null) {
-            navObject.setFrom(extentionManager.currentNavigation.getTo()!= null ? extentionManager.currentNavigation.getTo() : this.activityName);
-        } else {
-            navObject.setFrom(this.activityName);
-        }
-
-        navObject.setTo(this.activityName);
-        extentionManager.currentNavigation = navObject;
-
-
-        if (extentionManager.currentTimer != null) {
-            extentionManager.currentTimer.cancel();
-        }
-        extentionManager.currentTimer = createTimer();
-        extentionManager.currentTime = 0;
-
-        //Funnel execution and testing based
-        BOFunnelSyncController.getInstance().recordNavigationEventFrom(navObject.getFrom(), navObject.getTo(), new HashMap<>());
     }
 
     private Timer createTimer() {
         Timer timer = new Timer();
         TimerTask task = new Helper();
-        timer.schedule(task, 1);
+        timer.schedule(task, 0,1000);
         return timer;
     }
 
@@ -290,7 +294,7 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
     class Helper extends TimerTask {
         public void run() {
             BOSharedManager extentionManager = BOSharedManager.getInstance();
-            extentionManager.currentTime += 0.1;
+            extentionManager.currentTime += 1;
         }
     }
 }
