@@ -22,6 +22,7 @@ public class BOAccessoriesAttached {
     private boolean status;
     private long timeStamp;
     private String mid;
+    private String sessionId;
 
     @JsonProperty("mid")
     public String getMid() { return mid; }
@@ -42,6 +43,11 @@ public class BOAccessoriesAttached {
     public long getTimeStamp() { return timeStamp; }
     @JsonProperty("timeStamp")
     public void setTimeStamp(long value) { this.timeStamp = value; }
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     /*
         Model to json and vice-versa Conversion Methods

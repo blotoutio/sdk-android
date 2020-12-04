@@ -25,6 +25,12 @@ public class BORetentionEvent {
     private BODast dast;
     private List<BOCustomEvent> customEvents;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

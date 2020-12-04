@@ -38,6 +38,7 @@ public class BOExceptionHandler implements Thread.UncaughtExceptionHandler {
                 crashDetail.put("name", getExceptionName(e));
                 crashDetail.put("reason", e.getCause().toString());
                 crashDetail.put("info", null);
+                crashDetail.put("messageId",BOSharedManager.getInstance().sessionId);
 
                 if (e.getStackTrace() != null) {
                     List<String> stackTrace = new ArrayList<>();

@@ -22,11 +22,18 @@ public class BOChargeTransaction {
     private String transactionClassName;
     private HashMap<String,Object> transactionInfo;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
+
     @JsonProperty("sentToServer")
     public boolean getSentToServer() { return sentToServer; }
     @JsonProperty("sentToServer")

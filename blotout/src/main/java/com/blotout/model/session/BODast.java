@@ -21,6 +21,12 @@ public class BODast {
     private long averageSessionTime;
     private HashMap<String,Object> payload;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

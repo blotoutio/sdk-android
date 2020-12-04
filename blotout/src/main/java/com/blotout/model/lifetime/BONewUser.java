@@ -23,7 +23,7 @@ public class BONewUser {
     private long timeStamp;
     private HashMap<String,Object> theNewUserInfo;
     private boolean sentToServer;
-
+    private String sessionId;
 
     @JsonProperty("sentToServer")
     public boolean getSentToServer() { return sentToServer; }
@@ -50,6 +50,10 @@ public class BONewUser {
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
 
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
     /*
         Model to json and vice-versa Conversion Methods
      */

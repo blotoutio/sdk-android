@@ -23,7 +23,12 @@ public class BOSessionInfo {
     private long start;
     private long end;
     private long duration;
+    private String sessionId;
 
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

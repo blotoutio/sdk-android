@@ -1,6 +1,7 @@
 package com.blotout.events;
 
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
+import com.blotout.analytics.BOSharedManager;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
 import com.blotout.model.session.BOAppSessionDataModel;
@@ -50,6 +51,7 @@ public class BOCommonEvents {
                 customEventModelDict.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEventModelDict.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 customEventModelDict.put(BONetworkConstants.BO_MESSAGE_ID,BOCommonUtils.getMessageIDForEvent(eventName));
+                customEventModelDict.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCommonEvent customEventModel = BOCommonEvent.fromJsonDictionary(customEventModelDict);
                 List<BOCommonEvent> existingCommonEvents = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getCommonEvents();
@@ -77,6 +79,7 @@ public class BOCommonEvents {
                 customEventModelDict.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEventModelDict.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 customEventModelDict.put(BONetworkConstants.BO_MESSAGE_ID,BOCommonUtils.getMessageIDForEvent(eventName));
+                customEventModelDict.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCommonEvent customEventModel = BOCommonEvent.fromJsonDictionary(customEventModelDict);
                 List<BOCommonEvent> existingCommonEvents = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getCommonEvents();
@@ -104,6 +107,7 @@ public class BOCommonEvents {
                 customEventModelDict.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEventModelDict.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 customEventModelDict.put(BONetworkConstants.BO_MESSAGE_ID,BOCommonUtils.getMessageIDForEvent(eventName));
+                customEventModelDict.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCommonEvent customEventModel = BOCommonEvent.fromJsonDictionary(customEventModelDict);
                 List<BOCommonEvent> existingCommonEvents = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getCommonEvents();
@@ -131,6 +135,7 @@ public class BOCommonEvents {
                 customEventModelDict.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEventModelDict.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 customEventModelDict.put(BONetworkConstants.BO_MESSAGE_ID,BOCommonUtils.getMessageIDForEvent(eventName));
+                customEventModelDict.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCommonEvent customEventModel = BOCommonEvent.fromJsonDictionary(customEventModelDict);
                 List<BOCommonEvent> existingCommonEvents = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getCommonEvents();

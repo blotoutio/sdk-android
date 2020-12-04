@@ -21,6 +21,7 @@ public class BODau {
     private HashMap<String,Object> dauInfo;
     private boolean sentToServer;
     private String mid;
+    private String sessionId;
 
     @JsonProperty("sentToServer")
     public boolean getSentToServer() { return sentToServer; }
@@ -42,6 +43,10 @@ public class BODau {
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
 
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     /*
         Model to json and vice-versa Conversion Methods

@@ -25,6 +25,12 @@ public class BOAdInfo {
     private String mid;
     private String  advertisingId;
     private boolean  isAdDoNotTrack;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

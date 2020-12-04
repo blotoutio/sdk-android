@@ -23,6 +23,12 @@ public class BOListUpdated {
     private String listClassName;
     private HashMap<String,Object> updatesInfo;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

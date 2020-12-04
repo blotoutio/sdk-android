@@ -80,6 +80,7 @@ public class BODeviceEvents {
                 stringObjectHashMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 stringObjectHashMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("MultiTaskingState"));
                 stringObjectHashMap.put(BOCommonConstants.BO_STATUS, false); // BOCommonUtils.isMultitaskEnabled(mContext));
+                stringObjectHashMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached boAccessoriesAttached = BOAccessoriesAttached.fromJsonDictionary(
                         stringObjectHashMap);
@@ -97,6 +98,7 @@ public class BODeviceEvents {
                 proximityHashMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 proximityHashMap.put(BOCommonConstants.BO_STATUS,
                         BOCommonUtils.getSensorEnabled(mContext, Sensor.TYPE_PROXIMITY));
+                proximityHashMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached boProximitySensor = BOAccessoriesAttached.fromJsonDictionary(
                         proximityHashMap);
@@ -113,6 +115,7 @@ public class BODeviceEvents {
                 debuggerAttachedMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("DebuggerAttachedState"));
                 debuggerAttachedMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 debuggerAttachedMap.put(BOCommonConstants.BO_STATUS, (BuildConfig.DEBUG));
+                debuggerAttachedMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached boAccessoriesAttachedDebugger =
                         BOAccessoriesAttached.fromJsonDictionary(
@@ -130,6 +133,7 @@ public class BODeviceEvents {
                 pluggedInMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("PluggedIn"));
                 pluggedInMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 pluggedInMap.put(BOCommonConstants.BO_STATUS, mDeviceInfo.isPhoneCharging());
+                pluggedInMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached boAccessoriesAttachedPluggedIn =
                         BOAccessoriesAttached.fromJsonDictionary(
@@ -147,6 +151,7 @@ public class BODeviceEvents {
                 rootedDeviceMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("JailBroken"));
                 rootedDeviceMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 rootedDeviceMap.put(BOCommonConstants.BO_STATUS, mDeviceInfo.isDeviceRooted());
+                rootedDeviceMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached boAccessoriesAttachedRootedDevice =
                         BOAccessoriesAttached.fromJsonDictionary(
@@ -164,6 +169,7 @@ public class BODeviceEvents {
                 noOfActiveCoresMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("ActiveProcessor"));
                 noOfActiveCoresMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 noOfActiveCoresMap.put(BOCommonConstants.BO_NUMBER, BOCommonUtils.getNumberOfActiveCores());
+                noOfActiveCoresMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BONumberOfA boNumberOfA = BONumberOfA.fromJsonDictionary(
                         noOfActiveCoresMap);
@@ -192,6 +198,7 @@ public class BODeviceEvents {
                     processorUsageMap.put(BOCommonConstants.BO_PROCESSOR_ID, processInfo.pid);
                     //TODO: need to get cpu usage percentage.Hardcoded as 10
                     processorUsageMap.put(BOCommonConstants.BO_USAGE_PERCENTAGE, 10);
+                    processorUsageMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOProcessorsUsage boProcessorsUsage = BOProcessorsUsage.fromJsonDictionary(
                             processorUsageMap);
@@ -209,6 +216,7 @@ public class BODeviceEvents {
                 accessoriesAttachedMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 accessoriesAttachedMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("AccessoriesAttached"));
                 accessoriesAttachedMap.put(BOCommonConstants.BO_STATUS, BOCommonUtils.iSAccessoriesAttached(mContext));
+                accessoriesAttachedMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached accessoriesAttached = BOAccessoriesAttached.fromJsonDictionary(
                         accessoriesAttachedMap);
@@ -224,6 +232,7 @@ public class BODeviceEvents {
                 headphoneAttachedMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 headphoneAttachedMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("HeadphoneAttached"));
                 headphoneAttachedMap.put(BOCommonConstants.BO_STATUS, BOCommonUtils.iSAccessoriesAttached(mContext));
+                headphoneAttachedMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached headphoneAttached = BOAccessoriesAttached.fromJsonDictionary(
                         headphoneAttachedMap);
@@ -241,6 +250,7 @@ public class BODeviceEvents {
                 noOfAccessoriesAttachedMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("NumberOfAccessories"));
                 noOfAccessoriesAttachedMap.put(BOCommonConstants.BO_NUMBER,
                         BOCommonUtils.getNameAccessoriesAttached(mContext).size());
+                noOfAccessoriesAttachedMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BONumberOfA boNumberOfA1 = BONumberOfA.fromJsonDictionary(
                         noOfAccessoriesAttachedMap);
@@ -257,6 +267,7 @@ public class BODeviceEvents {
                 nameOfAttachedAccessoriesMap.put(BOCommonConstants.BO_TIME_STAMP,
                         BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 nameOfAttachedAccessoriesMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("NameOfAccessory"));
+                nameOfAttachedAccessoriesMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 nameOfAttachedAccessoriesMap.put(BOCommonConstants.BO_NAMES,
                         BOCommonUtils.getNameAccessoriesAttached(mContext));
@@ -277,6 +288,7 @@ public class BODeviceEvents {
                 batteryLevelMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 batteryLevelMap.put(BOCommonConstants.BO_PERCENTAGE, mDeviceInfo.getBatteryPercent());
                 batteryLevelMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("BatteryLevel"));
+                batteryLevelMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOBatteryLevel batteryLevel = BOBatteryLevel.fromJsonDictionary(
                         batteryLevelMap);
@@ -293,6 +305,7 @@ public class BODeviceEvents {
                 batteryChargingMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 batteryChargingMap.put(BOCommonConstants.BO_STATUS, mDeviceInfo.isPhoneCharging());
                 batteryChargingMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("BatteryCharging"));
+                batteryChargingMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached batteryCharging = BOAccessoriesAttached.fromJsonDictionary(
                         batteryChargingMap);
@@ -309,7 +322,7 @@ public class BODeviceEvents {
                 fullyChargedBatteryMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 fullyChargedBatteryMap.put(BOCommonConstants.BO_STATUS, (mDeviceInfo.getBatteryPercent() == 100));
                 fullyChargedBatteryMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("BatteryFullCharged"));
-
+                fullyChargedBatteryMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAccessoriesAttached fullyChargedBattery = BOAccessoriesAttached.fromJsonDictionary(
                         fullyChargedBatteryMap);
@@ -327,7 +340,7 @@ public class BODeviceEvents {
                 deviceOrientationMap.put(BOCommonConstants.BO_ORIENTATION,
                         mContext.getResources().getConfiguration().orientation);
                 deviceOrientationMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_DEVICE_ORIENTATION));
-
+                deviceOrientationMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BODeviceOrientation boDeviceOrientation = BODeviceOrientation.fromJsonDictionary(
                         deviceOrientationMap);
@@ -345,6 +358,7 @@ public class BODeviceEvents {
                 bocfuuidMap.put("cfUUID",
                         mDeviceInfo.getAndroidId());
                 bocfuuidMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("CFUUID"));
+                bocfuuidMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCFUUID bocfuuid = BOCFUUID.fromJsonDictionary(
                         bocfuuidMap);
@@ -361,6 +375,7 @@ public class BODeviceEvents {
                 // val manufacturer = Build.MANUFACTURER + val model = Build.MODEL
                 boVendorIDMap.put("vendorID", mDeviceInfo.getDeviceName());
                 boVendorIDMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("VendorID"));
+                boVendorIDMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOVendorID boVendorID = BOVendorID.fromJsonDictionary(
                         boVendorIDMap);
@@ -387,6 +402,7 @@ public class BODeviceEvents {
                 boExternalIpAddressMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 boExternalIpAddressMap.put("ipAddress", BOCommonUtils.getExternalIpAddress());
                 boExternalIpAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("ExternalIPAddress"));
+                boExternalIpAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
                 BOIPAddress boExternalIp = BOIPAddress.fromJsonDictionary(
                         boExternalIpAddressMap);
                 List<BOIPAddress> boExternalIpList =
@@ -418,7 +434,7 @@ public class BODeviceEvents {
                        BOCommonUtils.getIPAddress(true);
                boIpAddressMap.put("ipAddress", ipAddress);
                boIpAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("CurrentIPAddress"));
-
+               boIpAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOIPAddress boIpAddress = BOIPAddress.fromJsonDictionary(
                        boIpAddressMap);
@@ -435,6 +451,7 @@ public class BODeviceEvents {
                cellIPAddressMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                cellIPAddressMap.put("ipAddress", BOCommonUtils.getCellularIPAddress());
                cellIPAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("CellIPAddress"));
+               cellIPAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOIPAddress cellIPAddress = BOIPAddress.fromJsonDictionary(
                        cellIPAddressMap);
@@ -451,6 +468,7 @@ public class BODeviceEvents {
                netmaskMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                netmaskMap.put("netmask", BOCommonUtils.getNetMask(mContext));
                netmaskMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("CellNetMask"));
+               netmaskMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BONetMask netmask = BONetMask.fromJsonDictionary(
                        netmaskMap);
@@ -466,6 +484,7 @@ public class BODeviceEvents {
                broadcastAddressMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                broadcastAddressMap.put("broadcastAddress", BOCommonUtils.getCellBroadcastAddress());
                broadcastAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("CellBroadcastAddress"));
+               broadcastAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOBroadcastAddress broadcastAddress = BOBroadcastAddress.fromJsonDictionary(
                        broadcastAddressMap);
@@ -480,7 +499,7 @@ public class BODeviceEvents {
                wifiIPAddressMap.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                wifiIPAddressMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                wifiIPAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("WifiIPAddress"));
-
+               wifiIPAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                boIpAddressMap.put("ipAddress", mDeviceInfo.getWifiMacAddress(mContext));
 
@@ -498,6 +517,7 @@ public class BODeviceEvents {
                wifinetmaskMap.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                wifinetmaskMap.put("netmask", BOCommonUtils.getNetMask(mContext));
                wifinetmaskMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("WifiNetMask"));
+               wifinetmaskMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BONetMask wifinetmask = BONetMask.fromJsonDictionary(
                        wifinetmaskMap);
@@ -515,6 +535,7 @@ public class BODeviceEvents {
                wifiBroadcastAddressMap.put("broadcastAddress",
                        BOCommonUtils.getWifiBroadcastAddress(mContext));
                wifiBroadcastAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("WifiBroadcastAddress"));
+               wifiBroadcastAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOBroadcastAddress wifiBroadcastAddress = BOBroadcastAddress.fromJsonDictionary(
                        wifiBroadcastAddressMap);
@@ -532,6 +553,7 @@ public class BODeviceEvents {
                //TODO: need to re-verify
                routerAddressMap.put("routerAddress", BOCommonUtils.getRouterAddress(mContext));
                routerAddressMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("WifiRouterAddress"));
+               routerAddressMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOWifiRouterAddress boWifiRouterAddress = BOWifiRouterAddress.fromJsonDictionary(
                        routerAddressMap);
@@ -549,6 +571,7 @@ public class BODeviceEvents {
                //Write logic for generate based on LanPing library later
                ssidMap.put("ssid", BOCommonUtils.getCurrentSsid(mContext));
                ssidMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("WifiSSID"));
+               ssidMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOWifiSSID ssid = BOWifiSSID.fromJsonDictionary(
                        ssidMap);
@@ -564,6 +587,7 @@ public class BODeviceEvents {
                connectedToWifiMap.put("isConnected",
                        (mDeviceInfo.isWifiEnabled() && mDeviceInfo.isNetworkAvailable()));
                connectedToWifiMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("ConnectedToWifi"));
+               connectedToWifiMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOConnectedTo connectedTo = BOConnectedTo.fromJsonDictionary(
                        connectedToWifiMap);
@@ -581,6 +605,7 @@ public class BODeviceEvents {
                connectedToCellMap.put("isConnected",
                        (!mDeviceInfo.isWifiEnabled() && mDeviceInfo.isNetworkAvailable()));
                connectedToCellMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("ConnectedToCellNet"));
+               connectedToCellMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                BOConnectedTo connectedToCell = BOConnectedTo.fromJsonDictionary(
                        connectedToCellMap);
@@ -610,6 +635,7 @@ public class BODeviceEvents {
                 bOStorageInfoMap.put("freeDiskSpace", mDeviceInfo.getAvailableInternalMemorySize());
                 bOStorageInfoMap.put("unit", "GB");
                 bOStorageInfoMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("StorageInfo"));
+                bOStorageInfoMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
 
                 BOStorageInfo bOStorageInf = BOStorageInfo.fromJsonDictionary(
@@ -643,7 +669,7 @@ public class BODeviceEvents {
                     bOMemoryInfoMap.put("inActiveMemory", "0");
                     bOMemoryInfoMap.put("purgeableMemory", "0");
                     bOMemoryInfoMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("MemoryRAMInfo"));
-
+                    bOMemoryInfoMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
                     //---
 
 
@@ -677,6 +703,7 @@ public class BODeviceEvents {
                 stringObjectHashMap.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("AdInfo"));
                 stringObjectHashMap.put("advertisingId",mAdInfo.getAd().getAdvertisingId());
                 stringObjectHashMap.put("isAdDoNotTrack", mAdInfo.getAd().isAdDoNotTrack());
+                stringObjectHashMap.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAdInfo adInfo = BOAdInfo.fromJsonDictionary(stringObjectHashMap);
                 List<BOAdInfo> adInfoList = singalDaySessions.getAdInfo();

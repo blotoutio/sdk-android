@@ -2,6 +2,7 @@ package com.blotout.events;
 import androidx.annotation.Nullable;
 
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
+import com.blotout.analytics.BOSharedManager;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
@@ -266,6 +267,7 @@ public class BOLifeTimeAllEvent {
                     appwau.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_WAU));
                     appwau.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     appwau.put(BOCommonConstants.BO_WAU_INFO, null);
+                    appwau.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOWau wau = BOWau.fromJsonDictionary(appwau);
                     info.getRetentionEvent().setWau(wau);
@@ -293,6 +295,7 @@ public class BOLifeTimeAllEvent {
                     appmau.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_MAU));
                     appmau.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     appmau.put(BOCommonConstants.BO_MAU_INFO, null);
+                    appmau.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOMau mau = BOMau.fromJsonDictionary(appmau);
                     info.getRetentionEvent().setMau(mau);
@@ -330,6 +333,7 @@ public class BOLifeTimeAllEvent {
             appwpu.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_WPU));
             appwpu.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
             appwpu.put(BOCommonConstants.BO_WPU_INFO, null);
+            appwpu.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
             BOWpu wpu = BOWpu.fromJsonDictionary(appwpu);
             info.getRetentionEvent().setWpu(wpu);
@@ -355,6 +359,7 @@ public class BOLifeTimeAllEvent {
             appmpu.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_MPU));
             appmpu.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
             appmpu.put(BOCommonConstants.BO_MPU_INFO, null);
+            appmpu.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
             BOMpu mpu = BOMpu.fromJsonDictionary(appmpu);
             info.getRetentionEvent().setMpu(mpu);
@@ -384,6 +389,7 @@ public class BOLifeTimeAllEvent {
                      appInstalled.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                      appInstalled.put(BOCommonConstants.BO_IS_FIRST_LAUNCH, isAppFirstLaunch);
                      appInstalled.put(BOCommonConstants.BO_APP_INSTALLED_INFO, null);
+                     appInstalled.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                      BOAppInstalled app = BOAppInstalled.fromJsonDictionary(appInstalled);
 
@@ -418,6 +424,7 @@ public class BOLifeTimeAllEvent {
                      newUser.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                      newUser.put(BOCommonConstants.BO_IS_NEW_USER, isNewUserInstallCheck);
                      newUser.put(BOCommonConstants.BO_THE_NEW_USER_INFO, null);
+                     newUser.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                      BONewUser theNewUser = BONewUser.fromJsonDictionary(newUser);
 
@@ -761,6 +768,7 @@ public class BOLifeTimeAllEvent {
                     wast.put(BOCommonConstants.BO_DAST_INFO, null);
                     wast.put(BOCommonConstants.BO_MAST_INFO, null);
                     wast.put(BOCommonConstants.BO_WAST_INFO, averageSessionInfo);
+                    wast.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOAST wastObj = BOAST.fromJsonDictionary(wast);
 
@@ -802,6 +810,7 @@ public class BOLifeTimeAllEvent {
                     mast.put(BOCommonConstants.BO_DAST_INFO, null);
                     mast.put(BOCommonConstants.BO_MAST_INFO, averageSessionInfo);
                     mast.put(BOCommonConstants.BO_WAST_INFO, null);
+                    mast.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOAST mastObj = BOAST.fromJsonDictionary(mast);
 
@@ -832,6 +841,7 @@ public class BOLifeTimeAllEvent {
                     dast.put(BOCommonConstants.BO_EVENT_INFO, customEventInfo);
                     dast.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                     dast.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
+                    dast.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BOCustomEvents customEvents = BOCustomEvents.fromJsonDictionary(dast);
                     info.getRetentionEvent().setCustomEvents(customEvents);

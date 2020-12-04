@@ -65,6 +65,7 @@ public class BOActivityOrientationListener extends OrientationEventListener {
                                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("Portrait"));
+                                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
                                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                                 BOAppSessionDataModel sessionInstance = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null);
                                 List<BOApp> existingData = sessionInstance.getSingleDaySessions().getAppStates().getAppOrientationPortrait();
@@ -76,6 +77,7 @@ public class BOActivityOrientationListener extends OrientationEventListener {
                                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("Landscape"));
+                                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
                                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                                 BOAppSessionDataModel sessionInstance = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null);
                                 List<BOApp> existingData = sessionInstance.getSingleDaySessions().getAppStates().getAppOrientationLandscape();

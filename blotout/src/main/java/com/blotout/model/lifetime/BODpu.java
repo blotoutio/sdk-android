@@ -21,6 +21,7 @@ public class BODpu {
     private long timeStamp;
     private HashMap<String,Object> dpuInfo;
     private String mid;
+    private String sessionId;
 
     @JsonProperty("sentToServer")
     public boolean getSentToServer() { return sentToServer; }
@@ -42,7 +43,10 @@ public class BODpu {
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
 
-
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
      /*
         Model to json and vice-versa Conversion Methods

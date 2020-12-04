@@ -3,6 +3,7 @@ package com.blotout.events;
 import androidx.annotation.Nullable;
 
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
+import com.blotout.analytics.BOSharedManager;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
@@ -56,6 +57,7 @@ public class BORetentionEvents extends BOAEvents {
                     appDau.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_DAU));
                     appDau.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     appDau.put(BOCommonConstants.BO_DAU_INFO, infoActiveUser);
+                    appDau.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BODau dau = BODau.fromJsonDictionary(appDau);
 
@@ -81,6 +83,8 @@ public class BORetentionEvents extends BOAEvents {
                     appDpu.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_DPU));
                     appDpu.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     appDpu.put(BOCommonConstants.BO_DPU_INFO, infoPayingUser);
+                    appDpu.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
+
                     BODpu dpu = BODpu.fromJsonDictionary(appDpu);
                     BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getRetentionEvent().setDpu(dpu);
                 }
@@ -107,6 +111,7 @@ public class BORetentionEvents extends BOAEvents {
                 appInstalled.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStampFor(documentsDirCrDate));
                 appInstalled.put(BOCommonConstants.BO_IS_FIRST_LAUNCH, true);
                 appInstalled.put(BOCommonConstants.BO_APP_INSTALLED_INFO, appInstalledInfo);
+                appInstalled.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOAppInstalled appInstall = BOAppInstalled.fromJsonDictionary(appInstalled);
                 BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getRetentionEvent().setAppInstalled(appInstall);
@@ -132,6 +137,7 @@ public class BORetentionEvents extends BOAEvents {
                     newUser.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     newUser.put(BOCommonConstants.BO_IS_NEW_USER, true);
                     newUser.put(BOCommonConstants.BO_THE_NEW_USER_INFO, newUserInfo);
+                    newUser.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BONewUser user = BONewUser.fromJsonDictionary(newUser);
                     BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getRetentionEvent().setNewUser(user);
@@ -176,6 +182,7 @@ public class BORetentionEvents extends BOAEvents {
                     dastUser.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                     dastUser.put(BOCommonConstants.BO_AVERAGE_SESSION_TIME, averageSessionTime);
                     dastUser.put(BOCommonConstants.BO_PAYLOAD, averageSessionInfo);
+                    dastUser.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                     BODast dastModel = BODast.fromJsonDictionary(dastUser);
                     BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getRetentionEvent().setDast(dastModel);
@@ -201,6 +208,7 @@ public class BORetentionEvents extends BOAEvents {
                 customEvents.put(BOCommonConstants.BO_EVENT_SUB_CODE, this.codeForCustomCodifiedEvent(eventName));
                 customEvents.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEvents.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
+                customEvents.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOCustomEvent customEvent = BOCustomEvent.fromJsonDictionary(customEvents);
 

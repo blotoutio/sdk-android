@@ -25,6 +25,12 @@ public class BOCrashDetail {
     private HashMap<String,Object> info;
     private List<String> callStackSymbols;
     private List<Long> callStackReturnAddress;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

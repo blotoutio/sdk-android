@@ -24,6 +24,12 @@ public class BODoubleTap {
     private Map<String, Long> objectRect;
     private BOScreenRect screenRect;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }

@@ -7,6 +7,7 @@ import android.location.*;
 import androidx.annotation.*;
 
 import com.blotout.analytics.*;
+import com.blotout.constants.BONetworkConstants;
 import com.blotout.deviceinfo.device.*;
 import com.blotout.deviceinfo.device.DeviceInfo;
 import com.blotout.deviceinfo.location.*;
@@ -82,6 +83,8 @@ public class BOPiiEvents extends LocationTracker {
             boNonPIILocation.setSource(location.getProvider());
             boNonPIILocation.setSentToServer(false);
             boNonPIILocation.setMid(BOCommonUtils.getMessageIDForEvent("NonPIILocation"));
+            boNonPIILocation.setSessionId(BOSharedManager.getInstance().sessionId);
+
 
             BOPiiLocation boPIILocation = new BOPiiLocation();
 
@@ -89,6 +92,7 @@ public class BOPiiEvents extends LocationTracker {
             boPIILocation.setLongitude(location.getLongitude());
             boPIILocation.setMid(BOCommonUtils.getMessageIDForEvent("PIILocation"));
             boPIILocation.setSentToServer(false);
+            boPIILocation.setSessionId(BOSharedManager.getInstance().sessionId);
 
             BOLocation boLocation = new BOLocation();
             boLocation.setNonPIILocation(boNonPIILocation);
@@ -96,7 +100,7 @@ public class BOPiiEvents extends LocationTracker {
             boLocation.setSentToServer(false);
             boLocation.setMid(BOCommonUtils.getMessageIDForEvent("PiiNonPiiLocation"));
             boLocation.setTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp());
-
+            boLocation.setSessionId(BOSharedManager.getInstance().sessionId);
 
             List<BOLocation> existingLocations = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getLocation();
             existingLocations.add(boLocation);

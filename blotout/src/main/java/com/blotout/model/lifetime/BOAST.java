@@ -24,6 +24,7 @@ public class BOAST {
     private HashMap<String,Object> dastInfo;
     private HashMap<String,Object> mastInfo;
     private HashMap<String,Object> wastInfo;
+    private String sessionId;
 
     @JsonProperty("timeStamp")
     public long getTimeStamp() { return timeStamp; }
@@ -44,6 +45,11 @@ public class BOAST {
     public String getMid() { return mid; }
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("dastInfo")
     public HashMap<String,Object> getDastInfo() { return dastInfo; }

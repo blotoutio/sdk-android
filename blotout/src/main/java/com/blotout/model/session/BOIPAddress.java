@@ -21,6 +21,12 @@ public class BOIPAddress {
     private String ipAddress;
     private long timeStamp;
     private String mid;
+    private String sessionId;
+
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")
     public String getMid() { return mid; }
@@ -46,20 +52,25 @@ public class BOIPAddress {
         Model to json and vice-versa Conversion Methods
      */
 
+     /*
+        Model to json and vice-versa Conversion Methods
+     */
+
     public static BOIPAddress fromJsonString(String json) throws IOException {
         return getObjectReader().readValue(json);
     }
 
     @Nullable
-    public static BOIPAddress fromJsonDictionary(HashMap<String,Object> jsonDict) {
-       try {
-           String jsonString = null;
-        jsonString = BOCommonUtils.getJsonStringFromHashMap(jsonDict);
-        return getObjectReader().readValue(jsonString);
-    }catch (IOException e) {
-        Logger.INSTANCE.e(TAG, e.toString());
-    }
+    public static BOIPAddress fromJsonDictionary(HashMap<String,Object> jsonDict)  {
+        try {
+            String jsonString = null;
+            jsonString = BOCommonUtils.getJsonStringFromHashMap(jsonDict);
+            return getObjectReader().readValue(jsonString);
+        }catch (IOException e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+        }
         return null;
+
     }
 
     public static String toJsonString(BOIPAddress obj) throws JsonProcessingException {

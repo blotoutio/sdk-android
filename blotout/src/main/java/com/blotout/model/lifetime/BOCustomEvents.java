@@ -23,6 +23,7 @@ public class BOCustomEvents {
     private String visibleClassName;
     private boolean sentToServer;
     private String mid;
+    private String sessionId;
 
     @JsonProperty("timeStamp")
     public long getTimeStamp() { return timeStamp; }
@@ -54,6 +55,10 @@ public class BOCustomEvents {
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
 
+    @JsonProperty("sessionId")
+    public String getSessionId() { return sessionId; }
+    @JsonProperty("sessionId")
+    public void setSessionId(String value) { this.sessionId = value; }
 
 
     /*
