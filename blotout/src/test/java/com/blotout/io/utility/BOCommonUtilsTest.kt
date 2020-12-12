@@ -3,6 +3,7 @@ package com.blotout.io.utility
 import android.app.Application
 import com.blotout.io.BOTestUtils
 import com.blotout.io.BuildConfig
+import com.blotout.storage.BOSharedPreferenceImpl
 import com.blotout.utilities.BOCommonUtils
 import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions
@@ -32,6 +33,7 @@ class BOCommonUtilsTest {
         MockitoAnnotations.initMocks(this)
         context = BOTestUtils.mockApplication()
         whenever(context.applicationContext).thenReturn(context)
+        BOSharedPreferenceImpl.getInstance(context.applicationContext)
     }
 
     @Test
@@ -304,8 +306,14 @@ class BOCommonUtilsTest {
 
     @Test
     fun testCodeForCustomCodifiedEvent() {
-        var value = BOCommonUtils.codeForCustomCodifiedEvent("testEvent")
-        Assert.assertNotNull(value)
+        var eventNameWithUnderscore = BOCommonUtils.codeForCustomCodifiedEvent("awesome_event")
+        Assert.assertEquals(21308L,eventNameWithUnderscore)
+
+        var eventNameWithSpace = BOCommonUtils.codeForCustomCodifiedEvent("some awesome event")
+        Assert.assertEquals(21316L,eventNameWithSpace)
+
+        var eventNameWithAscii = BOCommonUtils.codeForCustomCodifiedEvent("目_awesome_event")
+        Assert.assertEquals(21349L,eventNameWithAscii)
     }
 
     @Test

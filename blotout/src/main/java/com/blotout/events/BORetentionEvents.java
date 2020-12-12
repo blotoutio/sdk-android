@@ -205,7 +205,7 @@ public class BORetentionEvents extends BOAEvents {
                 customEvents.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(eventName));
                 customEvents.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 customEvents.put(BOCommonConstants.BO_EVENT_INFO, costumEventInfo);
-                customEvents.put(BOCommonConstants.BO_EVENT_SUB_CODE, this.codeForCustomCodifiedEvent(eventName));
+                customEvents.put(BOCommonConstants.BO_EVENT_SUB_CODE, BOCommonUtils.codeForCustomCodifiedEvent(eventName));
                 customEvents.put(BOCommonConstants.BO_EVENT_NAME, eventName);
                 customEvents.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 customEvents.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);

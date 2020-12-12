@@ -579,65 +579,6 @@ public class BOAEvents {
         Thread.setDefaultUncaughtExceptionHandler(new BOExceptionHandler());
     }
 
-    /**
-     * This Method is used for creating unique name for any event
-     * @param eventName as String
-     * @return Long value as code
-     */
-    @Nullable
-    public Long codeForCustomCodifiedEvent(@Nullable String eventName) {
-        try {
-            String tempEventName = eventName.replaceAll(" ", "");
-            if (eventName != null && !eventName.equals("") && !tempEventName.equals("")) {
-                BOSharedPreferenceImpl analyticsRootUD = BOSharedPreferenceImpl.getInstance();
-                String codifiedEventsString = analyticsRootUD.getString(BOCommonConstants.BO_ANALYTICS_ALL_DEV_CODIFIED_CUSTOM_EVENTS);
-                HashMap<String, Object> allCustomEvents = BOCommonUtils.getHashmapFromJsonString(codifiedEventsString);
-
-                if (allCustomEvents == null) {
-                    allCustomEvents = new HashMap<>();
-                    //allCustomEvents.put(eventName, BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY);
-                    //analyticsRootUD.saveString(BOCommonConstants.BO_ANALYTICS_ALL_DEV_CODIFIED_CUSTOM_EVENTS, BOCommonUtils.getJsonStringFromHashMap(allCustomEvents));
-                    //return BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY;
-                }
-
-                boolean isNameFound = allCustomEvents.containsKey(eventName);
-                if (isNameFound) {
-                    return Long.valueOf((Integer) allCustomEvents.get(eventName));
-                } else {
-                    int eventNameIntSum = 0;
-                    boolean isAscii = BOCommonUtils.isPureAscii(eventName);
-                    if (isAscii) {
-                        eventNameIntSum = BOCommonUtils.getAsciiCustomIntSum(eventName, false);
-                    } else {
-                        eventNameIntSum = BOCommonUtils.getStringMD5CustomIntSumWithCharIndexAdded(eventName, false);
-                    }
-                    long eventNameIntSumModulo = eventNameIntSum % 9000;
-                    long eventSubCode = BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY + eventNameIntSumModulo; //21100
-                    Long eventSubCodeObj = eventSubCode;
-                    //Test for sub code exist and above logic generated duplicate code then increment by 1 until unique & if greater than 500 then decrement by one until unique.
-                    //if containsObject is having issues then move manual number to int and the int comaprision
-                    if (allCustomEvents.values().contains(eventSubCodeObj)) {
-                        Logger.INSTANCE.d(TAG, "codeForCustomCodifiedEvent: " + eventSubCodeObj);
-                    }
-
-                    while (allCustomEvents.values().contains(eventSubCodeObj)) {
-                        eventNameIntSum = eventNameIntSum + 1;
-                        eventNameIntSumModulo = eventNameIntSum % 9000;
-                        eventSubCode = BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY + eventNameIntSumModulo; //21100
-                        eventSubCodeObj = eventSubCode;
-                    }
-                    allCustomEvents.put(eventName, eventSubCodeObj);
-                    analyticsRootUD.saveString(BOCommonConstants.BO_ANALYTICS_ALL_DEV_CODIFIED_CUSTOM_EVENTS, BOCommonUtils.getJsonStringFromHashMap(allCustomEvents));
-                    return eventSubCodeObj;
-                }
-            }
-            return Long.valueOf((Integer) 0);
-        } catch (Exception e) {
-            Logger.INSTANCE.e(TAG, e.getMessage());
-            return Long.valueOf((Integer) 0);
-        }
-    }
-
     public static void storePreviousDayAppInfoViaNotification(HashMap<String, Object> appSessionObject) {
 
         try {

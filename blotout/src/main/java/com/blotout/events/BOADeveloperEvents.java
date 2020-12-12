@@ -136,7 +136,7 @@ public class BOADeveloperEvents extends BOAEvents {
             existingTimedEvent.add(timedEvent);
             BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getDeveloperCodified().setTimedEvent(existingTimedEvent);
             //Funnel execution and testing based
-            long eventSubCode = this.codeForCustomCodifiedEvent(eventName);
+            long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
             BOFunnelSyncController.getInstance().recordDevEvent(eventName, eventSubCode, timeEventDict);
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
@@ -162,7 +162,7 @@ public class BOADeveloperEvents extends BOAEvents {
                 long timeStamp = eventTime != null ? BODateTimeUtils.get13DigitNumberObjTimeStampFor(eventTime) : BODateTimeUtils.get13DigitNumberObjTimeStamp();
 
                 HashMap<String, Object> customEventInfo = (eventInfo != null && (eventInfo.keySet().size() > 0)) ? eventInfo : null;
-                Long eventSubCode = this.codeForCustomCodifiedEvent(eventName);
+                Long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
                 HashMap<String, Object> customEventModelDict = new HashMap<>();
                 customEventModelDict.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                 customEventModelDict.put(BOCommonConstants.BO_TIME_STAMP, timeStamp);
@@ -196,7 +196,7 @@ public class BOADeveloperEvents extends BOAEvents {
                 long timeStamp = eventTime != null ? BODateTimeUtils.get13DigitNumberObjTimeStampFor(eventTime) : BODateTimeUtils.get13DigitNumberObjTimeStamp();
 
                 HashMap<String, Object> customEventInfo = (eventInfo != null && (eventInfo.keySet().size() > 0)) ? eventInfo : null;
-                Long eventSubCode = this.codeForCustomCodifiedEvent(eventName);
+                Long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
                 HashMap<String, Object> customEventModelDict = new HashMap<>();
                 customEventModelDict.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                 customEventModelDict.put(BOCommonConstants.BO_TIME_STAMP, timeStamp);
@@ -231,7 +231,7 @@ public class BOADeveloperEvents extends BOAEvents {
                 long timeStamp = eventTime != null ? BODateTimeUtils.get13DigitNumberObjTimeStampFor(eventTime) : BODateTimeUtils.get13DigitNumberObjTimeStamp();
 
                 HashMap<String, Object> customEventInfo = (eventInfo != null && (eventInfo.keySet().size() > 0)) ? eventInfo : null;
-                Long eventSubCode = this.codeForCustomCodifiedEvent(eventName);
+                Long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
                 HashMap<String, Object> customEventModelDict = new HashMap<>();
                 customEventModelDict.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                 customEventModelDict.put(BOCommonConstants.BO_TIME_STAMP, timeStamp);
