@@ -307,13 +307,13 @@ class BOCommonUtilsTest {
     @Test
     fun testCodeForCustomCodifiedEvent() {
         var eventNameWithUnderscore = BOCommonUtils.codeForCustomCodifiedEvent("awesome_event")
-        Assert.assertEquals(21308L,eventNameWithUnderscore)
+        Assert.assertEquals(24008L,eventNameWithUnderscore)
 
         var eventNameWithSpace = BOCommonUtils.codeForCustomCodifiedEvent("some awesome event")
-        Assert.assertEquals(21316L,eventNameWithSpace)
+        Assert.assertEquals(24016L,eventNameWithSpace)
 
         var eventNameWithAscii = BOCommonUtils.codeForCustomCodifiedEvent("目_awesome_event")
-        Assert.assertEquals(21349L,eventNameWithAscii)
+        Assert.assertEquals(24049L,eventNameWithAscii)
     }
 
     @Test

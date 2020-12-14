@@ -1235,7 +1235,7 @@ public class BOCommonUtils {
                     return Long.valueOf((Integer) allCustomEvents.get(eventName));
                 } else {
                     int eventNameIntSum = BOCommonUtils.getHashIntSum(eventName);
-                    long eventNameIntSumModulo = eventNameIntSum % 900;
+                    long eventNameIntSumModulo = eventNameIntSum % 8899;
                     long eventSubCode = BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY + eventNameIntSumModulo; //21100
                     Long eventSubCodeObj = eventSubCode;
 
@@ -1245,7 +1245,7 @@ public class BOCommonUtils {
 
                     while (allCustomEvents.values().contains(eventSubCodeObj)) {
                         eventNameIntSum = eventNameIntSum + 1;
-                        eventNameIntSumModulo = eventNameIntSum % 900;
+                        eventNameIntSumModulo = eventNameIntSum % 8899;
                         eventSubCode = BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY + eventNameIntSumModulo; //21100
                         eventSubCodeObj = eventSubCode;
                     }
