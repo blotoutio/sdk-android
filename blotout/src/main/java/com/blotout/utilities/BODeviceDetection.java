@@ -76,13 +76,11 @@ public class BODeviceDetection {
     }
 
     public static boolean isHbbTVDevice(String userAgent) {
-        final String HbbTV = "HbbTV".toLowerCase();
-        return userAgent.toLowerCase().contains(HbbTV);
+        return userAgent.toLowerCase().contains("hbbtv");
     }
 
     public static boolean isRokuDevice(String userAgent) {
-        final String Roku = "Roku".toLowerCase();
-        return userAgent.toLowerCase().contains(Roku);
+        return userAgent.toLowerCase().contains("roku");
     }
 
     public static boolean isMeizuDevice(String userAgent) {
@@ -94,16 +92,14 @@ public class BODeviceDetection {
      * Returns true if the device manufacturer is LG.
      */
     public static boolean isLGEDevice(String userAgent) {
-        final String LGE = "lge".toLowerCase();
-        return userAgent.toLowerCase().contains(LGE);
+        return userAgent.toLowerCase().contains("lg ") || userAgent.toLowerCase().contains("lg-");
     }
 
     /**
      * Returns true if the device manufacturer is Samsung.
      */
     public static boolean isSamsungDevice(String userAgent) {
-        final String SAMSUNG = "samsung".toLowerCase();
-        return userAgent.toLowerCase().contains(SAMSUNG);
+        return userAgent.toLowerCase().contains("samsung") || userAgent.toLowerCase().contains("sm-");
     }
 
     public static boolean isAmazonFire(String userAgent) {
@@ -113,7 +109,7 @@ public class BODeviceDetection {
         return userAgent.toLowerCase().contains(AMAZON) || userAgent.toLowerCase().contains(FIRE_TV);
     }
 
-    private static boolean isTabletDevice(Context activityContext) {
+    public static boolean isTabletDevice(Context activityContext) {
         try {
             boolean device_large = ((activityContext.getResources().getConfiguration().screenLayout &
                     Configuration.SCREENLAYOUT_SIZE_MASK) ==
@@ -157,8 +153,8 @@ public class BODeviceDetection {
     }
 
     @TargetApi(17)
-    static class NewApiWrapper {
-        static String getDefaultUserAgent(Context context) {
+    public static class NewApiWrapper {
+        public static String getDefaultUserAgent(Context context) {
             return WebSettings.getDefaultUserAgent(context);
         }
     }
@@ -272,11 +268,11 @@ public class BODeviceDetection {
     }
 
     // Generates a random int with n digits
-    private static long generateNumber() {
+    public static long generateNumber() {
         return (long)(Math.random()*100000 + 3333300000L);
     }
 
-    private static String convertTo64CharUUID(String stringToConvert) {
+    public static String convertTo64CharUUID(String stringToConvert) {
         try {
             if(stringToConvert != null && stringToConvert.length()>0) {
                 String str = stringToConvert;
@@ -299,7 +295,7 @@ public class BODeviceDetection {
         return stringToConvert;
     }
 
-    private String getUniqueUserId() {
+    public static String getUniqueUserId() {
 
         String uniqueId = BOSharedPreferenceImpl.getInstance().getString(BO_ANALYTICS_USER_UNIQUE_KEY);
         if (uniqueId != null) {
@@ -311,12 +307,12 @@ public class BODeviceDetection {
         }
     }
 
-    private static boolean isBadDeviceId(String id) {
+    public static boolean isBadDeviceId(String id) {
         // empty or contains only spaces or 0
         return TextUtils.isEmpty(id) || TextUtils.isEmpty(id.replace('0', ' ').replace('-', ' ').trim());
     }
 
-    private static boolean isBadSerial(String id) {
+    public static boolean isBadSerial(String id) {
         if (!TextUtils.isEmpty(id)) {
             id = id.toLowerCase();
             for (String pattern : BAD_SERIAL_PATTERNS) {
@@ -415,10 +411,7 @@ public class BODeviceDetection {
 
     Set Top Boxes User Agents
             Chromecast
-    Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36
-    Roku Ultra
-    Roku4640X/DVP-7.70 (297.70E04154A)
-    Minix NEO X5
+    Mozilla/5.0 (CrKey armv7l 1.5.16041) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.0 Safari/537.36 Roku Ultra Roku4640X/DVP-7.70 (297.70E04154A) Minix NEO X5
     Mozilla/5.0 (Linux; U; Android 4.2.2; he-il; NEO-X5-116A Build/JDQ39) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Safari/534.30
     Amazon 4K Fire TV
     Mozilla/5.0 (Linux; Android 5.1; AFTS Build/LMY47O) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/41.99900.2250.0242 Safari/537.36

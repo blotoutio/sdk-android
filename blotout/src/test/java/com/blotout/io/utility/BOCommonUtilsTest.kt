@@ -147,6 +147,7 @@ class BOCommonUtilsTest {
         Assert.assertNull(value)
     }
 
+
     @Test
     fun testISAccessoriesAttached() {
         var value = BOCommonUtils.iSAccessoriesAttached(context.applicationContext)
@@ -337,8 +338,16 @@ class BOCommonUtilsTest {
     @Test
     fun testGetPasspharseKey() {
         var value = BOCommonUtils.getPasspharseKey()
-        print(value)
         Assert.assertNotNull(value)
+    }
+
+    @Test
+    fun testIsEmpty() {
+        var value = BOCommonUtils.isEmpty(null)
+        Assert.assertTrue(value)
+
+        var value1 = BOCommonUtils.isEmpty("Blotout")
+        Assert.assertFalse(value1)
     }
 
 
