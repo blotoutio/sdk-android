@@ -180,7 +180,7 @@ public final class BOCommonConstants {
     public static final String BO_ORIENTATION ="orientation";
     public static final String BO_DEVICE_ORIENTATION ="DeviceOrientation";
     public static final String BO_PII_EVENT ="piiEvent";
-
+    public static final String BO_TIME_ZONE_OFFSET ="timeZoneOffset";
     public static final String BO_START = "start";
     public static final String BO_END = "end";
     public static final String BO_DURATION = "duration";
@@ -192,4 +192,8 @@ public final class BOCommonConstants {
     public static final int BO_EVENT_TYPE_START_TIMED_EVENT = 4;
     public static final int BO_EVENT_TYPE_END_TIMED_EVENT = 5;
     public static final int BO_EVENT_TYPE_RETENTION_EVENT = 6;
+
+    public static final String  BO_EVENT_MAP_ID = "map_id";
+    public static final String  BO_EVENT_MAP_Provider = "map_provider";
+
 }

@@ -1,4 +1,5 @@
 package com.blotout.utilities;
+
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -36,7 +37,7 @@ public class BOServerDataConverter {
     private static final int DeviceGrainMedium = 1;
     private static final int DeviceGrainAll = 2;
 
-    private static HashMap<String,Object> appInfo = new HashMap<>();
+    private static HashMap<String, Object> appInfo = new HashMap<>();
 
     public static HashMap<String, Object> prepareMetaData() {
         try {
@@ -44,12 +45,12 @@ public class BOServerDataConverter {
             HashMap<String, Object> appInfoCurrentDict = null;
             if (appInfo != null && (appInfo.values().size() > 0)) {
                 appInfoCurrentDict = appInfo;
-            }else{
-                appInfoCurrentDict =  recordAppInformation();
+            } else {
+                appInfoCurrentDict = recordAppInformation();
             }
 
             HashMap<String, Object> metaData = new HashMap<>();
-            if(appInfoCurrentDict != null) {
+            if (appInfoCurrentDict != null) {
                 metaData.put("plf", appInfoCurrentDict.get("platform"));
                 metaData.put("appn", appInfoCurrentDict.get("bundle"));
                 metaData.put("appv", appInfoCurrentDict.get("version"));
@@ -61,7 +62,8 @@ public class BOServerDataConverter {
                 metaData.put("acomp", appInfoCurrentDict.get("acompStatus"));
                 metaData.put("jbrkn", appInfoCurrentDict.get("jbnStatus"));
                 metaData.put("vpn", appInfoCurrentDict.get("vpnStatus"));
-
+                metaData.put("sdkv", appInfoCurrentDict.get("sdkVersion"));
+                metaData.put("tz_offset", appInfoCurrentDict.get("timeZoneOffset"));
                 if (metaData.keySet().size() > 0) {
                     int deviceGrain = getDeviceGrain();
                     switch (deviceGrain) {
@@ -91,7 +93,7 @@ public class BOServerDataConverter {
         try {
 
             //Return No Geo Event in case of firstParty container
-            if(BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
+            if (BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
                 return null;
             }
 
@@ -135,7 +137,7 @@ public class BOServerDataConverter {
                     //geoInfo.put("long", gpsGeoLocation.getPiiLocation().getLongitude());
                 } else {
                     HashMap<String, Object> currentKnownLocation = BOAppSessionEvents.getInstance().getGeoIPAndPublish(false);
-                    if(currentKnownLocation != null && currentKnownLocation.keySet().size() >0) {
+                    if (currentKnownLocation != null && currentKnownLocation.keySet().size() > 0) {
                         geoInfo.put("conc", currentKnownLocation.get("continentCode"));
                         geoInfo.put("couc", currentKnownLocation.get("country"));
                         geoInfo.put("reg", currentKnownLocation.get("state"));
@@ -147,7 +149,7 @@ public class BOServerDataConverter {
                 }
             } else {
                 HashMap<String, Object> currentKnownLocation = BOAppSessionEvents.getInstance().getGeoIPAndPublish(false);
-                if(currentKnownLocation != null && currentKnownLocation.keySet().size() >0) {
+                if (currentKnownLocation != null && currentKnownLocation.keySet().size() > 0) {
                     geoInfo.put("conc", currentKnownLocation.get("continentCode"));
                     geoInfo.put("couc", currentKnownLocation.get("country"));
                     geoInfo.put("reg", currentKnownLocation.get("state"));
@@ -158,32 +160,32 @@ public class BOServerDataConverter {
                 }
             }
 
-                if(geoInfo.keySet().size() > 0) {
-                    int geoGrain = getGeoGrain();
-                    switch (geoGrain) {
-                        case Continent:
-                            geoInfo.remove("country");
-                            geoInfo.remove("state");
-                            geoInfo.remove("city");
-                            geoInfo.remove("zip");
-                            break;
-                        case Country:
-                            geoInfo.remove("state");
-                            geoInfo.remove("city");
-                            geoInfo.remove("zip");
-                            break;
-                        case Region:
-                            geoInfo.remove("city");
-                            break;
-                        case City:
-                            geoInfo.remove("zip");
-                            break;
-                        case Postal_Address:
-                            break;
-                    }
+            if (geoInfo.keySet().size() > 0) {
+                int geoGrain = getGeoGrain();
+                switch (geoGrain) {
+                    case Continent:
+                        geoInfo.remove("country");
+                        geoInfo.remove("state");
+                        geoInfo.remove("city");
+                        geoInfo.remove("zip");
+                        break;
+                    case Country:
+                        geoInfo.remove("state");
+                        geoInfo.remove("city");
+                        geoInfo.remove("zip");
+                        break;
+                    case Region:
+                        geoInfo.remove("city");
+                        break;
+                    case City:
+                        geoInfo.remove("zip");
+                        break;
+                    case Postal_Address:
+                        break;
                 }
+            }
             return geoInfo;
-     }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return null;
         }
@@ -192,7 +194,7 @@ public class BOServerDataConverter {
     private static int getGeoGrain() {
 
         int geoGrain = BOSDKManifestController.getInstance().eventGEOLocationGrain;
-        if(geoGrain >0) {
+        if (geoGrain > 0) {
             return geoGrain;
         }
 
@@ -202,7 +204,7 @@ public class BOServerDataConverter {
     private static int getDeviceGrain() {
 
         int deviceGrain = BOSDKManifestController.getInstance().eventDeviceInfoGrain;
-        if(deviceGrain >0) {
+        if (deviceGrain > 0) {
             return deviceGrain;
         }
 
@@ -211,12 +213,12 @@ public class BOServerDataConverter {
 
     public static HashMap<String, Object> preparePreviousMetaData(BOAppSessionDataModel sessionData) {
 
-         try {
+        try {
 
             HashMap<String, Object> appInfoCurrentDict = BOAppSessionEvents.getInstance().sessionAppInfo;
             if (!(appInfoCurrentDict != null && (appInfoCurrentDict.values().size() > 0))) {
 
-               BOAppSessionEvents.getInstance().recordAppInformation();
+                BOAppSessionEvents.getInstance().recordAppInformation();
                 appInfoCurrentDict = BOAppSessionEvents.getInstance().sessionAppInfo;
             }
             BOAppInfo appInfoCurrent = BOAppInfo.fromJsonDictionary(appInfoCurrentDict);
@@ -228,82 +230,84 @@ public class BOServerDataConverter {
 
             BOAppInfo appInfoPrevious = null;
             if (previousAppInfoDict != null && previousAppInfoDict.values().size() > 0) {
-                appInfoPrevious =  BOAppInfo.fromJsonDictionary(previousAppInfoDict);
+                appInfoPrevious = BOAppInfo.fromJsonDictionary(previousAppInfoDict);
             }
 
-                if (appInfoPrevious != null && appInfoCurrent != null) {
-                    HashMap<String, Object> metaData = new HashMap<>();
-                    metaData.put("plf", null);
-                    metaData.put("appn", appInfoPrevious.getName().equals(appInfoCurrent.getName()) ? null : appInfoPrevious.getName());
-                    metaData.put("osn", appInfoPrevious.getOsName().equals(appInfoCurrent.getOsName()) ? null : appInfoPrevious.getOsName());
-                    metaData.put("osv", appInfoPrevious.getOsVersion().equals(appInfoCurrent.getOsVersion()) ? null : appInfoPrevious.getOsVersion());
-                    metaData.put("dmft", null);
-                    metaData.put("dm", null);
-                    metaData.put("dcomp", appInfoPrevious.getDcompStatus() != appInfoCurrent.getDcompStatus() ? null : appInfoPrevious.getDcompStatus());
-                    metaData.put("acomp", appInfoPrevious.getAcompStatus() != appInfoCurrent.getAcompStatus() ? null : appInfoPrevious.getAcompStatus());
-                    metaData.put("jbrkn",BODeviceAndAppFraudController.getInstance().isDeviceJailbroken());
-                    metaData.put("appv", appInfoPrevious.getVersion().equals(appInfoCurrent.getVersion()) ? null : appInfoPrevious.getVersion());
-                    metaData.put("vpn", appInfoPrevious.getVpnStatus() != appInfoCurrent.getVpnStatus() ? null : appInfoPrevious.getVpnStatus());
+            if (appInfoPrevious != null && appInfoCurrent != null) {
+                HashMap<String, Object> metaData = new HashMap<>();
+                metaData.put("plf", null);
+                metaData.put("appn", appInfoPrevious.getName().equals(appInfoCurrent.getName()) ? null : appInfoPrevious.getName());
+                metaData.put("osn", appInfoPrevious.getOsName().equals(appInfoCurrent.getOsName()) ? null : appInfoPrevious.getOsName());
+                metaData.put("osv", appInfoPrevious.getOsVersion().equals(appInfoCurrent.getOsVersion()) ? null : appInfoPrevious.getOsVersion());
+                metaData.put("dmft", null);
+                metaData.put("dm", null);
+                metaData.put("dcomp", appInfoPrevious.getDcompStatus() != appInfoCurrent.getDcompStatus() ? null : appInfoPrevious.getDcompStatus());
+                metaData.put("acomp", appInfoPrevious.getAcompStatus() != appInfoCurrent.getAcompStatus() ? null : appInfoPrevious.getAcompStatus());
+                metaData.put("jbrkn", BODeviceAndAppFraudController.getInstance().isDeviceJailbroken());
+                metaData.put("appv", appInfoPrevious.getVersion().equals(appInfoCurrent.getVersion()) ? null : appInfoPrevious.getVersion());
+                metaData.put("vpn", appInfoPrevious.getVpnStatus() != appInfoCurrent.getVpnStatus() ? null : appInfoPrevious.getVpnStatus());
+                metaData.put("sdkv", appInfoPrevious.getSdkVersion() != appInfoCurrent.getSdkVersion() ? null : appInfoPrevious.getSdkVersion());
+                metaData.put("tz_offset", appInfoPrevious.getTimeZoneOffset() != appInfoCurrent.getTimeZoneOffset() ? null : appInfoPrevious.getTimeZoneOffset());
 
-                    if(metaData.keySet().size() > 0) {
-                        int deviceGrain = getDeviceGrain();
-                        switch (deviceGrain) {
-                            case DeviceGrainHigh:
-                                metaData.remove("osn");
-                                metaData.remove("osv");
-                                metaData.remove("dmft");
-                                metaData.remove("dm");
-                                break;
-                            case DeviceGrainMedium:
-                                break;
-                            case DeviceGrainAll:
-                                break;
-                        }
+                if (metaData.keySet().size() > 0) {
+                    int deviceGrain = getDeviceGrain();
+                    switch (deviceGrain) {
+                        case DeviceGrainHigh:
+                            metaData.remove("osn");
+                            metaData.remove("osv");
+                            metaData.remove("dmft");
+                            metaData.remove("dm");
+                            break;
+                        case DeviceGrainMedium:
+                            break;
+                        case DeviceGrainAll:
+                            break;
                     }
-
-                    for (String metaInfoKey : metaData.keySet()) {
-                        Object metaVal = metaData.get(metaInfoKey);
-                        if (metaVal != null) {
-                            metaData.remove(metaInfoKey);
-                        }
-                    }
-
-                    return metaData;
                 }
-            }catch( Exception e) {
-             Logger.INSTANCE.e(TAG, e.toString());
-             return null;
-         }
-         return null;
+
+                for (String metaInfoKey : metaData.keySet()) {
+                    Object metaVal = metaData.get(metaInfoKey);
+                    if (metaVal != null) {
+                        metaData.remove(metaInfoKey);
+                    }
+                }
+
+                return metaData;
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+            return null;
+        }
+        return null;
     }
 
-    private static HashMap<String,Object> recordAppInformation() {
+    private static HashMap<String, Object> recordAppInformation() {
 
         long launchTimeStamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
-        appInfo.put("launchTimeStamp",launchTimeStamp);
+        appInfo.put("launchTimeStamp", launchTimeStamp);
 
         PackageInfo packageInfo = BOAnalyticsActivityLifecycleCallbacks.getPackageInfo(BOSharedManager.getInstance().getContext());
         String currentVersion = packageInfo.versionName;
         int currentBuild = packageInfo.versionCode;
-        appInfo.put("version",currentVersion+currentBuild);
-        String  sdkVersion = BOCommonConstants.SDK_VERSION;
-        appInfo.put("sdkVersion",sdkVersion);
+        appInfo.put("version", currentVersion + currentBuild);
+        String sdkVersion = BOCommonConstants.SDK_VERSION;
+        appInfo.put("sdkVersion", sdkVersion);
 
         String bundleIdentifier = BOSharedManager.getInstance().getContext().getPackageName();
-        appInfo.put("bundle",bundleIdentifier);
+        appInfo.put("bundle", bundleIdentifier);
 
         final String packageName = bundleIdentifier;
-        PackageManager packageManager= BOSharedManager.getInstance().getContext().getPackageManager();
+        PackageManager packageManager = BOSharedManager.getInstance().getContext().getPackageManager();
         String appName = "";
         try {
             appName = (String) packageManager.getApplicationLabel(packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        appInfo.put("name",appName);
+        appInfo.put("name", appName);
 
         DeviceInfo mDeviceInfo = new DeviceInfo(BOSharedManager.getInstance().getContext());
-        appInfo.put("language",mDeviceInfo.getLanguage());
+        appInfo.put("language", mDeviceInfo.getLanguage());
 
         appInfo.put("platform", BODeviceDetection.getDevicePlatformCode());
 
@@ -330,6 +334,7 @@ public class BOServerDataConverter {
         appInfo.put("jbnStatus", BODeviceAndAppFraudController.getInstance().isDeviceJailbroken());
         appInfo.put("dcompStatus", BODeviceAndAppFraudController.getInstance().isDeviceCompromised());
         appInfo.put("acompStatus", BODeviceAndAppFraudController.getInstance().isAppCompromised());
+        appInfo.put("timeZoneOffset", BODateTimeUtils.getCurrentTimezoneOffsetInMin());
 
         return appInfo;
     }

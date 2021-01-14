@@ -11,17 +11,17 @@ import androidx.annotation.Nullable;
 import com.blotout.Controllers.BODeviceAndAppFraudController;
 import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
-import com.blotout.constants.BONetworkConstants;
-import com.blotout.eventsExecutor.BOGeoRetentionOperationExecutorHelper;
-import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
-import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.analytics.BOSharedManager;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
+import com.blotout.constants.BONetworkConstants;
 import com.blotout.deviceinfo.device.DeviceInfo;
-import com.blotout.model.session.BOAppInfo;
+import com.blotout.eventsExecutor.BOGeoRetentionOperationExecutorHelper;
+import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
+import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.model.lifetime.BOAppLifetimeData;
 import com.blotout.model.session.BOApp;
+import com.blotout.model.session.BOAppInfo;
 import com.blotout.model.session.BOAppSessionDataModel;
 import com.blotout.model.session.BOScreenShotsTaken;
 import com.blotout.model.session.BOSessionInfo;
@@ -110,7 +110,7 @@ public class BOAppSessionEvents extends BOAEvents {
         appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
         appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
         appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_LAUNCHED));
-        appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+        appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
         BOApp appStates = BOApp.fromJsonDictionary(appState);
 
         List<BOApp> existingData = sInstance.getSingleDaySessions().getAppStates().getAppLaunched();
@@ -125,7 +125,7 @@ public class BOAppSessionEvents extends BOAEvents {
         sessionInfo.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
         sessionInfo.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_LAUNCHED));
         sessionInfo.put(BOCommonConstants.BO_START, BODateTimeUtils.get13DigitNumberObjTimeStamp());
-        sessionInfo.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+        sessionInfo.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
         BOSessionInfo sessionInfoObj = BOSessionInfo.fromJsonDictionary(sessionInfo);
 
@@ -272,6 +272,7 @@ public class BOAppSessionEvents extends BOAEvents {
             this.sessionAppInfo.put(BOCommonConstants.BO_JBN_STATUS, BODeviceAndAppFraudController.getInstance().isDeviceJailbroken());
             this.sessionAppInfo.put(BOCommonConstants.BO_DCOMP_STATUS, BODeviceAndAppFraudController.getInstance().isDeviceCompromised());
             this.sessionAppInfo.put(BOCommonConstants.BO_ACOMP_STATUS, BODeviceAndAppFraudController.getInstance().isAppCompromised());
+            this.sessionAppInfo.put(BOCommonConstants.BO_TIME_ZONE_OFFSET, BODateTimeUtils.getCurrentTimezoneOffsetInMin());
 
             HashMap<String, Object> cKnownLocation = getGeoIPAndPublish(false);
             this.sessionAppInfo.put(BOCommonConstants.BO_CURRENT_LOCATION, cKnownLocation);
@@ -434,7 +435,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_IN_BACKGROUND));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                 List<BOApp> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().getAppInBackground();
@@ -456,7 +457,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_IN_FOREGROUND));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
@@ -478,7 +479,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_BECOME_ACTIVE));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                 List<BOApp> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().getAppActive();
@@ -499,7 +500,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_RESIGN_ACTIVE));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                 List<BOApp> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().getAppResignActive();
@@ -520,7 +521,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_MEMORY_WARNING));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                 List<BOApp> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().getAppReceiveMemoryWarning();
@@ -571,7 +572,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_SIGNIFICANT_TIME_CHANGE));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
                 List<BOApp> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().getAppSignificantTimeChange();
@@ -592,7 +593,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_STATUS_BAR_FRAME_CHANGED));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
 
                 BOApp appStates = BOApp.fromJsonDictionary(appState);
@@ -614,7 +615,7 @@ public class BOAppSessionEvents extends BOAEvents {
                 appState.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                 appState.put(BOCommonConstants.BO_VISIBLE_CLASS_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                 appState.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BOCommonConstants.BO_APP_TAKEN_SCREEN_SHOT));
-                appState.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+                appState.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
                 BOScreenShotsTaken appStates = BOScreenShotsTaken.fromJsonDictionary(appState);
                 List<BOScreenShotsTaken> existingData = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getUbiAutoDetected().getScreenShotsTaken();

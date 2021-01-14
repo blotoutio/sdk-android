@@ -13,6 +13,7 @@ import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.Controllers.BOSDKManifestController;
 import com.blotout.Controllers.BOSegmentsSyncController;
 import com.blotout.constants.BOCommonConstants;
+import com.blotout.constants.BONetworkConstants;
 import com.blotout.events.*;
 import com.blotout.events.BOADeveloperEvents;
 import com.blotout.events.BOAEvents;
@@ -450,11 +451,7 @@ public class BlotoutAnalytics {
                  }
              });
              } else {
-                 BOPendingEvents pendingEvent = new BOPendingEvents();
-                 pendingEvent.setEventInfo(startEventInfo);
-                 pendingEvent.setEventName(eventName);
-                 pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_START_TIMED_EVENT);
-                 BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                 this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_START_TIMED_EVENT,startEventInfo,null);
              }
          }
      }catch (Exception e) {
@@ -488,16 +485,63 @@ public class BlotoutAnalytics {
                        }
                });
             } else {
-                BOPendingEvents pendingEvent = new BOPendingEvents();
-                pendingEvent.setEventInfo(endEventInfo);
-                pendingEvent.setEventName(eventName);
-                pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_END_TIMED_EVENT);
-                BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_END_TIMED_EVENT,endEventInfo,null);
             }
            }
        }catch (Exception e) {
            Logger.INSTANCE.e(TAG,e.toString());
        }
+    }
+
+    /**
+     * This Method is used to add pending events based on their type
+     * @param eventName
+     * @param eventType
+     * @param eventInfo
+     */
+
+    public void addPendingEvents(String eventName, int eventType, HashMap<String, Object> eventInfo, Date eventTime) {
+        BOPendingEvents pendingEvent = new BOPendingEvents();
+        pendingEvent.setEventInfo(eventInfo);
+        pendingEvent.setEventName(eventName);
+        pendingEvent.setEventType(eventType);
+        pendingEvent.setEventTime(eventTime);
+        BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+    }
+
+    /**
+     *
+     * @param id any userid
+     * @param provider e.g google, Mixpanel
+     * @param eventInfo dictionary of events
+     */
+    public void mapId(@NonNull String id, @NonNull String provider, @Nullable HashMap<String, Object> eventInfo) {
+        try {
+            HashMap<String, Object> mapIdInfo = new HashMap<>();
+            mapIdInfo.put(BOCommonConstants.BO_EVENT_MAP_ID, id);
+            mapIdInfo.put(BOCommonConstants.BO_EVENT_MAP_Provider, provider);
+
+            if(eventInfo != null) {
+               mapIdInfo.putAll(eventInfo);
+            }
+
+            if (BlotoutAnalytics.this.isEnabled) {
+                if(BlotoutAnalytics_Internal.getInstance().sdkInitConfirmationSend) {
+                    BOWorkerHelper.getInstance().post(new Runnable() {
+                        @Override
+                        public void run() {
+                                HashMap<String, Object> userDataDict = BlotoutAnalytics.this.replaceAllOccuranceOfDateInDict(null, mapIdInfo);
+                                BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
+                                devEvents.logEvent(BOCommonConstants.BO_EVENT_MAP_ID, userDataDict, BONetworkConstants.BO_DEV_EVENT_MAP_ID);
+                        }
+                    });
+                } else {
+                    this.addPendingEvents(BOCommonConstants.BO_EVENT_MAP_ID,BOCommonConstants.BO_EVENT_TYPE_SESSION,mapIdInfo, null);
+                }
+            }
+        }catch (Exception e) {
+            Logger.INSTANCE.e(TAG,e.toString());
+        }
     }
 
     /**
@@ -514,29 +558,21 @@ public class BlotoutAnalytics {
                         public void run() {
                             if (eventInfo != null) {
                                 HashMap<String, Object> userDataDict = BlotoutAnalytics.this.replaceAllOccuranceOfDateInDict(null, eventInfo);
-                                String afterDateStr = BOCommonUtils.getJsonStringFromHashMap(userDataDict);
-                                Logger.INSTANCE.d(TAG, "events in analytics event afterDateStr");
                                 BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
-                                devEvents.logEvent(eventName, userDataDict);
+                                devEvents.logEvent(eventName, userDataDict,0);
                             } else {
                                 BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
-                                devEvents.logEvent(eventName, eventInfo);
+                                devEvents.logEvent(eventName, eventInfo,0);
                             }
-
                         }
                     });
                 } else {
-                    BOPendingEvents pendingEvent = new BOPendingEvents();
-                    pendingEvent.setEventInfo(eventInfo);
-                    pendingEvent.setEventName(eventName);
-                    pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_SESSION);
-                    BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION,eventInfo,null);
                 }
             }
         }catch (Exception e) {
             Logger.INSTANCE.e(TAG,e.toString());
         }
-
     }
 
 
@@ -557,8 +593,6 @@ public class BlotoutAnalytics {
                             public void run() {
                                 if (eventInfo != null) {
                                     HashMap<String, Object> userDataDict = BlotoutAnalytics.this.replaceAllOccuranceOfDateInDict(null, eventInfo);
-                                    String afterDateStr = BOCommonUtils.getJsonStringFromHashMap(userDataDict);
-                                    Logger.INSTANCE.d(TAG, "events in analytics event afterDateStr");
                                     BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
                                     devEvents.logPIIEvent(eventName, userDataDict, eventTime);
                                 } else {
@@ -568,12 +602,7 @@ public class BlotoutAnalytics {
                             }
                         });
                     } else {
-                        BOPendingEvents pendingEvent = new BOPendingEvents();
-                        pendingEvent.setEventInfo(eventInfo);
-                        pendingEvent.setEventName(eventName);
-                        pendingEvent.setEventTime(eventTime);
-                        pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_PII);
-                        BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PII,eventInfo, eventTime);
                     }
                 }
             }catch (Exception e) {
@@ -613,12 +642,7 @@ public class BlotoutAnalytics {
                             }
                         });
                     } else {
-                        BOPendingEvents pendingEvent = new BOPendingEvents();
-                        pendingEvent.setEventInfo(eventInfo);
-                        pendingEvent.setEventName(eventName);
-                        pendingEvent.setEventTime(eventTime);
-                        pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_PHI);
-                        BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PHI,eventInfo, eventTime);
                     }
                 }
             }catch (Exception e) {
@@ -647,20 +671,15 @@ public class BlotoutAnalytics {
                                 String afterDateStr = BOCommonUtils.getJsonStringFromHashMap(userDataDict);
                                 Logger.INSTANCE.d(TAG, "events in analytics event afterDateStr");
                                 BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
-                                devEvents.logEvent(eventName, userDataDict, eventTime);
+                                devEvents.logEvent(eventName, userDataDict, eventTime,0);
                             } else {
                                 BOADeveloperEvents devEvents = BOADeveloperEvents.getInstance();
-                                devEvents.logEvent(eventName, eventInfo, eventTime);
+                                devEvents.logEvent(eventName, eventInfo, eventTime,0);
                             }
                         }
                     });
                 } else {
-                    BOPendingEvents pendingEvent = new BOPendingEvents();
-                    pendingEvent.setEventInfo(eventInfo);
-                    pendingEvent.setEventName(eventName);
-                    pendingEvent.setEventTime(eventTime);
-                    pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_SESSION_WITH_TIME);
-                    BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION_WITH_TIME,eventInfo, eventTime);
                 }
             }
         }catch (Exception e) {
@@ -695,13 +714,7 @@ public class BlotoutAnalytics {
                         }
                     });
                 } else {
-
-                    BOPendingEvents pendingEvent = new BOPendingEvents();
-                    pendingEvent.setEventInfo(eventInfo);
-                    pendingEvent.setEventName(eventName);
-                    pendingEvent.setEventType(BOCommonConstants.BO_EVENT_TYPE_RETENTION_EVENT);
-                    BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
-
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_RETENTION_EVENT,eventInfo, null);
                 }
             }
         }catch (Exception e) {

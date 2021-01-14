@@ -10,17 +10,9 @@ import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
 import com.blotout.model.BODeveloperEventModel;
-import com.blotout.model.session.BOAddToCart;
 import com.blotout.model.session.BOAppSessionDataModel;
-import com.blotout.model.session.BOChargeTransaction;
 import com.blotout.model.session.BOCustomEvent;
-import com.blotout.model.session.BODeveloperCodified;
-import com.blotout.model.session.BODoubleTap;
-import com.blotout.model.session.BOListUpdated;
-import com.blotout.model.session.BOScreenEdgePan;
-import com.blotout.model.session.BOScreenRect;
 import com.blotout.model.session.BOTimedEvent;
-import com.blotout.model.session.BOView;
 import com.blotout.storage.BOSharedPreferenceImpl;
 import com.blotout.utilities.BOCommonUtils;
 import com.blotout.utilities.BODateTimeUtils;
@@ -37,9 +29,18 @@ import kotlin.jvm.Synchronized;
  */
 public class BOADeveloperEvents extends BOAEvents {
     private static final String TAG = BOCommonConstants.TAG_PREFIX + "BOADeveloperEvents";
+    private static volatile BOADeveloperEvents instance;
     @Nullable
     private HashMap<String, Object> devEventUD;
-    private static volatile BOADeveloperEvents instance;
+
+    private BOADeveloperEvents() {
+        this.devEventUD = BOCommonUtils.getHashmapFromJsonString(BOSharedPreferenceImpl.getInstance().getString(BOCommonConstants.BO_ANALYTICS_DEV_EVENT_USER_DEFAULTS_KEY));
+
+        if (this.devEventUD == null) {
+            HashMap<String, Object> devEvent = new HashMap<>();
+            BOSharedPreferenceImpl.getInstance().saveString(BOCommonConstants.BO_ANALYTICS_DEV_EVENT_USER_DEFAULTS_KEY, BOCommonUtils.getJsonStringFromHashMap(devEvent));
+        }
+    }
 
     @Synchronized
     public static BOADeveloperEvents getInstance() {
@@ -52,15 +53,6 @@ public class BOADeveloperEvents extends BOAEvents {
             }
         }
         return instance;
-    }
-
-    private BOADeveloperEvents() {
-        this.devEventUD = BOCommonUtils.getHashmapFromJsonString(BOSharedPreferenceImpl.getInstance().getString(BOCommonConstants.BO_ANALYTICS_DEV_EVENT_USER_DEFAULTS_KEY));
-
-        if (this.devEventUD == null) {
-            HashMap<String, Object> devEvent = new HashMap<>();
-            BOSharedPreferenceImpl.getInstance().saveString(BOCommonConstants.BO_ANALYTICS_DEV_EVENT_USER_DEFAULTS_KEY, BOCommonUtils.getJsonStringFromHashMap(devEvent));
-        }
     }
 
     public void startTimedEvent(@NonNull String eventName, HashMap<String, Object> startEventInfo) {
@@ -98,7 +90,7 @@ public class BOADeveloperEvents extends BOAEvents {
         try {
             HashMap<String, Object> eventStartInfo = (HashMap<String, Object>) this.devEventUD.get(eventName);
             if (eventStartInfo != null) {
-                this.logEvent(eventName, endEventInfo);
+                this.logEvent(eventName, endEventInfo, 0);
             }
 
             BODeveloperEventModel event = new BODeveloperEventModel(eventName, endEventInfo);
@@ -143,15 +135,15 @@ public class BOADeveloperEvents extends BOAEvents {
         }
     }
 
-    public void logEvent(@NonNull String eventName, @Nullable HashMap<String, Object> eventInfo) {
+    public void logEvent(@NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, long eventCode) {
         if (!BlotoutAnalytics_Internal.getInstance().isDeveloperEventsEnabled) {
             return;
         }
-        this.logEvent(eventName, eventInfo, null);
+        this.logEvent(eventName, eventInfo, null, eventCode);
     }
 
     public void logEvent(
-            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime ) {
+            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime, long eventCode) {
 
         try {
             if (!BlotoutAnalytics_Internal.getInstance().isDeveloperEventsEnabled) {
@@ -162,7 +154,13 @@ public class BOADeveloperEvents extends BOAEvents {
                 long timeStamp = eventTime != null ? BODateTimeUtils.get13DigitNumberObjTimeStampFor(eventTime) : BODateTimeUtils.get13DigitNumberObjTimeStamp();
 
                 HashMap<String, Object> customEventInfo = (eventInfo != null && (eventInfo.keySet().size() > 0)) ? eventInfo : null;
-                Long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
+                Long eventSubCode;
+                if (eventCode == 0) {
+                    eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
+                } else {
+                    eventSubCode = eventCode;
+                }
+
                 HashMap<String, Object> customEventModelDict = new HashMap<>();
                 customEventModelDict.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
                 customEventModelDict.put(BOCommonConstants.BO_TIME_STAMP, timeStamp);
@@ -185,7 +183,7 @@ public class BOADeveloperEvents extends BOAEvents {
     }
 
     public void logPIIEvent(
-            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime ) {
+            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime) {
 
         try {
             if (!BlotoutAnalytics_Internal.getInstance().isDeveloperEventsEnabled) {
@@ -220,7 +218,7 @@ public class BOADeveloperEvents extends BOAEvents {
     }
 
     public void logPHIEvent(
-            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime ) {
+            @NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, @Nullable Date eventTime) {
 
         try {
             if (!BlotoutAnalytics_Internal.getInstance().isDeveloperEventsEnabled) {

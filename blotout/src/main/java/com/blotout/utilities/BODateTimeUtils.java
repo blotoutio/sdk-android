@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public final class BODateTimeUtils {
@@ -66,9 +67,9 @@ public final class BODateTimeUtils {
      */
     public static long getCurrentTimeStampMilliSeconds() {
         try {
-        Calendar calendar = Calendar.getInstance();
-        return calendar.getTime().getTime();
-        }catch (Exception e) {
+            Calendar calendar = Calendar.getInstance();
+            return calendar.getTime().getTime();
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
@@ -80,10 +81,10 @@ public final class BODateTimeUtils {
      */
     public static long getTimeInMilliSeconds(String dateString, String dateFormatter) {
         try {
-        Date formattedDate = getDateFromString(dateString,
-                dateFormatter);
-        return formattedDate.getTime();
-        }catch (Exception e) {
+            Date formattedDate = getDateFromString(dateString,
+                    dateFormatter);
+            return formattedDate.getTime();
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
@@ -95,9 +96,9 @@ public final class BODateTimeUtils {
     @NonNull
     public static Date getDateWithTimeInterval(long timeinterval, String dateFormat) {
         try {
-        Date formattedDate = new Date(timeinterval);
-        return formattedDate;
-        }catch (Exception e) {
+            Date formattedDate = new Date(timeinterval);
+            return formattedDate;
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return null;
@@ -109,9 +110,9 @@ public final class BODateTimeUtils {
     @Nullable
     public static Date getDateFromString(@Nullable String dateString, String dateFormat) {
 
-       if(dateString == null) {
-           return null;
-       }
+        if (dateString == null) {
+            return null;
+        }
         Date formattedDate = new Date();
 
         SimpleDateFormat format = new SimpleDateFormat(dateFormat, Locale.getDefault());
@@ -130,7 +131,7 @@ public final class BODateTimeUtils {
     @Nullable
     public static String getDateStringFromString(@Nullable String dateString, String dateFormat) {
 
-        if(dateString == null) {
+        if (dateString == null) {
             return null;
         }
         String formattedDateStr = null;
@@ -151,7 +152,7 @@ public final class BODateTimeUtils {
     @Nullable
     public static String getStringFromDate(@Nullable Date date, String dateFormat) {
 
-        if(date == null)
+        if (date == null)
             return null;
 
         String dateTime = null;
@@ -171,7 +172,7 @@ public final class BODateTimeUtils {
      * @returnL: diff in  milliseconds
      */
     public static long getDateDiffFromCurrentDate(@NonNull Date date) {
-        if(date == null)
+        if (date == null)
             return 0;
 
         return (date.getTime() - Calendar.getInstance().getTimeInMillis());
@@ -229,7 +230,7 @@ public final class BODateTimeUtils {
     }
 
     public static boolean isDayMonthAndYearSameOfDate(@Nullable Date date, @Nullable String dateStr,
-            @Nullable String format) {
+                                                      @Nullable String format) {
         try {
             if (date != null && dateStr != null && format != null && !dateStr.equals("")) {
                 SimpleDateFormat sdfo = new SimpleDateFormat(format);
@@ -250,7 +251,7 @@ public final class BODateTimeUtils {
     }
 
     public static boolean isMonthAndYearSameOfDate(@Nullable Date date, @Nullable String dateStr,
-                                                      @Nullable String format) {
+                                                   @Nullable String format) {
         try {
             if (date != null && dateStr != null && format != null && !dateStr.equals("")) {
                 SimpleDateFormat sdfo = new SimpleDateFormat(format);
@@ -270,8 +271,8 @@ public final class BODateTimeUtils {
         return false;
     }
 
-    public static boolean isMonthSameOfDate( @Nullable Date d1,  @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+    public static boolean isMonthSameOfDate(@Nullable Date d1, @Nullable Date d2) {
+        if (d1 == null || d2 == null)
             return false;
 
         if (BODateTimeUtils.getMonthFromDate(d1) == BODateTimeUtils.getMonthFromDate(d2)) {
@@ -281,7 +282,7 @@ public final class BODateTimeUtils {
     }
 
     public static boolean isWeekSameOfDate(@Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+        if (d1 == null || d2 == null)
             return false;
 
         if (BODateTimeUtils.getWeekFromDate(d1) == BODateTimeUtils.getWeekFromDate(d2)) {
@@ -291,40 +292,40 @@ public final class BODateTimeUtils {
     }
 
     public static boolean isDateBetween(@Nullable Date testDate, @Nullable Date d1, @Nullable Date d2) {
-        if(testDate == null || d1 == null || d2 == null)
+        if (testDate == null || d1 == null || d2 == null)
             return false;
         return testDate.compareTo(d1) > 0 && testDate.compareTo(d2) < 0;
     }
 
     public static boolean isDateLessThan(@Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+        if (d1 == null || d2 == null)
             return false;
         return d1.compareTo(d2) < 0;
     }
 
-    public static boolean isDateLessThanEqualTo( @Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+    public static boolean isDateLessThanEqualTo(@Nullable Date d1, @Nullable Date d2) {
+        if (d1 == null || d2 == null)
             return false;
 
         return d1.compareTo(d2) <= 0;
     }
 
     public static boolean isDateGreaterThan(@Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+        if (d1 == null || d2 == null)
             return false;
 
         return d1.compareTo(d2) > 0;
     }
 
     public static boolean isDateGreaterThanEqualTo(@Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+        if (d1 == null || d2 == null)
             return false;
 
         return d1.compareTo(d2) >= 0;
     }
 
     public static boolean equalTo(@Nullable Date d1, @Nullable Date d2) {
-        if(d1 == null || d2 == null)
+        if (d1 == null || d2 == null)
             return false;
 
         return d1.compareTo(d2) == 0;
@@ -416,11 +417,12 @@ public final class BODateTimeUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             return c.get(Calendar.MONTH) + 1;
-        }catch (Exception e) {
-                Logger.INSTANCE.e(TAG, e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
     }
+
     /**
      * Gets month of supplied date
      */
@@ -429,7 +431,7 @@ public final class BODateTimeUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             return c.get(Calendar.WEEK_OF_MONTH) + 1;
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
@@ -443,7 +445,7 @@ public final class BODateTimeUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             return c.get(Calendar.DAY_OF_MONTH);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
@@ -466,7 +468,7 @@ public final class BODateTimeUtils {
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             return c.get(Calendar.DAY_OF_YEAR);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return 0;
@@ -481,20 +483,20 @@ public final class BODateTimeUtils {
     @Nullable
     public static String getDayOfWeekAbbreviatedFromDateString(String date, String formatter) {
         try {
-        Date dateDT = getDateFromString(date, formatter);
+            Date dateDT = getDateFromString(date, formatter);
 
-        if (dateDT == null) {
-            return null;
-        }
-        // Get current date
-        Calendar c = Calendar.getInstance();
-        // it is very important to
-        // set the date of
-        // the calendar.
-        c.setTime(dateDT);
-        int day = c.get(Calendar.DAY_OF_WEEK);
-        return getDayOfWeekString(day);
-        }catch (Exception e) {
+            if (dateDT == null) {
+                return null;
+            }
+            // Get current date
+            Calendar c = Calendar.getInstance();
+            // it is very important to
+            // set the date of
+            // the calendar.
+            c.setTime(dateDT);
+            int day = c.get(Calendar.DAY_OF_WEEK);
+            return getDayOfWeekString(day);
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return null;
@@ -509,22 +511,22 @@ public final class BODateTimeUtils {
     @Nullable
     public static String getMonthFromDateString(String date, String formatter) {
         try {
-        Date dateDT = getDateFromString(date, formatter);
+            Date dateDT = getDateFromString(date, formatter);
 
-        if (dateDT == null) {
-            return null;
-        }
+            if (dateDT == null) {
+                return null;
+            }
 
-        // Get current date
-        Calendar c = Calendar.getInstance();
-        // it is very important to
-        // set the date of
-        // the calendar.
-        c.setTime(dateDT);
-        int day = c.get(Calendar.MONTH);
+            // Get current date
+            Calendar c = Calendar.getInstance();
+            // it is very important to
+            // set the date of
+            // the calendar.
+            c.setTime(dateDT);
+            int day = c.get(Calendar.MONTH);
 
-        return getMonthOfYearString(day);
-        }catch (Exception e) {
+            return getMonthOfYearString(day);
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }
         return null;
@@ -786,22 +788,22 @@ public final class BODateTimeUtils {
             Logger.INSTANCE.d(TAG,
                     "Current week of this month = " + calendar.get(Calendar.WEEK_OF_MONTH));
             return calendar.get(Calendar.WEEK_OF_MONTH);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
     }
 
     public static int weekOfYear(Date date) {
-       try {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        Logger.INSTANCE.d(TAG,
-                ("Current week of this year = " + calendar.get(Calendar.WEEK_OF_YEAR)));
-        return calendar.get(Calendar.WEEK_OF_YEAR);
-       }catch (Exception e) {
-           Logger.INSTANCE.e(TAG, e.getMessage());
-       }
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            Logger.INSTANCE.d(TAG,
+                    ("Current week of this year = " + calendar.get(Calendar.WEEK_OF_YEAR)));
+            return calendar.get(Calendar.WEEK_OF_YEAR);
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
+        }
         return 0;
     }
 
@@ -812,7 +814,7 @@ public final class BODateTimeUtils {
             Logger.INSTANCE.d(TAG,
                     ("Current month of this year = " + calendar.get(Calendar.MONTH)));
             return calendar.get(Calendar.MONTH);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
@@ -827,7 +829,7 @@ public final class BODateTimeUtils {
             Logger.INSTANCE.d(TAG,
                     ("Current week of this year = " + calendar.get(Calendar.WEEK_OF_YEAR)));
             return calendar.get(Calendar.WEEK_OF_YEAR);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
@@ -841,7 +843,7 @@ public final class BODateTimeUtils {
             Logger.INSTANCE.d(TAG,
                     ("Current week of this year = " + calendar.get(Calendar.WEEK_OF_YEAR)));
             return calendar.get(Calendar.WEEK_OF_YEAR);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
@@ -849,13 +851,14 @@ public final class BODateTimeUtils {
 
     public static int monthOfYearForDateString(String dateStr) {
         try {
-            Date date = getDateFromString(dateStr, BOCommonConstants.BO_DATE_FORMAT);;
+            Date date = getDateFromString(dateStr, BOCommonConstants.BO_DATE_FORMAT);
+            ;
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
             Logger.INSTANCE.d(TAG,
                     ("Current week of this year = " + calendar.get(Calendar.MONTH)));
             return calendar.get(Calendar.MONTH);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
@@ -869,7 +872,7 @@ public final class BODateTimeUtils {
             Logger.INSTANCE.d(TAG,
                     ("Current week of this year = " + calendar.get(Calendar.MONTH)));
             return calendar.get(Calendar.MONTH);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
@@ -916,14 +919,14 @@ public final class BODateTimeUtils {
         if (date == null) {
             return null;
         }
-    try {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, -1);
-        return getStringFromDate(cal.getTime(),format);
-    }catch (Exception e) {
-        Logger.INSTANCE.e(TAG, e.toString());
-    }
+        try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, -1);
+            return getStringFromDate(cal.getTime(), format);
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+        }
         return null;
     }
 
@@ -941,13 +944,13 @@ public final class BODateTimeUtils {
         try {
             long diffInMs = endDate.getTime() - startDate.getTime();
             return diffInMs;
-        }catch (Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return 0;
     }
 
-    public static Date dateByAddingTimeInterval(Date fileModificationDate, long expiryInterval){
+    public static Date dateByAddingTimeInterval(Date fileModificationDate, long expiryInterval) {
         try {
             return new Date(fileModificationDate.getTime() + timeIntervalToMilliseconds(expiryInterval));
         } catch (Exception e) {
@@ -962,16 +965,17 @@ public final class BODateTimeUtils {
 
     /**
      * This method used to roundoff timestamp to protect behavioural timestamp analysis
+     *
      * @param timeStamp
      * @return
      */
     public static long roundOffTimeStamp(long timeStamp) {
         try {
 
-            if(timeStamp <= 0)
+            if (timeStamp <= 0)
                 return 0;
 
-            if(BOSDKManifestController.getInstance().sdkMapUserId)
+            if (BOSDKManifestController.getInstance().sdkMapUserId)
                 return timeStamp;
 
             Date date = new Date(timeStamp);
@@ -993,10 +997,33 @@ public final class BODateTimeUtils {
 
             return roundOffTimeStamp;
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
 
         return 0;
     }
+
+    public static int getCurrentTimezoneOffsetInMin() {
+        try {
+            TimeZone tz = TimeZone.getDefault();
+            Date now = new Date();
+            int timeZoneOffset = tz.getOffset(now.getTime()) / (1000 * 60);
+            return timeZoneOffset;
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
+            return 0;
+        }
+    }
+
+    public static int getCurrentTimezoneOffsetInMin(TimeZone timeZOne) {
+        try {
+            Date now = new Date();
+            return timeZOne.getOffset(now.getTime()) / (1000 * 60);
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
+            return 0;
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ import org.junit.runner.RunWith
 import org.mockito.MockitoAnnotations
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.util.*
 
 /**
  * Created by ankuradhikari on 16,November,2020
@@ -246,4 +247,14 @@ class BODateTimeUtilsTest {
         Assert.assertNotNull(value)
     }
 
+    @Test
+    fun testTimeZoneOffset() {
+
+        val timeZoneOffset = BODateTimeUtils.getCurrentTimezoneOffsetInMin();
+        Assert.assertTrue(timeZoneOffset == 330)
+
+        val timeZoneOffsetUtc = BODateTimeUtils.getCurrentTimezoneOffsetInMin(TimeZone.getTimeZone("UTC"));
+        Assert.assertTrue(timeZoneOffsetUtc == 0)
+
+    }
 }

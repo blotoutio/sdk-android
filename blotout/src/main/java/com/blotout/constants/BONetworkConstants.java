@@ -52,6 +52,7 @@ public final class BONetworkConstants {
     public static final String BO_INSTALL_REFERRAR = "InstallReferrar";
     public static final String BO_PII_Event_SERVER = "piievn";
     public static final String BO_SESSION_ID = "sessionId";
+    public static final String BO_SDK_START = "sdk_start";
 
 
     public static final String BO_CLIENT_TIMEZONE = "client_timezone";
@@ -98,10 +99,12 @@ public final class BONetworkConstants {
     public static final long BO_EVENT_APP_DO_NOT_TRACK = 11022;
     public static final long BO_EVENT_APP_DEEP_LINK = 11023;
     public static final long BO_EVENT_APP_SESSION_INFO = 11024;
+    public static final long BO_EVENT_SDK_START = 11130;
 
 
 
     //#pragma mark - Event DEVELOPER CODED SUB EVENTS
+    public static final long BO_DEV_EVENT_MAP_ID = 21001;
     public static final long BO_DEV_EVENT_CLICK_TAP_KEY = 21001;
     public static final long BO_DEV_EVENT_DOUBLE_CLICK_TAP_KEY = 21002;
     public static final long BO_DEV_EVENT_VIEW_KEY = 21003;

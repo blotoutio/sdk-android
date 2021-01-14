@@ -44,6 +44,7 @@ public class BOAppInfo {
     private   String launchReason;
     private BOCurrentLocation currentLocation;
     private String sessionId;
+    private int timeZoneOffset;
 
     @JsonProperty("sessionId")
     public String getSessionId() { return sessionId; }
@@ -165,6 +166,11 @@ public class BOAppInfo {
     public BOCurrentLocation getCurrentLocation() { return currentLocation; }
     @JsonProperty("currentLocation")
     public void setCurrentLocation(BOCurrentLocation value) { this.currentLocation = value; }
+
+    @JsonProperty("timeZoneOffset")
+    public int getTimeZoneOffset() { return timeZoneOffset; }
+    @JsonProperty("timeZoneOffset")
+    public void setTimeZoneOffset(int value) { this.timeZoneOffset = value; }
 
     /*
         Model to json and vice-versa Conversion Methods

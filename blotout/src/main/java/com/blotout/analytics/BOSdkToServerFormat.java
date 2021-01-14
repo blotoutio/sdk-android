@@ -1,8 +1,10 @@
 package com.blotout.analytics;
 
 import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import com.blotout.Controllers.BOSDKManifestController;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
@@ -69,6 +71,7 @@ public class BOSdkToServerFormat {
     private HashMap<String, Object> metaData;
     private HashMap<String, Object> geoData;
     private HashMap<String, Object> previousMetaData;
+
     public static BOSdkToServerFormat getInstance() {
 
         if (instance == null) { //if there is no instance available... create new one
@@ -113,19 +116,19 @@ public class BOSdkToServerFormat {
                     events.addAll(this.prepareMemoryEvents(sessionData));
                 }
 
-                if(BOSDKManifestController.getInstance().sdkPushPIIEvents) {
+                if (BOSDKManifestController.getInstance().sdkPushPIIEvents) {
                     events.addAll(this.preparePIIEvents(sessionData));
                     events.addAll(this.prepareAdInfo(sessionData));
                 }
 
-                if(BOSDKManifestController.getInstance().sdkBehaviourEvents) {
+                if (BOSDKManifestController.getInstance().sdkBehaviourEvents) {
                     events.addAll(this.prepareNavigationEvents(sessionData));
                 }
             }
 
             //add userID mapping
-            if(BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
-               events = this.addUserIdMapping(events);
+            if (BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
+                events = this.addUserIdMapping(events);
             }
 
             HashMap<String, Object> serverData = new HashMap<>();
@@ -160,21 +163,21 @@ public class BOSdkToServerFormat {
             //Prepare
             if (BlotoutAnalytics_Internal.getInstance().isDeveloperEventsEnabled && BlotoutAnalytics_Internal.getInstance().isSDKEnabled) {
 
-                if(BOSDKManifestController.getInstance().sdkPushPIIEvents) {
+                if (BOSDKManifestController.getInstance().sdkPushPIIEvents) {
                     piiServerData = this.prepareDeveloperCodifiedPIIEvents(sessionData);
                 }
 
-                if(BOSDKManifestController.getInstance().sdkPushPHIEvents) {
+                if (BOSDKManifestController.getInstance().sdkPushPHIEvents) {
                     phiServerData = this.prepareDeveloperCodifiedPHIEvents(sessionData);
                 }
             }
 
             //add userID mapping
-            if(BOSDKManifestController.getInstance().sdkMapUserId) {
-                if(piiServerData != null) {
+            if (BOSDKManifestController.getInstance().sdkMapUserId) {
+                if (piiServerData != null) {
                     piiServerData = this.addUserIdMapping(piiServerData);
                 }
-                if(phiServerData != null) {
+                if (phiServerData != null) {
                     phiServerData = this.addUserIdMapping(phiServerData);
                 }
             }
@@ -182,28 +185,28 @@ public class BOSdkToServerFormat {
             HashMap<String, Object> serverData = new HashMap<>();
 
             if ((piiServerData != null && piiServerData.size() > 0)
-                    || (phiServerData != null && phiServerData.size() > 0) ) {
+                    || (phiServerData != null && phiServerData.size() > 0)) {
 
                 String secretKey = BOCommonUtils.getUUID();
-                secretKey = secretKey.replace("-","");
-                BOEncryptionManager encryptionManager = new BOEncryptionManager(BOEncryptionManager.ALGORITHM_AES_CBC_PKCS5Padding,secretKey,BOEncryptionManager.MODE_256BIT);
+                secretKey = secretKey.replace("-", "");
+                BOEncryptionManager encryptionManager = new BOEncryptionManager(BOEncryptionManager.ALGORITHM_AES_CBC_PKCS5Padding, secretKey, BOEncryptionManager.MODE_256BIT);
 
                 serverData.put(BONetworkConstants.BO_META, this.prepareMetaData(sessionData));
                 serverData.put(BONetworkConstants.BO_GEO, this.prepareGeoData(sessionData));
 
                 String piiEncryptedData = null;
                 String piiEncryptedSecretKey = null;
-                if(piiServerData != null && piiServerData.size() > 0) {
+                if (piiServerData != null && piiServerData.size() > 0) {
 
                     byte[] dataToEncryptPII = this.convertObjectToByte(piiServerData);
                     piiEncryptedData = Base64.encodeToString(encryptionManager.encrypt(dataToEncryptPII), Base64.NO_WRAP);
-                    piiEncryptedSecretKey =  BOEncryptionManager.encryptText(secretKey.getBytes(), BOSDKManifestController.getInstance().sdkPIIPublicKey);
+                    piiEncryptedSecretKey = BOEncryptionManager.encryptText(secretKey.getBytes(), BOSDKManifestController.getInstance().sdkPIIPublicKey);
 
                     HashMap<String, Object> piiPayload = new HashMap<>();
-                    piiPayload.put(BONetworkConstants.BO_KEY,piiEncryptedSecretKey);
-                    piiPayload.put(BONetworkConstants.BO_DATA,piiEncryptedData);
+                    piiPayload.put(BONetworkConstants.BO_KEY, piiEncryptedSecretKey);
+                    piiPayload.put(BONetworkConstants.BO_DATA, piiEncryptedData);
 
-                    if(piiEncryptedSecretKey != null && piiEncryptedData != null) {
+                    if (piiEncryptedSecretKey != null && piiEncryptedData != null) {
                         serverData.put(BONetworkConstants.BO_PII, piiPayload);
                     } else {
                         serverData.put(BONetworkConstants.BO_PII, null);
@@ -215,16 +218,16 @@ public class BOSdkToServerFormat {
 
                 String phiEncryptedData = null;
                 String phiEncryptedSecretKey = null;
-                if(phiServerData != null && phiServerData.size() > 0) {
+                if (phiServerData != null && phiServerData.size() > 0) {
                     byte[] dataToEncryptPHI = this.convertObjectToByte(phiServerData);
                     phiEncryptedData = Base64.encodeToString(encryptionManager.encrypt(dataToEncryptPHI), Base64.NO_WRAP);
-                    phiEncryptedSecretKey =  BOEncryptionManager.encryptText(secretKey.getBytes(), BOSDKManifestController.getInstance().sdkPHIPublicKey);
+                    phiEncryptedSecretKey = BOEncryptionManager.encryptText(secretKey.getBytes(), BOSDKManifestController.getInstance().sdkPHIPublicKey);
 
                     HashMap<String, Object> phiPayload = new HashMap<>();
-                    phiPayload.put(BONetworkConstants.BO_KEY,phiEncryptedSecretKey);
-                    phiPayload.put(BONetworkConstants.BO_DATA,phiEncryptedData);
+                    phiPayload.put(BONetworkConstants.BO_KEY, phiEncryptedSecretKey);
+                    phiPayload.put(BONetworkConstants.BO_DATA, phiEncryptedData);
 
-                    if(phiEncryptedSecretKey != null && phiEncryptedData != null) {
+                    if (phiEncryptedSecretKey != null && phiEncryptedData != null) {
                         serverData.put(BONetworkConstants.BO_PHI, phiPayload);
                     } else {
                         serverData.put(BONetworkConstants.BO_PHI, null);
@@ -237,7 +240,7 @@ public class BOSdkToServerFormat {
                 serverData.put(BONetworkConstants.BO_PHI_DATA, phiServerData);
 
 
-                if((piiEncryptedData != null && piiEncryptedSecretKey != null)  || (phiEncryptedData != null && phiEncryptedSecretKey!= null)) {
+                if ((piiEncryptedData != null && piiEncryptedSecretKey != null) || (phiEncryptedData != null && phiEncryptedSecretKey != null)) {
                     return serverData;
                 } else {
                     //clear all data if encryption failed
@@ -263,7 +266,7 @@ public class BOSdkToServerFormat {
         try {
 
             //Return No retention Event in case of firstParty container
-            if(BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
+            if (BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
                 return null;
             }
 
@@ -273,7 +276,7 @@ public class BOSdkToServerFormat {
             }
 
             //add userID mapping
-            if(BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
+            if (BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
                 events = this.addUserIdMapping(events);
             }
 
@@ -308,7 +311,7 @@ public class BOSdkToServerFormat {
         try {
 
             //Return No retention Event in case of firstParty container
-            if(BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
+            if (BOSDKManifestController.getInstance().sdkModeDeployment == BOSDKManifestController.BO_DEPLOYMENT_MODE_FIRST_PARTY) {
                 return null;
             }
 
@@ -322,7 +325,7 @@ public class BOSdkToServerFormat {
             }
 
             //add userID mapping
-            if(BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
+            if (BOSDKManifestController.getInstance().sdkMapUserId && events != null && events.size() > 0) {
                 events = this.addUserIdMapping(events);
             }
 
@@ -468,7 +471,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, customEvent.getVisibleClassName());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,customEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, customEvent.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -485,7 +488,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_TIMED_KEY);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, timedEvent.getTimedEvenInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, timedEvent.getMid());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,timedEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, timedEvent.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -505,7 +508,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, screenEdgepan.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_FROM, screenEdgepan.getScreenRectFrom().getScreenX());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_TO, screenEdgepan.getScreenRectFrom().getScreenY());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,screenEdgepan.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, screenEdgepan.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -522,7 +525,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_VIEW_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, viewEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, viewEvent.getViewClassName());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,viewEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, viewEvent.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -542,7 +545,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
                         eventsArray.add(customEventJson);
 
                     }
@@ -562,7 +565,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
                         screenRect.add(gestureEvent.getScreenRect().getScreenY());
@@ -586,7 +589,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
                         screenRect.add(gestureEvent.getScreenRect().getScreenY());
@@ -610,7 +613,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
                         screenRect.add(gestureEvent.getScreenRect().getScreenY());
@@ -634,7 +637,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
                         screenRect.add(gestureEvent.getScreenRect().getScreenY());
@@ -658,7 +661,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
 
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
@@ -683,7 +686,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
 
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
@@ -707,7 +710,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
 
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
@@ -732,7 +735,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_TYPE, gestureEvent.getObjectType());
                         customEventJson.put(BONetworkConstants.BO_OBJECT_RECT, gestureEvent.getObjectRect());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,gestureEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, gestureEvent.getSessionId());
 
                         List<Object> screenRect = new ArrayList<>();
                         screenRect.add(gestureEvent.getScreenRect().getScreenX());
@@ -767,7 +770,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDau().getDauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDau().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getSessionId());
                 eventsArray.add(event);
             }
 
@@ -780,7 +783,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DPU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDpu().getDpuInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDpu().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getSessionId());
                 eventsArray.add(event);
             }
 
@@ -793,7 +796,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getAppInstalled().getAppInstalledInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getAppInstalled().getMid());
                 event.put("isFirstLaunch", retentionEvent.getAppInstalled().getIsFirstLaunch());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getSessionId());
                 eventsArray.add(event);
             }
 
@@ -806,7 +809,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getNewUser().getTheNewUserInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getNewUser().getMid());
                 event.put("isFirstLaunch", retentionEvent.getNewUser().getIsNewUser());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getSessionId());
                 eventsArray.add(event);
             }
 
@@ -820,7 +823,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDast().getPayload());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDast().getMid());
                 event.put("tst", retentionEvent.getDast().getAverageSessionTime());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getSessionId());
                 eventsArray.add(event);
             }
 
@@ -837,7 +840,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, customEvent.getVisibleClassName());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,customEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, customEvent.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -874,7 +877,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDau().getDauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDau().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getDau().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getDau().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -886,7 +889,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_WAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWau().getWauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWau().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getWau().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getWau().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -898,7 +901,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_MAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getMau().getMauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMau().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getMau().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getMau().getSessionId());
                 eventsArray.add(event);
             }
             if (BlotoutAnalytics_Internal.getInstance().isPayingUser) {
@@ -911,7 +914,7 @@ public class BOSdkToServerFormat {
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDpu().getDpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDpu().getMid());
-                    event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getDpu().getSessionId());
+                    event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getDpu().getSessionId());
                     eventsArray.add(event);
                 }
 
@@ -923,7 +926,7 @@ public class BOSdkToServerFormat {
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_WPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWpu().getWpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWpu().getMid());
-                    event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getWpu().getSessionId());
+                    event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getWpu().getSessionId());
                     eventsArray.add(event);
                 }
 
@@ -935,7 +938,7 @@ public class BOSdkToServerFormat {
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_MPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getMpu().getMpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMpu().getMid());
-                    event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getMpu().getSessionId());
+                    event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getMpu().getSessionId());
                     eventsArray.add(event);
                 }
             }
@@ -947,7 +950,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_APP_INSTALL_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getAppInstalled().getAppInstalledInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getAppInstalled().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getAppInstalled().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getAppInstalled().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -959,7 +962,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_NUO_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getNewUser().getTheNewUserInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getNewUser().getMid());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getNewUser().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getNewUser().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -973,7 +976,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDast().getDastInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDast().getMid());
                 event.put("tst", retentionEvent.getDast().getAverageSessionTime());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getDast().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getDast().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -987,7 +990,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWast().getWastInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWast().getMid());
                 event.put("tst", retentionEvent.getWast().getAverageSessionTime());
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getWast().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getWast().getSessionId());
                 eventsArray.add(event);
             }
 
@@ -1002,7 +1005,7 @@ public class BOSdkToServerFormat {
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMast().getMid());
                 event.put("tst", retentionEvent.getMast().getAverageSessionTime());
                 eventsArray.add(event);
-                event.put(BONetworkConstants.BO_SESSION_ID,retentionEvent.getMast().getSessionId());
+                event.put(BONetworkConstants.BO_SESSION_ID, retentionEvent.getMast().getSessionId());
             }
 
             if (retentionEvent.getCustomEvents() != null && retentionEvent.getCustomEvents().getTimeStamp() > 0) {
@@ -1017,7 +1020,7 @@ public class BOSdkToServerFormat {
                     customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                     customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
                     customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, customEvent.getVisibleClassName());
-                    customEventJson.put(BONetworkConstants.BO_SESSION_ID,customEvent.getSessionId());
+                    customEventJson.put(BONetworkConstants.BO_SESSION_ID, customEvent.getSessionId());
                     eventsArray.add(customEventJson);
                 }
 
@@ -1059,7 +1062,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_RUN_TIME_EXCEPTION);
                         event.put(BONetworkConstants.BO_PROPERTIES, crashEventProperties);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, crashEvent.getMid());
-                        event.put(BONetworkConstants.BO_SESSION_ID,crashEvent.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, crashEvent.getSessionId());
 
                         List<String> callbackSymbol = crashEvent.getCallStackSymbols();
                         String lastObject = null;
@@ -1106,7 +1109,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_START_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1124,7 +1127,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_END_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1141,7 +1144,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_BACKGROUND_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1158,7 +1161,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_FOREGROUND_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1176,7 +1179,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_LANDSCAPE_ORIENTATION_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1194,7 +1197,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_PORTRAIT_ORIENTATION_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1212,7 +1215,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_RECEIVED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1229,7 +1232,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_VIEWED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1247,7 +1250,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_CLICKED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_CLICKED_KEY + BODateTimeUtils.get13DigitNumberObjTimeStamp() + appInfo.getTimeStamp());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1258,9 +1261,9 @@ public class BOSdkToServerFormat {
                     if (!sessionInfo.getSentToServer()) {
 
                         HashMap<String, Object> sessionEvent = new HashMap<>();
-                        sessionEvent.put(BOCommonConstants.BO_START,sessionInfo.getStart());
-                        sessionEvent.put(BOCommonConstants.BO_END,sessionInfo.getEnd());
-                        sessionEvent.put(BOCommonConstants.BO_DURATION,sessionInfo.getDuration());
+                        sessionEvent.put(BOCommonConstants.BO_START, sessionInfo.getStart());
+                        sessionEvent.put(BOCommonConstants.BO_END, sessionInfo.getEnd());
+                        sessionEvent.put(BOCommonConstants.BO_DURATION, sessionInfo.getDuration());
 
                         HashMap<String, Object> event = new HashMap<>();
                         event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppSessionInfo().indexOf(sessionInfo));
@@ -1270,7 +1273,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, BONetworkConstants.BO_EVENT_APP_SESSION_INFO + BODateTimeUtils.get13DigitNumberObjTimeStamp() + sessionInfo.getTimeStamp());
                         event.put(BONetworkConstants.BO_PROPERTIES, sessionEvent);
-                        event.put(BONetworkConstants.BO_SESSION_ID,sessionInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, sessionInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1313,7 +1316,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, commonEvent.getEventSubCode());
                         event.put(BONetworkConstants.BO_PROPERTIES, commonEvent.getEventInfo());
                         event.put(BONetworkConstants.BO_MESSAGE_ID, commonEvent.getMid());
-                        event.put(BONetworkConstants.BO_SESSION_ID,commonEvent.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, commonEvent.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1346,7 +1349,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getPercentage());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1365,7 +1368,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1384,7 +1387,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1403,7 +1406,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1422,7 +1425,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1441,7 +1444,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1460,7 +1463,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getNumber());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1479,7 +1482,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getUsagePercentage());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1498,7 +1501,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1517,7 +1520,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1536,7 +1539,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getNumber());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1555,7 +1558,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getNames().toString());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1574,7 +1577,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1593,7 +1596,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, appInfo.getStatus());
-                        event.put(BONetworkConstants.BO_SESSION_ID,appInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1624,7 +1627,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, memoryInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,memoryInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, memoryInfo.getSessionId());
 
                         HashMap<String, Object> properties = new HashMap<>();
                         properties.put(BONetworkConstants.BO_EVENT_ACTIVE_MEMORY, memoryInfo.getActiveMemory());
@@ -1654,7 +1657,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, storageInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
-                        event.put(BONetworkConstants.BO_SESSION_ID,storageInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, storageInfo.getSessionId());
 
                         HashMap<String, Object> properties = new HashMap<>();
                         properties.put(BONetworkConstants.BO_EVENT_UNIT, storageInfo.getUnit());
@@ -1698,7 +1701,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, customEvent.getVisibleClassName());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,customEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, customEvent.getSessionId());
 
                         eventsArray.add(customEventJson);
                     }
@@ -1734,7 +1737,7 @@ public class BOSdkToServerFormat {
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, customEvent.getVisibleClassName());
-                        customEventJson.put(BONetworkConstants.BO_SESSION_ID,customEvent.getSessionId());
+                        customEventJson.put(BONetworkConstants.BO_SESSION_ID, customEvent.getSessionId());
                         eventsArray.add(customEventJson);
                     }
                 }
@@ -1766,7 +1769,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getipAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
 
                         eventsArray.add(event);
                     }
@@ -1786,7 +1789,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getBroadcastAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1805,7 +1808,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getipAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1824,7 +1827,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getNetmask());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1843,7 +1846,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getIsConnected());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1862,7 +1865,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getIsConnected());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1881,7 +1884,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getipAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1900,7 +1903,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getBroadcastAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1919,7 +1922,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getipAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1938,7 +1941,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getRouterAddress());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1957,7 +1960,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getssid());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -1976,7 +1979,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_VALUE, networkInfo.getNetmask());
-                        event.put(BONetworkConstants.BO_SESSION_ID,networkInfo.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, networkInfo.getSessionId());
                         eventsArray.add(event);
                     }
                 }
@@ -2011,7 +2014,7 @@ public class BOSdkToServerFormat {
             event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NAVIGATION));
             event.put(BONetworkConstants.BO_NAVIGATION_SCREEN, screenName);
             event.put(BONetworkConstants.BO_NAVIGATION_TIME, screenTime);
-            event.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+            event.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
             eventsArray.add(event);
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
@@ -2037,7 +2040,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DO_NOT_TRACK);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, adInformation.getMid());
-                        event.put(BONetworkConstants.BO_SESSION_ID,adInformation.getSessionId());
+                        event.put(BONetworkConstants.BO_SESSION_ID, adInformation.getSessionId());
 
                         HashMap<String, Object> property = new HashMap<>();
                         property.put(BONetworkConstants.BO_AD_IDENTIFIER, adInformation.getAdvertisingId());
@@ -2060,7 +2063,7 @@ public class BOSdkToServerFormat {
     }
 
     @NonNull
-    private List<HashMap<String,Object>> prepareInstallReferrarInfo() {
+    private List<HashMap<String, Object>> prepareInstallReferrarInfo() {
 
         List<HashMap<String, Object>> eventsArray = new ArrayList<HashMap<String, Object>>();
         try {
@@ -2072,7 +2075,7 @@ public class BOSdkToServerFormat {
             event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_INSTALL_REFERRER);
             event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_INSTALL_REFERRAR));
             event.put(BONetworkConstants.BO_PROPERTIES, BOInstallReferrerHelper.getInstance().getInstallReferrarData());
-            event.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
+            event.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
 
             eventsArray.add(event);
         } catch (Exception e) {
@@ -2086,10 +2089,10 @@ public class BOSdkToServerFormat {
     /*Add userId in every item in the list*/
     @NonNull
     private List<HashMap<String, Object>> addUserIdMapping(List<HashMap<String, Object>> events) {
-        List<HashMap<String, Object>> userIdMappedEvents =  new ArrayList<>();
+        List<HashMap<String, Object>> userIdMappedEvents = new ArrayList<>();
         String userId = BODeviceDetection.getDeviceId();
-        for(HashMap<String, Object> item : events) {
-           item.put("userid",userId);
+        for (HashMap<String, Object> item : events) {
+            item.put("userid", userId);
             userIdMappedEvents.add(item);
         }
         return userIdMappedEvents;
@@ -2112,6 +2115,29 @@ public class BOSdkToServerFormat {
             Logger.INSTANCE.e(TAG, e.toString());
             return null;
         }
+    }
+
+    public HashMap<String, Object> createEventObject(String eventName,long eventCategory, long eventSubCode) {
+        HashMap<String, Object> serverData = new HashMap<>();
+        List<HashMap<String, Object>> events = new ArrayList<HashMap<String, Object>>();
+
+        HashMap<String, Object> customEventJson = new HashMap<>();
+        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, 0);
+        customEventJson.put(BONetworkConstants.BO_EVENT_NAME, eventName);
+        customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
+        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, eventCategory);
+        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, eventSubCode);
+        customEventJson.put(BONetworkConstants.BO_PROPERTIES, null);
+        customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(eventName));
+        customEventJson.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
+        customEventJson.put("userid", BODeviceDetection.getDeviceId());
+        events.add(customEventJson);
+
+        serverData.put(BONetworkConstants.BO_META, this.prepareMetaData(null));
+        serverData.put(BONetworkConstants.BO_GEO, this.prepareGeoData(null));
+        serverData.put(BONetworkConstants.BO_PMETA, null);
+        serverData.put(BONetworkConstants.BO_EVENTS, events);
+        return serverData;
     }
 
 }
