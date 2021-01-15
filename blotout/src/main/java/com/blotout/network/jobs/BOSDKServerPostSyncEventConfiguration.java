@@ -2,7 +2,6 @@ package com.blotout.network.jobs;
 
 import androidx.annotation.NonNull;
 
-import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
 import com.blotout.model.lifetime.BOAppLifeTimeInfo;
@@ -13,7 +12,6 @@ import com.blotout.model.session.BOAddToCart;
 import com.blotout.model.session.BOApp;
 import com.blotout.model.session.BOAppNavigation;
 import com.blotout.model.session.BOAppSessionDataModel;
-import com.blotout.model.session.BOAppStates;
 import com.blotout.model.session.BOBatteryLevel;
 import com.blotout.model.session.BOBroadcastAddress;
 import com.blotout.model.session.BOChargeTransaction;
@@ -38,12 +36,8 @@ import com.blotout.model.session.BOTimedEvent;
 import com.blotout.model.session.BOView;
 import com.blotout.model.session.BOWifiRouterAddress;
 import com.blotout.model.session.BOWifiSSID;
-import com.blotout.referrerapi.BOInstallReferrerHelper;
-import com.blotout.utilities.BOCommonUtils;
-import com.blotout.utilities.BODateTimeUtils;
 import com.blotout.utilities.Logger;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,8 +45,8 @@ import java.util.List;
 /**
  * Created by Blotout on 21,November,2019
  */
-public class BOSDKServerPostSyncEventConfiguration  {
-    private static final String TAG = BOCommonConstants.TAG_PREFIX +"BOSDKServerPostSyncEventConfiguration";
+public class BOSDKServerPostSyncEventConfiguration {
+    private static final String TAG = BOCommonConstants.TAG_PREFIX + "BOSDKServerPostSyncEventConfiguration";
 
     public BOAppSessionDataModel sessionObject;
     public BOAppLifetimeData lifetimeDataObject;
@@ -62,7 +56,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
         if (instance == null) { //if there is no instance available... create new one
             synchronized (BOSDKServerPostSyncEventConfiguration.class) {
-                if(instance == null) {
+                if (instance == null) {
                     instance = new BOSDKServerPostSyncEventConfiguration();
                 }
             }
@@ -74,96 +68,96 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
     }
 
-    public void updateSentToServerForSessionEvents(HashMap<String,Object> events){
+    public void updateSentToServerForSessionEvents(HashMap<String, Object> events) {
         try {
             if (this.sessionObject != null && events != null) {
                 List<HashMap> eventList = (List<HashMap>) events.get("events");
-                for (HashMap<String,Object> singleEvent : eventList) {
-                     String serverEventMid = (String) singleEvent.get("mid");
+                for (HashMap<String, Object> singleEvent : eventList) {
+                    String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
                     long evc = (long) singleEvent.get("evc");
-                    updateConfigForEvent(serverEventMid,evc,evcs,serverEventMid,this.sessionObject);
+                    updateConfigForEvent(serverEventMid, evc, evcs, serverEventMid, this.sessionObject);
                 }
             }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
-    public void updateSentToServerForLifeTimeEvents(HashMap<String,Object> events){
+    public void updateSentToServerForLifeTimeEvents(HashMap<String, Object> events) {
         try {
             if (this.lifetimeDataObject != null && events != null) {
                 List<HashMap> eventList = (List<HashMap>) events.get("events");
-                for (HashMap<String,Object> singleEvent : eventList) {
+                for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
                     long evc = (long) singleEvent.get("evc");
-                    updateConfigForLifeTimeEvent(serverEventMid,evc,evcs,serverEventMid,this.lifetimeDataObject);
+                    updateConfigForLifeTimeEvent(serverEventMid, evc, evcs, serverEventMid, this.lifetimeDataObject);
                 }
             }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
-    public void updateSentToServerForEvents(HashMap<String,Object> events, BOAppSessionDataModel sessionObjectModel){
-       try {
+    public void updateSentToServerForEvents(HashMap<String, Object> events, BOAppSessionDataModel sessionObjectModel) {
+        try {
             if (sessionObjectModel != null && events != null) {
                 List<HashMap> eventList = (List<HashMap>) events.get("events");
-                for (HashMap<String,Object> singleEvent : eventList) {
+                for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
                     long evc = (long) singleEvent.get("evc");
-                    updateConfigForEvent(serverEventMid,evc,evcs,serverEventMid,sessionObjectModel);
+                    updateConfigForEvent(serverEventMid, evc, evcs, serverEventMid, sessionObjectModel);
                 }
             }
-       }catch (Exception e) {
-           Logger.INSTANCE.e(TAG,e.toString());
-       }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+        }
     }
 
-    public void updateSentToServerForLifeTimeEvents(HashMap<String,Object> events, BOAppLifetimeData lifeTimeModel){
+    public void updateSentToServerForLifeTimeEvents(HashMap<String, Object> events, BOAppLifetimeData lifeTimeModel) {
         try {
             if (lifeTimeModel != null && events != null) {
                 List<HashMap> eventList = (List<HashMap>) events.get("events");
-                for (HashMap<String,Object> singleEvent : eventList) {
+                for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
                     long evc = (long) singleEvent.get("evc");
-                    updateConfigForLifeTimeEvent(serverEventMid,evc,evcs,serverEventMid,lifeTimeModel);
+                    updateConfigForLifeTimeEvent(serverEventMid, evc, evcs, serverEventMid, lifeTimeModel);
                 }
             }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
-    public void updateConfigForEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppSessionDataModel sessionData){
-       try {
+    public void updateConfigForEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppSessionDataModel sessionData) {
+        try {
             if ((eventCode >= BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) && (eventCode < BONetworkConstants.BO_EVENT_FUNNEL_KEY)) {
-                updateDeveloperCodifiedEvents(serverEvent,sessionObject);
-            }else if ((eventCode >= BONetworkConstants.BO_EVENT_RETENTION_KEY) && (eventCode  < BONetworkConstants.BO_EVENT_EXCEPTION_KEY)){
-                updateSessionRetentionEvents(serverEvent,sessionObject);
-            } else if(eventCode >= BONetworkConstants.BO_EVENT_FUNNEL_KEY && eventCode < BONetworkConstants.BO_EVENT_RETENTION_KEY) {
-                updateFunnelCommonEvents(serverEvent,sessionObject);
-            } else if(eventCode >=BONetworkConstants.BO_EVENT_SEGMENT_KEY && eventCode < 80001) {
+                updateDeveloperCodifiedEvents(serverEvent, sessionObject);
+            } else if ((eventCode >= BONetworkConstants.BO_EVENT_RETENTION_KEY) && (eventCode < BONetworkConstants.BO_EVENT_EXCEPTION_KEY)) {
+                updateSessionRetentionEvents(serverEvent, sessionObject);
+            } else if (eventCode >= BONetworkConstants.BO_EVENT_FUNNEL_KEY && eventCode < BONetworkConstants.BO_EVENT_RETENTION_KEY) {
+                updateFunnelCommonEvents(serverEvent, sessionObject);
+            } else if (eventCode >= BONetworkConstants.BO_EVENT_SEGMENT_KEY && eventCode < 80001) {
                 //TODO: 80001 need to make constant for next base events
-                updateSegmentsCommonEvents(serverEvent,sessionObject);
-            } else if(eventCode >= BONetworkConstants.BO_EVENT_SYSTEM_KEY && eventCode < BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) {
-                updateSystemEvents(serverEvent,sessionObject);
+                updateSegmentsCommonEvents(serverEvent, sessionObject);
+            } else if (eventCode >= BONetworkConstants.BO_EVENT_SYSTEM_KEY && eventCode < BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) {
+                updateSystemEvents(serverEvent, sessionObject);
             }
-       }catch (Exception e) {
-           Logger.INSTANCE.e(TAG,e.toString());
-       }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+        }
     }
 
-    public void updatePIIPHIEvents(HashMap<String,Object> events,BOAppSessionDataModel sessionObject) {
+    public void updatePIIPHIEvents(HashMap<String, Object> events, BOAppSessionDataModel sessionObject) {
         try {
 
             if (this.sessionObject != null && events != null) {
                 //Update PII event
                 List<HashMap> piiEventList = (List<HashMap>) events.get(BONetworkConstants.BO_PII_DATA);
-                for (HashMap<String,Object> singleEvent : piiEventList) {
+                for (HashMap<String, Object> singleEvent : piiEventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     for (BOCustomEvent customEvent : sessionObject.getSingleDaySessions().getDeveloperCodified().getPiiEvent()) {
                         if (serverEventMid.equals(customEvent.getMid())) {
@@ -173,7 +167,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
                 }
 
                 List<HashMap> phiEventList = (List<HashMap>) events.get(BONetworkConstants.BO_PHI_DATA);
-                for (HashMap<String,Object> singleEvent : phiEventList) {
+                for (HashMap<String, Object> singleEvent : phiEventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     for (BOCustomEvent customEvent : sessionObject.getSingleDaySessions().getDeveloperCodified().getPhiEvent()) {
                         if (serverEventMid.equals(customEvent.getMid())) {
@@ -182,128 +176,128 @@ public class BOSDKServerPostSyncEventConfiguration  {
                     }
                 }
             }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
     public void updateSystemEvents(String serverEventMid, BOAppSessionDataModel sessionObject) {
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppLaunched()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppInForeground()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppInBackground()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppActive()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppResignActive()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppBackgroundRefreshAvailable()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppReceiveMemoryWarning()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppSignificantTimeChange()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppOrientationPortrait()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppOrientationLandscape()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppStatusbarFrameChange()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppBackgroundRefreshStatusChange()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppNotificationReceived()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppNotificationViewed()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOApp event : sessionObject.getSingleDaySessions().getAppStates().getAppNotificationClicked()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOAppNavigation event : sessionObject.getSingleDaySessions().getUbiAutoDetected().getAppNavigation()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
         for (BOSessionInfo event : sessionObject.getSingleDaySessions().getAppStates().getAppSessionInfo()) {
-            if(serverEventMid.equals(event.getMid())) {
+            if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
         }
 
-        this.updatePIIEvents(serverEventMid,sessionObject);
-        this.updateAdInfo(serverEventMid,sessionObject);
-        this.updateMemoryEvents(serverEventMid,sessionObject);
-        this.updateDeviceEvents(serverEventMid,sessionObject);
+        this.updatePIIEvents(serverEventMid, sessionObject);
+        this.updateAdInfo(serverEventMid, sessionObject);
+        this.updateMemoryEvents(serverEventMid, sessionObject);
+        this.updateDeviceEvents(serverEventMid, sessionObject);
     }
 
-    private void updatePIIEvents(String serverEventMid,@NonNull BOAppSessionDataModel sessionData) {
+    private void updatePIIEvents(String serverEventMid, @NonNull BOAppSessionDataModel sessionData) {
 
         try {
             BONetworkInfo networkInfoArray = sessionData.getSingleDaySessions().getNetworkInfo();
 
             if (networkInfoArray.getCurrentIPAddress() != null && networkInfoArray.getCurrentIPAddress().size() > 0) {
                 for (BOIPAddress networkInfo : networkInfoArray.getCurrentIPAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -311,7 +305,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getCellBroadcastAddress() != null && networkInfoArray.getCellBroadcastAddress().size() > 0) {
                 for (BOBroadcastAddress networkInfo : networkInfoArray.getCellBroadcastAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -319,7 +313,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getCellIPAddress() != null && networkInfoArray.getCellIPAddress().size() > 0) {
                 for (BOIPAddress networkInfo : networkInfoArray.getCellIPAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -327,7 +321,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getCellNetMask() != null && networkInfoArray.getCellNetMask().size() > 0) {
                 for (BONetMask networkInfo : networkInfoArray.getCellNetMask()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -335,7 +329,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getConnectedToCellNetwork() != null && networkInfoArray.getConnectedToCellNetwork().size() > 0) {
                 for (BOConnectedTo networkInfo : networkInfoArray.getConnectedToCellNetwork()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -343,7 +337,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getConnectedToWifi() != null && networkInfoArray.getConnectedToWifi().size() > 0) {
                 for (BOConnectedTo networkInfo : networkInfoArray.getConnectedToWifi()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -351,7 +345,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getExternalIPAddress() != null && networkInfoArray.getExternalIPAddress().size() > 0) {
                 for (BOIPAddress networkInfo : networkInfoArray.getExternalIPAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -359,7 +353,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getWifiBroadcastAddress() != null && networkInfoArray.getWifiBroadcastAddress().size() > 0) {
                 for (BOBroadcastAddress networkInfo : networkInfoArray.getWifiBroadcastAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -367,7 +361,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getWifiIPAddress() != null && networkInfoArray.getWifiIPAddress().size() > 0) {
                 for (BOIPAddress networkInfo : networkInfoArray.getWifiIPAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -375,7 +369,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getWifiRouterAddress() != null && networkInfoArray.getWifiRouterAddress().size() > 0) {
                 for (BOWifiRouterAddress networkInfo : networkInfoArray.getWifiRouterAddress()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -383,7 +377,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getWifiSSID() != null && networkInfoArray.getWifiSSID().size() > 0) {
                 for (BOWifiSSID networkInfo : networkInfoArray.getWifiSSID()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -391,7 +385,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (networkInfoArray.getWifiNetMask() != null && networkInfoArray.getWifiNetMask().size() > 0) {
                 for (BONetMask networkInfo : networkInfoArray.getWifiNetMask()) {
-                    if(serverEventMid.equals(networkInfo.getMid())) {
+                    if (serverEventMid.equals(networkInfo.getMid())) {
                         networkInfo.setSentToServer(true);
                     }
                 }
@@ -401,13 +395,13 @@ public class BOSDKServerPostSyncEventConfiguration  {
         }
     }
 
-    private void updateAdInfo(String serverEventMid,@NonNull BOAppSessionDataModel sessionData) {
+    private void updateAdInfo(String serverEventMid, @NonNull BOAppSessionDataModel sessionData) {
 
         try {
             List<BOAdInfo> adInfo = sessionData.getSingleDaySessions().getAdInfo();
             if (adInfo != null && adInfo.size() > 0) {
                 for (BOAdInfo adInformation : adInfo) {
-                    if(serverEventMid.equals(adInformation.getMid())) {
+                    if (serverEventMid.equals(adInformation.getMid())) {
                         adInformation.setSentToServer(true);
                     }
                 }
@@ -418,14 +412,14 @@ public class BOSDKServerPostSyncEventConfiguration  {
         }
     }
 
-    private void updateDeviceEvents(String serverEventMid,@NonNull BOAppSessionDataModel sessionData) {
+    private void updateDeviceEvents(String serverEventMid, @NonNull BOAppSessionDataModel sessionData) {
 
         try {
             BOSessionDeviceInfo deviceInfo = sessionData.getSingleDaySessions().getDeviceInfo();
 
             if (deviceInfo.getBatteryLevel() != null && deviceInfo.getBatteryLevel().size() > 0) {
                 for (BOBatteryLevel appInfo : deviceInfo.getBatteryLevel()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -433,7 +427,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getMultitaskingEnabled() != null && deviceInfo.getMultitaskingEnabled().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getMultitaskingEnabled()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -441,7 +435,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getProximitySensorEnabled() != null && deviceInfo.getProximitySensorEnabled().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getProximitySensorEnabled()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -449,7 +443,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getDebuggerAttached() != null && deviceInfo.getDebuggerAttached().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getDebuggerAttached()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -457,7 +451,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getPluggedIn() != null && deviceInfo.getPluggedIn().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getPluggedIn()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -465,7 +459,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getJailBroken() != null && deviceInfo.getJailBroken().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getJailBroken()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -473,7 +467,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getNumberOfActiveProcessors() != null && deviceInfo.getNumberOfActiveProcessors().size() > 0) {
                 for (BONumberOfA appInfo : deviceInfo.getNumberOfActiveProcessors()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -481,7 +475,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getProcessorsUsage() != null && deviceInfo.getProcessorsUsage().size() > 0) {
                 for (BOProcessorsUsage appInfo : deviceInfo.getProcessorsUsage()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -489,7 +483,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getAccessoriesAttached() != null && deviceInfo.getAccessoriesAttached().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getAccessoriesAttached()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -497,7 +491,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getHeadphoneAttached() != null && deviceInfo.getHeadphoneAttached().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getHeadphoneAttached()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -505,7 +499,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getNumberOfAttachedAccessories() != null && deviceInfo.getNumberOfAttachedAccessories().size() > 0) {
                 for (BONumberOfA appInfo : deviceInfo.getNumberOfAttachedAccessories()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -513,7 +507,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getNameOfAttachedAccessories() != null && deviceInfo.getNameOfAttachedAccessories().size() > 0) {
                 for (BONameOfAttachedAccessory appInfo : deviceInfo.getNameOfAttachedAccessories()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -521,7 +515,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getIsCharging() != null && deviceInfo.getIsCharging().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getIsCharging()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -529,7 +523,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (deviceInfo.getFullyCharged() != null && deviceInfo.getFullyCharged().size() > 0) {
                 for (BOAccessoriesAttached appInfo : deviceInfo.getFullyCharged()) {
-                    if(serverEventMid.equals(appInfo.getMid())) {
+                    if (serverEventMid.equals(appInfo.getMid())) {
                         appInfo.setSentToServer(true);
                     }
                 }
@@ -539,14 +533,14 @@ public class BOSDKServerPostSyncEventConfiguration  {
         }
     }
 
-    private void updateMemoryEvents(String serverEventMid,@NonNull BOAppSessionDataModel sessionData) {
+    private void updateMemoryEvents(String serverEventMid, @NonNull BOAppSessionDataModel sessionData) {
 
         try {
             BOSingleDaySessions singleDaySessions = sessionData.getSingleDaySessions();
 
             if (singleDaySessions.getMemoryInfo() != null && singleDaySessions.getMemoryInfo().size() > 0) {
                 for (BOMemoryInfo memoryInfo : singleDaySessions.getMemoryInfo()) {
-                    if(serverEventMid.equals(memoryInfo.getMid())) {
+                    if (serverEventMid.equals(memoryInfo.getMid())) {
                         memoryInfo.setSentToServer(true);
                     }
                 }
@@ -554,7 +548,7 @@ public class BOSDKServerPostSyncEventConfiguration  {
 
             if (singleDaySessions.getStorageInfo() != null && singleDaySessions.getStorageInfo().size() > 0) {
                 for (BOStorageInfo storageInfo : singleDaySessions.getStorageInfo()) {
-                    if(serverEventMid.equals(storageInfo.getMid())) {
+                    if (serverEventMid.equals(storageInfo.getMid())) {
                         storageInfo.setSentToServer(true);
                     }
                 }
@@ -565,27 +559,35 @@ public class BOSDKServerPostSyncEventConfiguration  {
     }
 
     public void updateFunnelCommonEvents(String serverEventMid, BOAppSessionDataModel sessionObject) {
-        for (BOCommonEvent event : sessionObject.getSingleDaySessions().getCommonEvents()) {
-            if(serverEventMid.equals(event.getMid())) {
-                event.setSentToServer(true);
+        try {
+            for (BOCommonEvent event : sessionObject.getSingleDaySessions().getCommonEvents()) {
+                if (serverEventMid.equals(event.getMid())) {
+                    event.setSentToServer(true);
+                }
             }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
     public void updateSegmentsCommonEvents(String serverEventMid, BOAppSessionDataModel sessionObject) {
-        for (BOCommonEvent event : sessionObject.getSingleDaySessions().getCommonEvents()) {
-            if(serverEventMid.equals(event.getMid())) {
-                event.setSentToServer(true);
+        try {
+            for (BOCommonEvent event : sessionObject.getSingleDaySessions().getCommonEvents()) {
+                if (serverEventMid.equals(event.getMid())) {
+                    event.setSentToServer(true);
+                }
             }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
-    public void updateConfigForLifeTimeEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppLifetimeData lifetimeData){
+    public void updateConfigForLifeTimeEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppLifetimeData lifetimeData) {
         // BOARetentionEvent
         try {
-            updateRetentionEvents(serverEvent,lifetimeDataObject);
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+            updateRetentionEvents(serverEvent, lifetimeDataObject);
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
@@ -706,36 +708,36 @@ public class BOSDKServerPostSyncEventConfiguration  {
                     singleCusEvent.setSentToServer(true);
                 }
             }
-    }catch (Exception e) {
-        Logger.INSTANCE.e(TAG,e.toString());
-    }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
+        }
 
     }
 
-    public void updateSessionRetentionEvents(String serverEventMid, BOAppSessionDataModel sessionObject){
+    public void updateSessionRetentionEvents(String serverEventMid, BOAppSessionDataModel sessionObject) {
         //Update Retention Event Send To Server
         try {
-            if (sessionObject.getSingleDaySessions().getRetentionEvent() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().setSentToServer(true);
             }
 
-            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDau() != null &&  sessionObject.getSingleDaySessions().getRetentionEvent().getDau() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDau().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDau() != null && sessionObject.getSingleDaySessions().getRetentionEvent().getDau() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDau().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().getDau().setSentToServer(true);
             }
 
-            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDpu() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDpu().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDpu() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDpu().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().getDpu().setSentToServer(true);
             }
 
-            if (sessionObject.getSingleDaySessions().getRetentionEvent().getAppInstalled() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getAppInstalled().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent().getAppInstalled() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getAppInstalled().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().getAppInstalled().setSentToServer(true);
             }
 
-            if (sessionObject.getSingleDaySessions().getRetentionEvent().getNewUser() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getNewUser().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent().getNewUser() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getNewUser().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().getNewUser().setSentToServer(true);
             }
 
-            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDast() != null &&  serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDast().getMid())) {
+            if (sessionObject.getSingleDaySessions().getRetentionEvent().getDast() != null && serverEventMid.equals(sessionObject.getSingleDaySessions().getRetentionEvent().getDast().getMid())) {
                 sessionObject.getSingleDaySessions().getRetentionEvent().getDast().setSentToServer(true);
             }
 
@@ -744,56 +746,56 @@ public class BOSDKServerPostSyncEventConfiguration  {
                     singleRenEvent.setSentToServer(true);
                 }
             }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 
-    public void  updateRetentionEvents(String serverEventMid, BOAppLifetimeData lifetimeDataObject) {
+    public void updateRetentionEvents(String serverEventMid, BOAppLifetimeData lifetimeDataObject) {
         try {
             for (BOAppLifeTimeInfo appLifeInfo : lifetimeDataObject.getAppLifeTimeInfo()) {
-            if (appLifeInfo.getRetentionEvent().getCustomEvents() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getCustomEvents().getMid())) {
-                appLifeInfo.getRetentionEvent().getCustomEvents().setSentToServer(true);
+                if (appLifeInfo.getRetentionEvent().getCustomEvents() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getCustomEvents().getMid())) {
+                    appLifeInfo.getRetentionEvent().getCustomEvents().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getDau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDau().getMid())) {
+                    appLifeInfo.getRetentionEvent().getDau().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getWau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWau().getMid())) {
+                    appLifeInfo.getRetentionEvent().getWau().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getMau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMau().getMid())) {
+                    appLifeInfo.getRetentionEvent().getMau().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getDpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDpu().getMid())) {
+                    appLifeInfo.getRetentionEvent().getDpu().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getWpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWpu().getMid())) {
+                    appLifeInfo.getRetentionEvent().getWpu().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getMpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMpu().getMid())) {
+                    appLifeInfo.getRetentionEvent().getMpu().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getAppInstalled() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getAppInstalled().getMid())) {
+                    appLifeInfo.getRetentionEvent().getAppInstalled().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getNewUser() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getNewUser().getMid())) {
+                    appLifeInfo.getRetentionEvent().getNewUser().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getDast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDast().getMid())) {
+                    appLifeInfo.getRetentionEvent().getDast().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getWast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWast().getMid())) {
+                    appLifeInfo.getRetentionEvent().getWast().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getMast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMast().getMid())) {
+                    appLifeInfo.getRetentionEvent().getMast().setSentToServer(true);
+                }
+                if (appLifeInfo.getRetentionEvent().getDast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDast().getMid())) {
+                    appLifeInfo.getRetentionEvent().getDast().setSentToServer(true);
+                }
             }
-            if (appLifeInfo.getRetentionEvent().getDau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDau().getMid())) {
-                appLifeInfo.getRetentionEvent().getDau().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getWau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWau().getMid())) {
-                appLifeInfo.getRetentionEvent().getWau().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getMau() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMau().getMid())) {
-                appLifeInfo.getRetentionEvent().getMau().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getDpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDpu().getMid())) {
-                appLifeInfo.getRetentionEvent().getDpu().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getWpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWpu().getMid())) {
-                appLifeInfo.getRetentionEvent().getWpu().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getMpu() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMpu().getMid())) {
-                appLifeInfo.getRetentionEvent().getMpu().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getAppInstalled() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getAppInstalled().getMid())) {
-                appLifeInfo.getRetentionEvent().getAppInstalled().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getNewUser() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getNewUser().getMid())) {
-                appLifeInfo.getRetentionEvent().getNewUser().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getDast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDast().getMid())) {
-                appLifeInfo.getRetentionEvent().getDast().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getWast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getWast().getMid())) {
-                appLifeInfo.getRetentionEvent().getWast().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getMast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getMast().getMid())) {
-                appLifeInfo.getRetentionEvent().getMast().setSentToServer(true);
-            }
-            if (appLifeInfo.getRetentionEvent().getDast() != null && serverEventMid.equals(appLifeInfo.getRetentionEvent().getDast().getMid())) {
-                appLifeInfo.getRetentionEvent().getDast().setSentToServer(true);
-            }
-        }
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.toString());
         }
     }
 }

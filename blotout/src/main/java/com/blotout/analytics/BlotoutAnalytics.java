@@ -26,7 +26,9 @@ import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
 import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.eventsExecutor.BONetworkSegmentExecutorHelper;
 import com.blotout.eventsExecutor.BOWorkerHelper;
+import com.blotout.model.session.BODeveloperCodified;
 import com.blotout.model.session.BOPendingEvents;
+import com.blotout.network.service.BONetworkEventService;
 import com.blotout.storage.BOFileSystemManager;
 import com.blotout.storage.BOSharedPreferenceImpl;
 import com.blotout.utilities.BOCommonUtils;
@@ -233,7 +235,6 @@ public class BlotoutAnalytics {
             initializeEngine(context);
 
             BOSDKManifestController.getInstance().syncManifestWithServer();
-
         }
     }catch(Exception e) {
         Logger.INSTANCE.i(TAG,e.toString());
@@ -451,7 +452,7 @@ public class BlotoutAnalytics {
                  }
              });
              } else {
-                 this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_START_TIMED_EVENT,startEventInfo,null);
+                 this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_START_TIMED_EVENT,startEventInfo,null,0);
              }
          }
      }catch (Exception e) {
@@ -485,7 +486,7 @@ public class BlotoutAnalytics {
                        }
                });
             } else {
-                this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_END_TIMED_EVENT,endEventInfo,null);
+                this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_END_TIMED_EVENT,endEventInfo,null,0);
             }
            }
        }catch (Exception e) {
@@ -500,12 +501,13 @@ public class BlotoutAnalytics {
      * @param eventInfo
      */
 
-    public void addPendingEvents(String eventName, int eventType, HashMap<String, Object> eventInfo, Date eventTime) {
+    public void addPendingEvents(String eventName, int eventType, HashMap<String, Object> eventInfo, Date eventTime, long eventCode) {
         BOPendingEvents pendingEvent = new BOPendingEvents();
         pendingEvent.setEventInfo(eventInfo);
         pendingEvent.setEventName(eventName);
         pendingEvent.setEventType(eventType);
         pendingEvent.setEventTime(eventTime);
+        pendingEvent.setEventCode(eventCode);
         BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents.add(pendingEvent);
     }
 
@@ -536,7 +538,7 @@ public class BlotoutAnalytics {
                         }
                     });
                 } else {
-                    this.addPendingEvents(BOCommonConstants.BO_EVENT_MAP_ID,BOCommonConstants.BO_EVENT_TYPE_SESSION,mapIdInfo, null);
+                    this.addPendingEvents(BOCommonConstants.BO_EVENT_MAP_ID,BOCommonConstants.BO_EVENT_TYPE_SESSION,mapIdInfo, null, BONetworkConstants.BO_DEV_EVENT_MAP_ID);
                 }
             }
         }catch (Exception e) {
@@ -567,7 +569,7 @@ public class BlotoutAnalytics {
                         }
                     });
                 } else {
-                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION,eventInfo,null);
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION,eventInfo,null,0);
                 }
             }
         }catch (Exception e) {
@@ -602,7 +604,7 @@ public class BlotoutAnalytics {
                             }
                         });
                     } else {
-                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PII,eventInfo, eventTime);
+                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PII,eventInfo, eventTime,0);
                     }
                 }
             }catch (Exception e) {
@@ -642,7 +644,7 @@ public class BlotoutAnalytics {
                             }
                         });
                     } else {
-                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PHI,eventInfo, eventTime);
+                        this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_PHI,eventInfo, eventTime,0);
                     }
                 }
             }catch (Exception e) {
@@ -679,7 +681,7 @@ public class BlotoutAnalytics {
                         }
                     });
                 } else {
-                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION_WITH_TIME,eventInfo, eventTime);
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_SESSION_WITH_TIME,eventInfo, eventTime,0);
                 }
             }
         }catch (Exception e) {
@@ -714,7 +716,7 @@ public class BlotoutAnalytics {
                         }
                     });
                 } else {
-                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_RETENTION_EVENT,eventInfo, null);
+                    this.addPendingEvents(eventName,BOCommonConstants.BO_EVENT_TYPE_RETENTION_EVENT,eventInfo, null,0);
                 }
             }
         }catch (Exception e) {
@@ -860,6 +862,8 @@ public class BlotoutAnalytics {
 
                             setupManifestValues();
 
+                            BONetworkEventService.sendSdkStartEvent();
+
                             BOLifetimeOperationExecutorHelper.getInstance().post(new Runnable() {
                                 @Override
                                 public void run() {
@@ -905,7 +909,7 @@ public class BlotoutAnalytics {
                             try {
                                 BOPiiEvents.getInstance().isEnabled = true;
                                 BOPiiEvents.getInstance().startCollectingUserLocationEvent();
-                            } catch (SecurityException e) {
+                            } catch (Exception e) {
                                 //Location Permission is not there
                                 Logger.INSTANCE.e(TAG, e.toString());
                             }
@@ -932,7 +936,7 @@ public class BlotoutAnalytics {
                 for (BOPendingEvents event : BlotoutAnalytics_Internal.getInstance().sdkInitWaitPendingEvents) {
                     switch (event.getEventType()) {
                         case BOCommonConstants.BO_EVENT_TYPE_SESSION:
-                            logEvent(event.getEventName(), event.getEventInfo());
+                            BOADeveloperEvents.getInstance().logEvent(event.getEventName(),event.getEventInfo(),event.getEventCode());
                             break;
                         case BOCommonConstants.BO_EVENT_TYPE_SESSION_WITH_TIME:
                             logEvent(event.getEventName(), event.getEventInfo(),event.getEventTime());

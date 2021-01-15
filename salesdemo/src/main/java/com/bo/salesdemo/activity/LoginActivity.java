@@ -51,7 +51,12 @@ public class LoginActivity extends AppCompatActivity {
         //BlotoutAnalytics.getInstance().isProductionMode=false;
         //PGH92NV367NA5ZX
         //BlotoutAnalytics.getInstance().initializeAnalyticsEngine(this,"5DNGP7DR2KD9JSY","WYHDWZ8EHZT3SXE");
+        HashMap<String,Object> item2 = new HashMap<>();
+        item2.put("emailId","ankuradhikari08@gmail.com");
+        item2.put("gender","Male");
 
+        //BlotoutAnalytics.getInstance().mapId("abcd","mixpanel",null);
+        //BlotoutAnalytics.getInstance().mapId("abcd","google",item2);
     }
 
     @Override
@@ -112,6 +117,10 @@ public class LoginActivity extends AppCompatActivity {
         HashMap<String,Object> item2 = new HashMap<>();
         item2.put("emailId","ankuradhikari08@gmail.com");
         item2.put("gender","Male");
+
+
+        BlotoutAnalytics.getInstance().mapId("abcd","mixpanel",null);
+        BlotoutAnalytics.getInstance().mapId("abcd","google",item2);
 
         BlotoutAnalytics.getInstance().logPHIEvent("testPHIEvent",item2,null);
 

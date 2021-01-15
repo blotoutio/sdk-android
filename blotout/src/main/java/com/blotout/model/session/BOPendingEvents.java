@@ -24,6 +24,7 @@ public class BOPendingEvents {
     private String eventName;
     private HashMap<String,Object> eventInfo;
     private Date eventTime;
+    private long eventCode;
 
     @JsonProperty("eventType")
     public int getEventType() { return eventType; }
@@ -44,6 +45,11 @@ public class BOPendingEvents {
     public Date getEventTime() { return eventTime; }
     @JsonProperty("eventTime")
     public void setEventTime(Date value) { this.eventTime = value; }
+
+    @JsonProperty("eventCode")
+    public long getEventCode() { return eventCode; }
+    @JsonProperty("eventCode")
+    public void setEventCode(long value) { this.eventCode = value; }
 
 
      /*

@@ -21,6 +21,7 @@ public class BOEncryptionManager {
 
     public static final String ALGORITHM_AES_CBC_PKCS5Padding = "AES/CBC/PKCS5Padding";
     private static final byte[] CRYPTO_IVX = "Q0BG17E2819IWZYQ".getBytes();
+    public static final String CRYPTO_IVX_STRING = "Q0BG17E2819IWZYQ";
     private static final String TAG = "SimpleCrypto";
     public static final int MODE_128BIT = 128;
     public static final int MODE_256BIT = 256;

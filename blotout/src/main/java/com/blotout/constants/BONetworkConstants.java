@@ -291,6 +291,7 @@ public final class BONetworkConstants {
     public static final String BO_EVENT_AD_INFO = "AdInfo";
     public static final String BO_KEY = "key";
     public static final String BO_DATA = "data";
+    public static final String BO_IV = "iv";
 
 
 

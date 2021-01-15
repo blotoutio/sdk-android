@@ -204,6 +204,7 @@ public class BOSdkToServerFormat {
 
                     HashMap<String, Object> piiPayload = new HashMap<>();
                     piiPayload.put(BONetworkConstants.BO_KEY, piiEncryptedSecretKey);
+                    piiPayload.put(BONetworkConstants.BO_IV, BOEncryptionManager.CRYPTO_IVX_STRING);
                     piiPayload.put(BONetworkConstants.BO_DATA, piiEncryptedData);
 
                     if (piiEncryptedSecretKey != null && piiEncryptedData != null) {
@@ -225,6 +226,7 @@ public class BOSdkToServerFormat {
 
                     HashMap<String, Object> phiPayload = new HashMap<>();
                     phiPayload.put(BONetworkConstants.BO_KEY, phiEncryptedSecretKey);
+                    phiPayload.put(BONetworkConstants.BO_IV, BOEncryptionManager.CRYPTO_IVX_STRING);
                     phiPayload.put(BONetworkConstants.BO_DATA, phiEncryptedData);
 
                     if (phiEncryptedSecretKey != null && phiEncryptedData != null) {
@@ -1248,7 +1250,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_CLICKED_KEY);
-                        event.put(BONetworkConstants.BO_MESSAGE_ID, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_CLICKED_KEY + BODateTimeUtils.get13DigitNumberObjTimeStamp() + appInfo.getTimeStamp());
+                        event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NOTIFICATION_CLICKED));
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
                         event.put(BONetworkConstants.BO_SESSION_ID, appInfo.getSessionId());
                         eventsArray.add(event);
@@ -1271,7 +1273,7 @@ public class BOSdkToServerFormat {
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(sessionInfo.getTimeStamp()));
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_INFO);
-                        event.put(BONetworkConstants.BO_MESSAGE_ID, BONetworkConstants.BO_EVENT_APP_SESSION_INFO + BODateTimeUtils.get13DigitNumberObjTimeStamp() + sessionInfo.getTimeStamp());
+                        event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_SESSION_INFO));
                         event.put(BONetworkConstants.BO_PROPERTIES, sessionEvent);
                         event.put(BONetworkConstants.BO_SESSION_ID, sessionInfo.getSessionId());
                         eventsArray.add(event);
