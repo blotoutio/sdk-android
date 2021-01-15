@@ -53,7 +53,7 @@ public final class BONetworkConstants {
     public static final String BO_PII_Event_SERVER = "piievn";
     public static final String BO_SESSION_ID = "sessionId";
     public static final String BO_SDK_START = "sdk_start";
-
+    public static final String BO_USER_ID = "userid";
 
     public static final String BO_CLIENT_TIMEZONE = "client_timezone";
     public static final String BO_EVENT_START_PERIOD = "event_start_period";

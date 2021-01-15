@@ -2094,7 +2094,7 @@ public class BOSdkToServerFormat {
         List<HashMap<String, Object>> userIdMappedEvents = new ArrayList<>();
         String userId = BODeviceDetection.getDeviceId();
         for (HashMap<String, Object> item : events) {
-            item.put("userid", userId);
+            item.put(BONetworkConstants.BO_USER_ID, userId);
             userIdMappedEvents.add(item);
         }
         return userIdMappedEvents;
@@ -2132,7 +2132,7 @@ public class BOSdkToServerFormat {
         customEventJson.put(BONetworkConstants.BO_PROPERTIES, null);
         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(eventName));
         customEventJson.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
-        customEventJson.put("userid", BODeviceDetection.getDeviceId());
+        customEventJson.put(BONetworkConstants.BO_USER_ID, BODeviceDetection.getDeviceId());
         events.add(customEventJson);
 
         serverData.put(BONetworkConstants.BO_META, this.prepareMetaData(null));
