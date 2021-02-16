@@ -278,10 +278,18 @@ public class BOSDKServerPostSyncEventConfiguration {
             }
         }
 
+        if(!sessionObject.getSingleDaySessions().getUbiAutoDetected().getAppNavigation().isEmpty()) {
+            sessionObject.getSingleDaySessions().getUbiAutoDetected().getAppNavigation().clear();
+        }
+
         for (BOSessionInfo event : sessionObject.getSingleDaySessions().getAppStates().getAppSessionInfo()) {
             if (serverEventMid.equals(event.getMid())) {
                 event.setSentToServer(true);
             }
+        }
+
+        if(!sessionObject.getSingleDaySessions().getAppStates().getAppSessionInfo().isEmpty()) {
+            sessionObject.getSingleDaySessions().getAppStates().getAppSessionInfo().clear();
         }
 
         this.updatePIIEvents(serverEventMid, sessionObject);

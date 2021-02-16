@@ -45,6 +45,7 @@ import com.blotout.model.session.BOView;
 import com.blotout.model.session.BOWifiRouterAddress;
 import com.blotout.model.session.BOWifiSSID;
 import com.blotout.referrerapi.BOInstallReferrerHelper;
+import com.blotout.storage.BOSharedPreferenceImpl;
 import com.blotout.utilities.BOCommonUtils;
 import com.blotout.utilities.BODateTimeUtils;
 import com.blotout.utilities.BODeviceDetection;
@@ -53,8 +54,6 @@ import com.blotout.utilities.BOServerDataConverter;
 import com.blotout.utilities.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,7 +105,8 @@ public class BOSdkToServerFormat {
 
             if (BlotoutAnalytics_Internal.getInstance().isSDKEnabled) {
                 events.addAll(this.prepareCrashEvents(sessionData));
-                events.addAll(this.prepareInstallReferrarInfo());
+                if (!BOSharedPreferenceImpl.getInstance().isReferralEventSent())
+                    events.addAll(this.prepareInstallReferrarInfo());
 
                 //system events
                 if (BOSDKManifestController.getInstance().sdkPushSystemEvents) {
@@ -2007,17 +2007,18 @@ public class BOSdkToServerFormat {
                     screenTime.add(appNavigation.getTimeSpent());
                 }
             }
-
-            HashMap<String, Object> event = new HashMap<>();
-            event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NAVIGATION);
-            event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
-            event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
-            event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NAVIGATION);
-            event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NAVIGATION));
-            event.put(BONetworkConstants.BO_NAVIGATION_SCREEN, screenName);
-            event.put(BONetworkConstants.BO_NAVIGATION_TIME, screenTime);
-            event.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
-            eventsArray.add(event);
+            if (!screenName.isEmpty() && !screenTime.isEmpty()) {
+                HashMap<String, Object> event = new HashMap<>();
+                event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NAVIGATION);
+                event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
+                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
+                event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NAVIGATION);
+                event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NAVIGATION));
+                event.put(BONetworkConstants.BO_NAVIGATION_SCREEN, screenName);
+                event.put(BONetworkConstants.BO_NAVIGATION_TIME, screenTime);
+                event.put(BONetworkConstants.BO_SESSION_ID, BOSharedManager.getInstance().sessionId);
+                eventsArray.add(event);
+            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return eventsArray;
@@ -2085,7 +2086,6 @@ public class BOSdkToServerFormat {
             return eventsArray;
         }
         return eventsArray;
-
     }
 
     /*Add userId in every item in the list*/
@@ -2119,7 +2119,7 @@ public class BOSdkToServerFormat {
         }
     }
 
-    public HashMap<String, Object> createEventObject(String eventName,long eventCategory, long eventSubCode) {
+    public HashMap<String, Object> createEventObject(String eventName, long eventCategory, long eventSubCode) {
         HashMap<String, Object> serverData = new HashMap<>();
         List<HashMap<String, Object>> events = new ArrayList<HashMap<String, Object>>();
 

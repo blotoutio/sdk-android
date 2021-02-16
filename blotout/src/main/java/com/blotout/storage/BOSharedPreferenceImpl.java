@@ -407,5 +407,14 @@ public class BOSharedPreferenceImpl implements IBOPreference {
         }
     }
 
+    public boolean isReferralEventSent(){
+        boolean isReferralEvent;
+        isReferralEvent = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY);
+        if(!isReferralEvent) {
+            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY, true);
+        }
+        return isReferralEvent;
+    }
+
 }
 

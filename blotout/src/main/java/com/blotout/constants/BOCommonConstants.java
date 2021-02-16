@@ -42,6 +42,8 @@ public final class BOCommonConstants {
     public static final String BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY = "com.blotout.sdk.Analytics.Root.UserBirthTimeStamp";
     public static final String BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE = "com.blotout.sdk.Analytics.Root.UserBirthTimeStamp_Stage";
 
+    public static final String BO_ANALYTICS_APP_REFERRAL_SEND_KEY = "com.blotout.sdk.Analytics.Root.AppReferralSend";
+
 
     //This is used for app release management
     private static final String MAJOR = "1";
@@ -95,7 +97,7 @@ public final class BOCommonConstants {
     public static final String BO_VERSION_KEY = "BOVersionKey";
     public static final String BO_BUILD_KEY = "BOBuildKey";
 
-    public static final int BO_DEFAULT_EVENT_PUSH_TIME = 60*1000;
+    public static final int BO_DEFAULT_EVENT_PUSH_TIME = 10*1000;
     //Default initial delay values, in MiliSeconds
     public static final int BO_ANALYTICS_POST_INIT_NETWORK_DELAY  = 5*1000;
     public static final int BO_ANALYTICS_EVENT_SYNC_NETWORK_DELAY = 5*1000;
