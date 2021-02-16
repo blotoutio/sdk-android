@@ -1401,12 +1401,15 @@ public class BOFileSystemManager implements IBOFileSystemManager {
          boolean isAllFiledDeleted = true;
 
          underRootDirPath = (underRootDirPath != null && !underRootDirPath.equals("")) ? underRootDirPath : getBOSDKRootDirectory();
-         olderThanDays = olderThanDays <= 0 ? olderThanDays : 180;
          List<String> allContent = getAllFileAndDirectories(underRootDirPath);
 
          for (String oneContent : allContent) {
              boolean isDir = false;
              File file = new File(oneContent);
+             //stop removing sdkManifest file
+             if(file.getName().equals("sdkManifest.txt"))
+                 continue;
+
              boolean isDirExist = file.exists();
              isDir = file.isDirectory();
              if (isDirExist && isDir && isRecursively) {
