@@ -11,6 +11,7 @@ import com.blotout.analytics.BlotoutAnalytics;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.utilities.BOCommonUtils;
+import com.blotout.utilities.BODateTimeUtils;
 import com.blotout.utilities.Logger;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -381,6 +382,28 @@ public class BOSharedPreferenceImpl implements IBOPreference {
             BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY, true);
         } else {
             BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY_STAGE, true);
+        }
+    }
+
+    public long getUserBirthTimeStamp(){
+        long userCreatedTimestamp;
+        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+            userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY);
+        } else {
+            userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE);
+        }
+        if(userCreatedTimestamp == 0) {
+            userCreatedTimestamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
+            setUserBirthTimeStamp(userCreatedTimestamp);
+        }
+        return userCreatedTimestamp;
+    }
+
+    public void setUserBirthTimeStamp(long timeStamp){
+        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+            BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY, timeStamp);
+        } else {
+            BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE, timeStamp);
         }
     }
 

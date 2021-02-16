@@ -64,6 +64,8 @@ public class BOServerDataConverter {
                 metaData.put("vpn", appInfoCurrentDict.get("vpnStatus"));
                 metaData.put("sdkv", appInfoCurrentDict.get("sdkVersion"));
                 metaData.put("tz_offset", appInfoCurrentDict.get("timeZoneOffset"));
+                metaData.put("user_id_created", BOSharedPreferenceImpl.getInstance().getUserBirthTimeStamp());
+
                 if (metaData.keySet().size() > 0) {
                     int deviceGrain = getDeviceGrain();
                     switch (deviceGrain) {

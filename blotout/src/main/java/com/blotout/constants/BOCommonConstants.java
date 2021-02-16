@@ -39,6 +39,10 @@ public final class BOCommonConstants {
 
     public static final String     BO_ANALYTICS_ROOT_USER_DEFAULTS_PREVIOUS_DAY_APP_INFO       ="com.blotout.sdk.Analytics.pDay.AppInfo";
 
+    public static final String BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY = "com.blotout.sdk.Analytics.Root.UserBirthTimeStamp";
+    public static final String BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE = "com.blotout.sdk.Analytics.Root.UserBirthTimeStamp_Stage";
+
+
     //This is used for app release management
     private static final String MAJOR = "1";
     private static final String MINOR = "0";
