@@ -3,14 +3,12 @@ package com.blotout.storage;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.blotout.analytics.BOSharedManager;
-import com.blotout.analytics.BlotoutAnalytics;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
 import com.blotout.constants.BOCommonConstants;
-import com.blotout.utilities.BOCommonUtils;
 import com.blotout.utilities.BODateTimeUtils;
 import com.blotout.utilities.Logger;
 import com.google.gson.Gson;
@@ -20,7 +18,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class BOSharedPreferenceImpl implements IBOPreference {
-    private static final String TAG = BOCommonConstants.TAG_PREFIX +"BOSharedPreferenceImpl";
+    private static final String TAG = BOCommonConstants.TAG_PREFIX + "BOSharedPreferenceImpl";
 
 
     private static final String PREFERENCE_NAME = "bo_preference";
@@ -34,7 +32,7 @@ public class BOSharedPreferenceImpl implements IBOPreference {
     private boolean mBulkDataUpdate = false;
 
     private BOSharedPreferenceImpl(@NonNull Context context) {
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+        if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
             mSharedPref = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         } else {
             mSharedPref = context.getSharedPreferences(PREFERENCE_NAME_STAGE, Context.MODE_PRIVATE);
@@ -52,7 +50,7 @@ public class BOSharedPreferenceImpl implements IBOPreference {
         if (mPrefHelper != null) {
             return mPrefHelper;
         }
-        Logger.INSTANCE.e(TAG,"Please use getInstance(context) for atleast once.");
+        Logger.INSTANCE.e(TAG, "Please use getInstance(context) for atleast once.");
         return mPrefHelper;
     }
 
@@ -185,7 +183,7 @@ public class BOSharedPreferenceImpl implements IBOPreference {
 //            String str = mSharedPref.getString(key, value);
 //            return BlotoutAnalytics_Internal.getInstance().getEncryptionManager().decryptString(str);
 //        } else {
-            return mSharedPref.getString(key, value);
+        return mSharedPref.getString(key, value);
         //}
     }
 
@@ -349,69 +347,97 @@ public class BOSharedPreferenceImpl implements IBOPreference {
     }
 
     public boolean isNewUserRecorded() {
-        boolean isNewUserRecorded;
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            isNewUserRecorded = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY);
-        } else {
-            isNewUserRecorded = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY_STAGE);
+        boolean isNewUserRecorded = false;
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                isNewUserRecorded = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY);
+            } else {
+                isNewUserRecorded = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY_STAGE);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return isNewUserRecorded;
     }
 
     public void saveNewUserRecorded() {
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY, true);
-        } else {
-            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY_STAGE, true);
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY, true);
+            } else {
+                BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_NEW_USER_DEFAULTS_KEY_STAGE, true);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
     }
 
-    public boolean isSDKFirstLaunched(){
-        boolean isSDKFirstLaunch;
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            isSDKFirstLaunch = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY);
-        } else {
-            isSDKFirstLaunch = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY_STAGE);
+    public boolean isSDKFirstLaunched() {
+        boolean isSDKFirstLaunch = false;
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                isSDKFirstLaunch = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY);
+            } else {
+                isSDKFirstLaunch = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY_STAGE);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
-        return isSDKFirstLaunch ;
+        return isSDKFirstLaunch;
 
     }
 
-    public void saveSDKFirstLaunched(){
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY, true);
-        } else {
-            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY_STAGE, true);
+    public void saveSDKFirstLaunched() {
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY, true);
+            } else {
+                BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_ROOT_SDK_LAUNCHED_DEFAULTS_KEY_STAGE, true);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
     }
 
-    public long getUserBirthTimeStamp(){
-        long userCreatedTimestamp;
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY);
-        } else {
-            userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE);
-        }
-        if(userCreatedTimestamp == 0) {
-            userCreatedTimestamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
-            setUserBirthTimeStamp(userCreatedTimestamp);
+    public long getUserBirthTimeStamp() {
+        long userCreatedTimestamp = 0;
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY);
+            } else {
+                userCreatedTimestamp = BOSharedPreferenceImpl.getInstance().getLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE);
+            }
+            if (userCreatedTimestamp == 0) {
+                userCreatedTimestamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
+                setUserBirthTimeStamp(userCreatedTimestamp);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return userCreatedTimestamp;
     }
 
-    public void setUserBirthTimeStamp(long timeStamp){
-        if(BlotoutAnalytics_Internal.getInstance().isProductionMode) {
-            BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY, timeStamp);
-        } else {
-            BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE, timeStamp);
+    public void setUserBirthTimeStamp(long timeStamp) {
+        try {
+            if (BlotoutAnalytics_Internal.getInstance().isProductionMode) {
+                BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY, timeStamp);
+            } else {
+                BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_USER_BIRTH_TIME_STAMP_KEY_STAGE, timeStamp);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
     }
 
-    public boolean isReferralEventSent(){
-        boolean isReferralEvent;
-        isReferralEvent = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY);
-        if(!isReferralEvent) {
-            BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY, true);
+    public boolean isReferralEventSent() {
+        boolean isReferralEvent = false;
+        try {
+            isReferralEvent = BOSharedPreferenceImpl.getInstance().getBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY);
+            if (!isReferralEvent) {
+                BOSharedPreferenceImpl.getInstance().saveBoolean(BOCommonConstants.BO_ANALYTICS_APP_REFERRAL_SEND_KEY, true);
+            }
+        } catch (Exception e) {
+            Logger.INSTANCE.e(TAG, e.getMessage());
         }
         return isReferralEvent;
     }
