@@ -21,10 +21,11 @@ import retrofit2.Response;
 public class BONetworkEventService {
 
     private static final String TAG = BOCommonConstants.TAG_PREFIX + "BONetworkService";
+    private static final String BOSendSDKStartEventAfterDelay = "BOSendSDKStartEventAfterDelay";
 
     public static void sendSdkStartEvent() {
 
-        BOInitializationExecutorHelper.getInstance().post(new Runnable() {
+        BOInitializationExecutorHelper.getInstance().postDelayedWithKey (BOSendSDKStartEventAfterDelay,new Runnable() {
             @Override
             public void run() {
                 try {
@@ -43,9 +44,7 @@ public class BONetworkEventService {
                     e.printStackTrace();
                 }
             }
-        });
-
-
+        },BOCommonConstants.BO_ANALYTICS_POST_INIT_NETWORK_DELAY);
     }
 
 }

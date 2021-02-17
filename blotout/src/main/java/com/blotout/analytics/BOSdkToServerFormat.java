@@ -67,8 +67,6 @@ public class BOSdkToServerFormat {
     private static final String TAG = BOCommonConstants.TAG_PREFIX + "BOSdkToServerFormat";
 
     private static volatile BOSdkToServerFormat instance;
-    private HashMap<String, Object> metaData;
-    private HashMap<String, Object> geoData;
     private HashMap<String, Object> previousMetaData;
 
     public static BOSdkToServerFormat getInstance() {
@@ -380,17 +378,12 @@ public class BOSdkToServerFormat {
     /* prepare Meta Data*/
     private HashMap<String, Object> prepareMetaData(BOAppSessionDataModel sessionData) {
         try {
-            if (this.metaData == null || this.metaData.size() == 0) {
-                HashMap<String, Object> metaDatas = BOServerDataConverter.prepareMetaData();
-                if (metaDatas != null) {
-                    this.metaData = new HashMap<>(metaDatas);
-                    return this.metaData;
+                HashMap<String, Object> metaDataMap = BOServerDataConverter.prepareMetaData();
+                if (metaDataMap != null) {
+                    return new HashMap<>(metaDataMap);
                 } else {
                     return new HashMap<>();
                 }
-            } else {
-                return new HashMap<>(this.metaData);
-            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();
@@ -402,17 +395,12 @@ public class BOSdkToServerFormat {
     private HashMap<String, Object> prepareGeoData(BOAppSessionDataModel sessionData) {
 
         try {
-            if (this.geoData == null) {
-                HashMap<String, Object> geoDatas = BOServerDataConverter.prepareGeoData();
-                if (geoDatas != null) {
-                    this.geoData = new HashMap<>(geoDatas);
-                    return this.geoData;
+                HashMap<String, Object> geoDataMap = BOServerDataConverter.prepareGeoData();
+                if (geoDataMap != null) {
+                    return new HashMap<>(geoDataMap);
                 } else {
                     return new HashMap<>();
                 }
-            } else {
-                return new HashMap<>(this.geoData);
-            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();

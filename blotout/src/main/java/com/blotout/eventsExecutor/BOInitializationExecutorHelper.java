@@ -18,12 +18,16 @@ public class BOInitializationExecutorHelper {
     private static final String TAG = "BODeviceOperationExecutorHelper";
     private static volatile BOInitializationExecutorHelper instance;
     private ThreadPoolExecutor networkExecutor;
+    private ScheduledThreadPoolExecutor scheduledExecutor;
+    private final Map<String, Runnable> runnableMap = new HashMap<>();
 
     private class ExecutorRunnableHolder implements Runnable {
         private Runnable runnableClient;
+
         private ExecutorRunnableHolder(Runnable runnableClient) {
             this.runnableClient = runnableClient;
         }
+
         @Override
         public void run() {
             this.runnableClient.run();
@@ -44,6 +48,7 @@ public class BOInitializationExecutorHelper {
 
     private BOInitializationExecutorHelper() {
         networkExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(3);
+        scheduledExecutor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(3);
     }
 
     private void shutDown() {
@@ -51,8 +56,31 @@ public class BOInitializationExecutorHelper {
     }
 
     public void post(Runnable runnable) {
-        Logger.INSTANCE.e(TAG,"");
+        Logger.INSTANCE.e(TAG, "");
         networkExecutor.execute(runnable);
+    }
+
+    public void postDelayedWithKey(String runnableKey, Runnable runnable, long delayTime) {
+        BOInitializationExecutorHelper.ExecutorRunnableHolder oldRunnable = (BOInitializationExecutorHelper.ExecutorRunnableHolder) runnableMap.get(runnableKey);
+        if (oldRunnable != null) {
+            scheduledExecutor.remove(oldRunnable);
+        }
+
+        BOInitializationExecutorHelper.ExecutorRunnableHolder newRunnable = new BOInitializationExecutorHelper.ExecutorRunnableHolder(runnable);
+        this.runnableMap.put(runnableKey, newRunnable);
+
+        scheduledExecutor.schedule(newRunnable, delayTime, TimeUnit.MILLISECONDS);
+    }
+
+//    public void removeCallback(Runnable runnable) {
+//        workerHandler.removeCallbacks(runnable);
+//    }
+
+    public void removeCallbackForKey(String key) {
+        BOInitializationExecutorHelper.ExecutorRunnableHolder oldRunnable = (BOInitializationExecutorHelper.ExecutorRunnableHolder) runnableMap.get(key);
+        if (oldRunnable != null) {
+            scheduledExecutor.remove(oldRunnable);
+        }
     }
 
 }

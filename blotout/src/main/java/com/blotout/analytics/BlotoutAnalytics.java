@@ -862,7 +862,7 @@ public class BlotoutAnalytics {
 
                             setupManifestValues();
 
-                            BONetworkEventService.sendSdkStartEvent();
+                            recordingDeviceEvents();
 
                             BOLifetimeOperationExecutorHelper.getInstance().post(new Runnable() {
                                 @Override
@@ -914,7 +914,7 @@ public class BlotoutAnalytics {
                                 Logger.INSTANCE.e(TAG, e.toString());
                             }
 
-                            recordingDeviceEvents();
+                            BONetworkEventService.sendSdkStartEvent();
 
                             postPendingEvents();
 

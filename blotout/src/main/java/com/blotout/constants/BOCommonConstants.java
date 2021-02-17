@@ -99,10 +99,10 @@ public final class BOCommonConstants {
 
     public static final int BO_DEFAULT_EVENT_PUSH_TIME = 10*1000;
     //Default initial delay values, in MiliSeconds
-    public static final int BO_ANALYTICS_POST_INIT_NETWORK_DELAY  = 5*1000;
-    public static final int BO_ANALYTICS_EVENT_SYNC_NETWORK_DELAY = 5*1000;
-    public static final int BO_ANALYTICS_FUNNEL_SYNC_NETWORK_DELAY = 5*1000;
-    public static final int BO_ANALYTICS_SEGMENT_SYNC_NETWORK_DELAY = 5*1000;
+    public static final int BO_ANALYTICS_POST_INIT_NETWORK_DELAY  = 10*1000;
+    public static final int BO_ANALYTICS_EVENT_SYNC_NETWORK_DELAY = 10*1000;
+    public static final int BO_ANALYTICS_FUNNEL_SYNC_NETWORK_DELAY = 10*1000;
+    public static final int BO_ANALYTICS_SEGMENT_SYNC_NETWORK_DELAY = 10*1000;
 
     public static final String BO_SINGLE_DAY_SESSIONS = "singleDaySessions";
     public static final String BO_APP_INFO = "appInfo";
