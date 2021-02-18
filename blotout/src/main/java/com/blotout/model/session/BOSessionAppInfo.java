@@ -34,9 +34,9 @@ public class BOSessionAppInfo {
     private BOCurrentLocation currentLocation;
     private String sessionId;
 
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public String getSessionId() { return sessionId; }
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("mid")

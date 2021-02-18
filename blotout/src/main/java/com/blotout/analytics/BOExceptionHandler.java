@@ -3,6 +3,8 @@ package com.blotout.analytics;
 import androidx.annotation.NonNull;
 
 import com.blotout.Controllers.BOFunnelSyncController;
+import com.blotout.constants.BOCommonConstants;
+import com.blotout.constants.BONetworkConstants;
 import com.blotout.events.BOAEvents;
 import com.blotout.events.BOAppSessionEvents;
 import com.blotout.model.session.BOAppSessionDataModel;
@@ -32,13 +34,13 @@ public class BOExceptionHandler implements Thread.UncaughtExceptionHandler {
         try {
             if (BOAEvents.isSessionModelInitialised) {
                 HashMap<String, Object> crashDetail = new HashMap<>();
-                crashDetail.put("sentToServer", false);
-                crashDetail.put("mid", BOCommonUtils.getMessageIDForEvent("AppCrashed"));
-                crashDetail.put("timeStamp", BODateTimeUtils.get13DigitNumberObjTimeStamp());
-                crashDetail.put("name", getExceptionName(e));
+                crashDetail.put(BOCommonConstants.BO_SENT_TO_SERVER, false);
+                crashDetail.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent("AppCrashed"));
+                crashDetail.put(BOCommonConstants.BO_TIME_STAMP, BODateTimeUtils.get13DigitNumberObjTimeStamp());
+                crashDetail.put(BOCommonConstants.BO_NAME, getExceptionName(e));
                 crashDetail.put("reason", e.getCause().toString());
                 crashDetail.put("info", null);
-                crashDetail.put("sessionId",BOSharedManager.getInstance().sessionId);
+                crashDetail.put(BONetworkConstants.BO_SESSION_ID,BOSharedManager.getInstance().sessionId);
 
                 if (e.getStackTrace() != null) {
                     List<String> stackTrace = new ArrayList<>();

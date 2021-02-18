@@ -44,9 +44,9 @@ public class BOAccessoriesAttached {
     @JsonProperty("timeStamp")
     public void setTimeStamp(long value) { this.timeStamp = value; }
 
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public String getSessionId() { return sessionId; }
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public void setSessionId(String value) { this.sessionId = value; }
 
     /*

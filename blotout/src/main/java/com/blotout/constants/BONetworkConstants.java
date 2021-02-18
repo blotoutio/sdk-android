@@ -51,7 +51,7 @@ public final class BONetworkConstants {
     public static final String BO_AD_DO_NOT_TRACK = "AdDoNotTrack";
     public static final String BO_INSTALL_REFERRAR = "InstallReferrar";
     public static final String BO_PII_Event_SERVER = "piievn";
-    public static final String BO_SESSION_ID = "sessionId";
+    public static final String BO_SESSION_ID = "session_id";
     public static final String BO_SDK_START = "sdk_start";
     public static final String BO_USER_ID = "userid";
 

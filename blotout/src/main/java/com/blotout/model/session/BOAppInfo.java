@@ -46,9 +46,9 @@ public class BOAppInfo {
     private String sessionId;
     private int timeZoneOffset;
 
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public String getSessionId() { return sessionId; }
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public void setSessionId(String value) { this.sessionId = value; }
 
     @JsonProperty("sentToServer")

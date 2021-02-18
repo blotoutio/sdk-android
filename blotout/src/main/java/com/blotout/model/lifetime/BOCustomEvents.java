@@ -55,9 +55,9 @@ public class BOCustomEvents {
     @JsonProperty("mid")
     public void setMid(String value) { this.mid = value; }
 
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public String getSessionId() { return sessionId; }
-    @JsonProperty("sessionId")
+    @JsonProperty("session_id")
     public void setSessionId(String value) { this.sessionId = value; }
 
 
