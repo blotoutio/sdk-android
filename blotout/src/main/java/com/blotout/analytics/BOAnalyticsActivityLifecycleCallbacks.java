@@ -245,7 +245,7 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
             extentionManager.currentTime = 1;
 
             //Funnel execution and testing based
-            BOFunnelSyncController.getInstance().recordNavigationEventFrom(navObject.getFrom(), navObject.getTo(), new HashMap<>());
+            //BOFunnelSyncController.getInstance().recordNavigationEventFrom(navObject.getFrom(), navObject.getTo(), new HashMap<>());
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
         }

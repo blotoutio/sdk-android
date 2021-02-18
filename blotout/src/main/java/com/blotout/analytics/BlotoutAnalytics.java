@@ -902,7 +902,7 @@ public class BlotoutAnalytics {
                             BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    BOFunnelSyncController.getInstance().prepareFunnnelSyncAndAnalyser();
+                                    BOFunnelSyncController.getInstance().prepareFunnelSyncAndAnalyser();
                                 }
                             });
 

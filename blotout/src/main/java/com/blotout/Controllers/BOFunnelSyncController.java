@@ -48,8 +48,6 @@ public class BOFunnelSyncController {
 
     private static final String TAG = "BOFunnelSyncController";
     private static boolean isAggregate = true;
-    private HashMap<String, Object> metaData;
-    private HashMap<String, Object> geoData;
 
     @Nullable
     private BOFunnelAndCodifiedEvents funnelsAndCodifiedEventsInstance;
@@ -96,8 +94,12 @@ public class BOFunnelSyncController {
         return instance;
     }
 
-    public void prepareFunnnelSyncAndAnalyser() {
+    public void prepareFunnelSyncAndAnalyser() {
         try {
+
+            if(!BlotoutAnalytics_Internal.getInstance().isFunnelEventsEnabled)
+                return;
+
             if (funnelsAndCodifiedEventsInstance == null) {
                 funnelsAndCodifiedEventsInstance = this.loadAllActiveFunnels();
             }
@@ -189,17 +191,12 @@ public class BOFunnelSyncController {
     @Nullable
     private HashMap<String, Object> prepareMetaDataDict(BOAppSessionDataModel sessionData) {
         try {
-            if (this.metaData == null) {
                 HashMap<String, Object> metaDatas = BOServerDataConverter.prepareMetaData();
                 if (metaDatas != null) {
-                    this.metaData = new HashMap<>(metaDatas);
-                    return this.metaData;
+                    return new HashMap<>(metaDatas);
                 } else {
                     return new HashMap<>();
                 }
-            } else {
-                return new HashMap<>(this.metaData);
-            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();
@@ -231,17 +228,13 @@ public class BOFunnelSyncController {
     @Nullable
     private HashMap<String, Object> prepareGeoDataDict() {
         try {
-            if (this.geoData == null) {
                 HashMap<String, Object> geoDatas = BOServerDataConverter.prepareGeoData();
                 if (geoDatas != null) {
-                    this.geoData = new HashMap<>(geoDatas);
-                    return this.geoData;
+                    return new HashMap<>(geoDatas);
+
                 } else {
                     return new HashMap<>();
                 }
-            } else {
-                return new HashMap<>(this.geoData);
-            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();
@@ -448,6 +441,10 @@ public class BOFunnelSyncController {
 
     public void recordDevEvent(@Nullable String eventName, Long eventSubCode, HashMap<String, Object> eventDetails) {
         try {
+
+            if(!BlotoutAnalytics_Internal.getInstance().isFunnelEventsEnabled)
+                return;
+
             if (eventName != null && !eventName.equals("")) {
 
                 Long eventTimeStamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
@@ -1118,7 +1115,7 @@ public class BOFunnelSyncController {
                             storeSessionFunnelsNewData(validEvents);
                             BOSharedPreferenceImpl.getInstance().saveLong(BOCommonConstants.BO_ANALYTICS_FUNNEL_LAST_UPDATE_TIME_DEFAULTS_KEY, BODateTimeUtils.get13DigitNumberObjTimeStamp());
                             if (BOFunnelSyncController.this.funnelsAndCodifiedEventsInstance == null) {
-                                prepareFunnnelSyncAndAnalyser();
+                                prepareFunnelSyncAndAnalyser();
                             }
                         }
                     } else {

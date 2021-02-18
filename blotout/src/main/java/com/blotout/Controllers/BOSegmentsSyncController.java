@@ -41,7 +41,7 @@ import retrofit2.Response;
  */
 public class BOSegmentsSyncController {
 
-    private static String BO_STRING_SEPERATOR_FOR_FILE_NAME = "-";
+    private static String BO_STRING_SEPARATOR_FOR_FILE_NAME = "-";
     private static final String TAG = "BOSegmentsSyncController";
     private static volatile BOSegmentsSyncController instance;
     private boolean isPrepareSegmentsSyncCalled;
@@ -111,7 +111,7 @@ public class BOSegmentsSyncController {
             List<String> segmentIDs = (allFiles.size() > 0) ? new ArrayList<>() : null;
             for (String filePath : allFiles) {
                 String completeFileName = BOFileSystemManager.getInstance().getLastPathComponent(filePath);
-                String segmentID = this.subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPERATOR_FOR_FILE_NAME);
+                String segmentID = this.subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPARATOR_FOR_FILE_NAME);
                 segmentIDs.add(segmentID);
             }
             if (segmentIDs != null && segmentIDs.size() > 0) {
@@ -139,7 +139,7 @@ public class BOSegmentsSyncController {
                 //NSMutableArray <NSString*>*segmentIDs = (allFiles.count > 0) ? [NSMutableArray array] : nil;
                 for (String filePath : allFiles) {
                     String completeFileName = BOFileSystemManager.getInstance().getLastPathComponent(filePath);
-                    String segmentID = this.subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPERATOR_FOR_FILE_NAME);
+                    String segmentID = this.subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPARATOR_FOR_FILE_NAME);
                     segmentIDRootArrs.add(segmentID);
                 }
             }
@@ -148,7 +148,7 @@ public class BOSegmentsSyncController {
             for (String oneFilePath : allSyncedSegmentFiles) {
                 //NSString *segmentID = [[oneFilePath stringByDeletingPathExtension] lastPathComponent];
                 String completeFileName = BOFileSystemManager.getInstance().getLastPathComponent(oneFilePath);
-                String segmentID = subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPERATOR_FOR_FILE_NAME);
+                String segmentID = subStringFromStringBeforeSeparator(completeFileName, BO_STRING_SEPARATOR_FOR_FILE_NAME);
                 segmentIDRootArrs.add(segmentID);
                 qualifiedSyncCompleteSegments.add(segmentID);
             }
@@ -162,6 +162,10 @@ public class BOSegmentsSyncController {
 
     public void prepareSegmentsSyncAndAnalyser() {
         try {
+
+            if(!BlotoutAnalytics_Internal.getInstance().isSegmentEventsEnabled)
+                return;
+
             BOSegmentEvents segmentEvents = null;
             if (!isPrepareSegmentsSyncCalled) {
                 segmentEvents = loadAllActiveSegments();
@@ -225,7 +229,7 @@ public class BOSegmentsSyncController {
                 String fileExtention = "txt";
                 long timeStamp = BODateTimeUtils.get13DigitNumberObjTimeStamp();
 
-                String segmentIDSyncPendingFilePath = "" + segmentsSyncPendingDirPath + "/" + segmentInfo.getIdentifier() + BO_STRING_SEPERATOR_FOR_FILE_NAME + timeStamp + "." + fileExtention;
+                String segmentIDSyncPendingFilePath = "" + segmentsSyncPendingDirPath + "/" + segmentInfo.getIdentifier() + BO_STRING_SEPARATOR_FOR_FILE_NAME + timeStamp + "." + fileExtention;
                 String segName = segmentInfo.getName().replace(" ", "");
                 HashMap<String, Object> serverResponse = new HashMap<>();
                 serverResponse.put("id", segmentInfo.getIdentifier());
@@ -266,7 +270,7 @@ public class BOSegmentsSyncController {
                         public void handleMessage(@NonNull BOMessage msg) {
                             if (msg.what == 1) {
                                 String completeFileName = BOFileSystemManager.getInstance().getFilePathAfterDeletingPathExtention(BOFileSystemManager.getInstance().getLastPathComponent(oneFile));
-                                String dateStampString = subStringFromStringAfterSeparator(completeFileName, BO_STRING_SEPERATOR_FOR_FILE_NAME);
+                                String dateStampString = subStringFromStringAfterSeparator(completeFileName, BO_STRING_SEPARATOR_FOR_FILE_NAME);
                                 String fileCreationDateStr = dateStampString != null ? BODateTimeUtils.getDateStringFromString(dateStampString, BOCommonConstants.BO_DATE_FORMAT) : "default";
                                 if (fileCreationDateStr != null && fileCreationDateStr.equals("default")) {
                                     Date fileCreationDate = BOFileSystemManager.getInstance().getCreationDateOfItemAtPath(oneFile);
@@ -524,7 +528,6 @@ public class BOSegmentsSyncController {
             Logger.INSTANCE.e(TAG, e.toString());
         }
     }
-
 
     public void pauseSegmentsSyncAndAnalyser() {
 
@@ -1202,7 +1205,7 @@ public class BOSegmentsSyncController {
 
     }
 
-    public void appWillTerminatWithInfo(HashMap<String, Object> terminationInfo) {
+    public void appWillTerminateWithInfo(HashMap<String, Object> terminationInfo) {
 
     }
 

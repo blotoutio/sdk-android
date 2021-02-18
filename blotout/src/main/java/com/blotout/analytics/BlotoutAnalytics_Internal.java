@@ -21,10 +21,10 @@ public class BlotoutAnalytics_Internal {
     public boolean isDevModeEnabled = false;
     public boolean isPayingUser = false;
     public boolean sdkInitConfirmationSend =false;
-    public boolean isFunnelEventsEnabled = true;
+    public boolean isFunnelEventsEnabled = false;
     public boolean isSystemEventsEnabled = true;
     public boolean isRetentionEventsEnabled = true;
-    public boolean isSegmentEventsEnabled = true;
+    public boolean isSegmentEventsEnabled = false;
     public boolean isDeveloperEventsEnabled = true;
     public boolean isDataCollectionEnabled = true;
     public boolean isNetworkSyncEnabled = true;
