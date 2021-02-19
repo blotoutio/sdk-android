@@ -1179,7 +1179,7 @@ public class BOSdkToServerFormat {
 
             if (appStates.getAppSessionInfo() != null && appStates.getAppSessionInfo().size() > 0) {
                 for (BOSessionInfo sessionInfo : appStates.getAppSessionInfo()) {
-                    if (!sessionInfo.getSentToServer()) {
+                    if (!sessionInfo.getSentToServer() && sessionInfo.getStart() > 0 && sessionInfo.getEnd() > 0) {
 
                         HashMap<String, Object> sessionEvent = new HashMap<>();
                         sessionEvent.put(BOCommonConstants.BO_START, sessionInfo.getStart());
