@@ -409,11 +409,11 @@ public class BOSDKManifestController {
                 if (intervalRetryIntervals != null) {
                     this.intervalRetryInterval = Integer.parseInt(intervalRetryIntervals.getValue());
                 }
-
-                BOManifestVariable serverBaseURL = getManifestVariable(this.sdkManifestModel, BOManifestConstants.Api_Endpoint);
-                if (serverBaseURL != null) {
-                    this.serverBaseURL = serverBaseURL.getValue();
-                }
+                //TODO: Uncomment this section when we want to use server base url that coming in manifest
+                //   BOManifestVariable serverBaseURL = getManifestVariable(this.sdkManifestModel, BOManifestConstants.Api_Endpoint);
+                //      if (serverBaseURL != null) {
+                //           this.serverBaseURL = serverBaseURL.getValue();
+                //      }
 
                 BOManifestVariable eventFunnelPaths = getManifestVariable(this.sdkManifestModel, BOManifestConstants.EVENT_FUNNEL_PATH);
                 if (eventFunnelPaths != null) {
