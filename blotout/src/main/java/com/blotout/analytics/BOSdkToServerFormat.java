@@ -378,12 +378,12 @@ public class BOSdkToServerFormat {
     /* prepare Meta Data*/
     private HashMap<String, Object> prepareMetaData(BOAppSessionDataModel sessionData) {
         try {
-                HashMap<String, Object> metaDataMap = BOServerDataConverter.prepareMetaData();
-                if (metaDataMap != null) {
-                    return new HashMap<>(metaDataMap);
-                } else {
-                    return new HashMap<>();
-                }
+            HashMap<String, Object> metaDataMap = BOServerDataConverter.prepareMetaData();
+            if (metaDataMap != null) {
+                return new HashMap<>(metaDataMap);
+            } else {
+                return new HashMap<>();
+            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();
@@ -395,12 +395,12 @@ public class BOSdkToServerFormat {
     private HashMap<String, Object> prepareGeoData(BOAppSessionDataModel sessionData) {
 
         try {
-                HashMap<String, Object> geoDataMap = BOServerDataConverter.prepareGeoData();
-                if (geoDataMap != null) {
-                    return new HashMap<>(geoDataMap);
-                } else {
-                    return new HashMap<>();
-                }
+            HashMap<String, Object> geoDataMap = BOServerDataConverter.prepareGeoData();
+            if (geoDataMap != null) {
+                return new HashMap<>(geoDataMap);
+            } else {
+                return new HashMap<>();
+            }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
             return new HashMap<>();
@@ -418,10 +418,8 @@ public class BOSdkToServerFormat {
                 for (BOAddToCart addToCart : developerCodified.getAddToCart()) {
                     if (!addToCart.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getAddToCart().indexOf(addToCart));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_ADD_TO_CART);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(addToCart.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_ADD_TO_CART_KEY);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, addToCart.getAdditionalInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, addToCart.getMid());
@@ -434,10 +432,8 @@ public class BOSdkToServerFormat {
                 for (BOChargeTransaction transaction : developerCodified.getChargeTransaction()) {
                     if (!transaction.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getChargeTransaction().indexOf(transaction));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_CHARGE_TRANSACTION);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(transaction.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_CHARGE_TRANSACTION_BUTTON_KEY);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, transaction.getTransactionInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, transaction.getMid());
@@ -453,10 +449,8 @@ public class BOSdkToServerFormat {
                         long eventSubCode = customEvent.getEventSubCode();
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getCustomEvent().indexOf(customEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, customEvent.getEventName());
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(customEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, eventSubCode); //BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
@@ -471,10 +465,8 @@ public class BOSdkToServerFormat {
                     if (!timedEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getTimedEvent().indexOf(timedEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, timedEvent.getEventName());
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(timedEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_TIMED_KEY);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, timedEvent.getTimedEvenInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, timedEvent.getMid());
@@ -489,10 +481,8 @@ public class BOSdkToServerFormat {
                     if (!screenEdgepan.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getScreenEdgePan().indexOf(screenEdgepan));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_SCREEN_EDGE_PAN);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(screenEdgepan.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_EDGE_PAN_GESTURE_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, screenEdgepan.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, screenEdgepan.getVisibleClassName());
@@ -508,10 +498,8 @@ public class BOSdkToServerFormat {
                 for (BOView viewEvent : developerCodified.getView()) {
                     if (!viewEvent.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getView().indexOf(viewEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_View);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(viewEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_VIEW_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, viewEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, viewEvent.getViewClassName());
@@ -526,10 +514,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getTouchClick().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_TOUCH_CLICK);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_CLICK_TAP_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -546,10 +532,8 @@ public class BOSdkToServerFormat {
                 for (BODoubleTap gestureEvent : developerCodified.getDrag()) {
                     if (!gestureEvent.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getDrag().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_DRAG);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_DRAG_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -570,10 +554,8 @@ public class BOSdkToServerFormat {
                 for (BODoubleTap gestureEvent : developerCodified.getFlick()) {
                     if (!gestureEvent.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getFlick().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_FLICK);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_FLICK_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -594,10 +576,8 @@ public class BOSdkToServerFormat {
                 for (BODoubleTap gestureEvent : developerCodified.getSwipe()) {
                     if (!gestureEvent.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getSwipe().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_SWIPE);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_SWIPE_UP_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -618,10 +598,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getDoubleTap().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_DOUBLE_TAP);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_DOUBLE_CLICK_TAP_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -642,10 +620,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getTwoFingerTap().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_TWO_FINGER_TAP);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_GESTURE_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -667,10 +643,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getPinch().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_PINCH);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_PINCH_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -691,10 +665,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getTouchAndHold().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_TOUCH_AND_HOLD);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_LONG_PRESS_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -716,10 +688,8 @@ public class BOSdkToServerFormat {
                     if (!gestureEvent.getSentToServer()) {
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getShake().indexOf(gestureEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_SHAKE);
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(gestureEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_DEV_EVENT_SHAKE_KEY);
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, gestureEvent.getMid());
                         customEventJson.put(BONetworkConstants.BO_SCREEN_NAME, gestureEvent.getVisibleClassName());
@@ -756,7 +726,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "DAU");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDau().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDau().getDauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDau().getMid());
@@ -769,7 +738,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "DPU");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDpu().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DPU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDpu().getDpuInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDpu().getMid());
@@ -781,7 +749,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "AppInstalled");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getAppInstalled().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_APP_INSTALL_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getAppInstalled().getAppInstalledInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getAppInstalled().getMid());
@@ -794,7 +761,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "NUO");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getNewUser().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_NUO_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getNewUser().getTheNewUserInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getNewUser().getMid());
@@ -808,7 +774,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "DAST");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDast().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAST_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDast().getPayload());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDast().getMid());
@@ -822,10 +787,8 @@ public class BOSdkToServerFormat {
                 for (BOCustomEvent customEvent : retentionEvent.getCustomEvents()) {
                     if (!customEvent.getSentToServer()) {
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, retentionEvent.getCustomEvents().indexOf(customEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, customEvent.getEventName());
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(customEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_CUS_KEY1);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
@@ -863,7 +826,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "DAU");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDau().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDau().getDauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDau().getMid());
@@ -875,7 +837,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "WAU");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getWau().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_WAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWau().getWauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWau().getMid());
@@ -887,7 +848,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "MAU");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getMau().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_MAU_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getMau().getMauInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMau().getMid());
@@ -900,7 +860,6 @@ public class BOSdkToServerFormat {
                     HashMap<String, Object> event = new HashMap<>();
                     event.put(BONetworkConstants.BO_EVENT_NAME, "DPU");
                     event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDpu().getTimeStamp()));
-                    event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDpu().getDpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDpu().getMid());
@@ -912,7 +871,6 @@ public class BOSdkToServerFormat {
                     HashMap<String, Object> event = new HashMap<>();
                     event.put(BONetworkConstants.BO_EVENT_NAME, "WPU");
                     event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getWpu().getTimeStamp()));
-                    event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_WPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWpu().getWpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWpu().getMid());
@@ -924,7 +882,6 @@ public class BOSdkToServerFormat {
                     HashMap<String, Object> event = new HashMap<>();
                     event.put(BONetworkConstants.BO_EVENT_NAME, "MPU");
                     event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getMau().getTimeStamp()));
-                    event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                     event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_MPU_KEY);
                     event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getMpu().getMpuInfo());
                     event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMpu().getMid());
@@ -936,7 +893,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "AppInstalled");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getAppInstalled().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_APP_INSTALL_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getAppInstalled().getAppInstalledInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getAppInstalled().getMid());
@@ -948,7 +904,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "NUO");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getNewUser().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_NUO_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getNewUser().getTheNewUserInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getNewUser().getMid());
@@ -961,7 +916,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "DAST");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getDast().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_DAST_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getDast().getDastInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getDast().getMid());
@@ -975,7 +929,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "WAST");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getWast().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_WAST_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getWast().getWastInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getWast().getMid());
@@ -989,7 +942,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, "MAST");
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(retentionEvent.getMast().getTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_MAST_KEY);
                 event.put(BONetworkConstants.BO_PROPERTIES, retentionEvent.getMast().getMastInfo());
                 event.put(BONetworkConstants.BO_MESSAGE_ID, retentionEvent.getMast().getMid());
@@ -1005,7 +957,6 @@ public class BOSdkToServerFormat {
                     HashMap<String, Object> customEventJson = new HashMap<>();
                     customEventJson.put(BONetworkConstants.BO_EVENT_NAME, customEvent.getEventName());
                     customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(customEvent.getTimeStamp()));
-                    customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_RETENTION_KEY);
                     customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_RETEN_CUS_KEY1);
                     customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                     customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
@@ -1045,10 +996,8 @@ public class BOSdkToServerFormat {
                         }
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, crashEvents.indexOf(crashEvent));
                         event.put(BONetworkConstants.BO_EVENT_NAME, crashEvent.getName());
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(crashEvent.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_RUN_TIME_EXCEPTION);
                         event.put(BONetworkConstants.BO_PROPERTIES, crashEventProperties);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, crashEvent.getMid());
@@ -1092,10 +1041,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppLaunched().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_LAUNCHED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_START_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1110,10 +1057,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppResignActive().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_RESIGN_ACTIVE);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_END_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1127,10 +1072,8 @@ public class BOSdkToServerFormat {
                 for (BOApp appInfo : appStates.getAppInBackground()) {
                     if (!appInfo.getSentToServer()) {
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppInBackground().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_IN_BACKGROUND);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_BACKGROUND_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1144,10 +1087,8 @@ public class BOSdkToServerFormat {
                 for (BOApp appInfo : appStates.getAppInForeground()) {
                     if (!appInfo.getSentToServer()) {
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppInForeground().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_IN_FOREGROUND);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_FOREGROUND_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1162,10 +1103,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppOrientationLandscape().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_ORIENTATION_LANDSCAPE);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_LANDSCAPE_ORIENTATION_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1180,10 +1119,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppOrientationPortrait().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_ORIENTATION_PORTRAIT);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_PORTRAIT_ORIENTATION_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1198,10 +1135,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppNotificationReceived().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NOTIFICATION_RECEIVED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_RECEIVED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1215,10 +1150,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppNotificationViewed().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NOTIFICATION_VIEWED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_VIEWED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1233,10 +1166,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppNotificationClicked().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NOTIFICATION_CLICKED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NOTIFICATION_CLICKED_KEY);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NOTIFICATION_CLICKED));
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1256,10 +1187,8 @@ public class BOSdkToServerFormat {
                         sessionEvent.put(BOCommonConstants.BO_DURATION, sessionInfo.getDuration());
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, appStates.getAppSessionInfo().indexOf(sessionInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_SESSION_INFO);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(sessionInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_SESSION_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_SESSION_INFO));
                         event.put(BONetworkConstants.BO_PROPERTIES, sessionEvent);
@@ -1299,10 +1228,8 @@ public class BOSdkToServerFormat {
                     if (!commonEvent.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, commonEvents.indexOf(commonEvent));
                         event.put(BONetworkConstants.BO_EVENT_NAME, commonEvent.getEventName());
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(commonEvent.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, commonEvent.getEventCode());
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, commonEvent.getEventSubCode());
                         event.put(BONetworkConstants.BO_PROPERTIES, commonEvent.getEventInfo());
                         event.put(BONetworkConstants.BO_MESSAGE_ID, commonEvent.getMid());
@@ -1331,10 +1258,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getBatteryLevel().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_BATTERY_LEVEL);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1350,10 +1275,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getMultitaskingEnabled().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_MULTITASKING_ENABLED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1369,10 +1292,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getProximitySensorEnabled().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_PROXIMITY_SENSOR_ENABLED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1388,10 +1309,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getDebuggerAttached().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_DEBUGGER_ATTACHED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1407,10 +1326,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getPluggedIn().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_PLUGGEDIN);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1426,10 +1343,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getJailBroken().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_JAIL_BROKEN);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1445,10 +1360,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getNumberOfActiveProcessors().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_NUMBER_OF_ACTIVE_PROCESSORS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1464,10 +1377,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getProcessorsUsage().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_PROCESSORS_USAGE);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1483,10 +1394,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getAccessoriesAttached().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_ACCESSORIES_ATTACHED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1502,10 +1411,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getHeadphoneAttached().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_HEADPHONE_ATTACHED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1521,10 +1428,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getNumberOfAttachedAccessories().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_NUMBER_OF_ATTACHED_ACCESSORIES);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1540,10 +1445,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getNameOfAttachedAccessories().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_NAME_OF_ATTACHED_ACCESSORIES);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1559,10 +1462,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getIsCharging().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_IS_CHARGING);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1578,10 +1479,8 @@ public class BOSdkToServerFormat {
                     if (!appInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, deviceInfo.getFullyCharged().indexOf(appInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_FULLY_CHARGED);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(appInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, appInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1610,10 +1509,8 @@ public class BOSdkToServerFormat {
                     if (!memoryInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, singleDaySessions.getMemoryInfo().indexOf(memoryInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_MEMORY_INFO);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(memoryInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, memoryInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1640,10 +1537,8 @@ public class BOSdkToServerFormat {
                     if (!storageInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, singleDaySessions.getStorageInfo().indexOf(storageInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_STORAGE_INFO);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(storageInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, storageInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1683,10 +1578,8 @@ public class BOSdkToServerFormat {
                         long eventSubCode = customEvent.getEventSubCode();
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getPiiEvent().indexOf(customEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, customEvent.getEventName());
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(customEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, eventSubCode); //BONetworkConstants.BO_DEV_EVENT_CUSTOM_KEY
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
@@ -1719,10 +1612,8 @@ public class BOSdkToServerFormat {
                         long eventSubCode = customEvent.getEventSubCode();
 
                         HashMap<String, Object> customEventJson = new HashMap<>();
-                        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, developerCodified.getPhiEvent().indexOf(customEvent));
                         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, customEvent.getEventName());
                         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(customEvent.getTimeStamp()));
-                        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY);
                         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, eventSubCode);
                         customEventJson.put(BONetworkConstants.BO_PROPERTIES, customEvent.getEventInfo());
                         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, customEvent.getMid());
@@ -1751,10 +1642,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getCurrentIPAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CURRENT_IP_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1771,10 +1660,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getCellBroadcastAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CELL_BROADCAST_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1790,10 +1677,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getCellIPAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CELL_IP_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1809,10 +1694,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getCellNetMask().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CELL_NETMASK);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1828,10 +1711,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getConnectedToCellNetwork().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CONNECTED_TO_CELL_NETWORK);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1847,10 +1728,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getConnectedToWifi().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_CONNECTED_WIFI);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1866,10 +1745,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getExternalIPAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_EXTERNAL_IP_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1885,10 +1762,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getWifiBroadcastAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_WIFI_BROADCAST_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1904,10 +1779,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getWifiIPAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_WIFI_IP_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1923,10 +1796,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getWifiRouterAddress().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_WIFI_ROUTER_ADDRESS);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1942,10 +1813,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getWifiSSID().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_WIFI_SSID);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1961,10 +1830,8 @@ public class BOSdkToServerFormat {
                     if (!networkInfo.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, networkInfoArray.getWifiNetMask().indexOf(networkInfo));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_WIFI_NET_MASK);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(networkInfo.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DEVICE_INFO);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, networkInfo.getMid());
                         event.put(BONetworkConstants.BO_SCREEN_NAME, BOAnalyticsActivityLifecycleCallbacks.getInstance().activityName);
@@ -1999,7 +1866,6 @@ public class BOSdkToServerFormat {
                 HashMap<String, Object> event = new HashMap<>();
                 event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_APP_NAVIGATION);
                 event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
-                event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                 event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_NAVIGATION);
                 event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_APP_NAVIGATION));
                 event.put(BONetworkConstants.BO_NAVIGATION_SCREEN, screenName);
@@ -2025,10 +1891,8 @@ public class BOSdkToServerFormat {
                     if (!adInformation.getSentToServer()) {
 
                         HashMap<String, Object> event = new HashMap<>();
-                        event.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, adInfo.indexOf(adInformation));
                         event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_EVENT_AD_INFO);
                         event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(adInformation.getTimeStamp()));
-                        event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
                         event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_DO_NOT_TRACK);
                         event.put(BONetworkConstants.BO_MESSAGE_ID, adInformation.getMid());
                         event.put(BONetworkConstants.BO_SESSION_ID, adInformation.getSessionId());
@@ -2062,7 +1926,6 @@ public class BOSdkToServerFormat {
             HashMap<String, Object> event = new HashMap<>();
             event.put(BONetworkConstants.BO_EVENT_NAME, BONetworkConstants.BO_INSTALL_REFERRAR);
             event.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
-            event.put(BONetworkConstants.BO_EVENT_CATEGORY, BONetworkConstants.BO_EVENT_SYSTEM_KEY);
             event.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, BONetworkConstants.BO_EVENT_APP_INSTALL_REFERRER);
             event.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(BONetworkConstants.BO_INSTALL_REFERRAR));
             event.put(BONetworkConstants.BO_PROPERTIES, BOInstallReferrerHelper.getInstance().getInstallReferrarData());
@@ -2112,10 +1975,8 @@ public class BOSdkToServerFormat {
         List<HashMap<String, Object>> events = new ArrayList<HashMap<String, Object>>();
 
         HashMap<String, Object> customEventJson = new HashMap<>();
-        customEventJson.put(BONetworkConstants.BO_EVENT_DAY_OCCURENCE_COUNT, 0);
         customEventJson.put(BONetworkConstants.BO_EVENT_NAME, eventName);
         customEventJson.put(BONetworkConstants.BO_EVENTS_TIME, BODateTimeUtils.roundOffTimeStamp(BODateTimeUtils.get13DigitNumberObjTimeStamp()));
-        customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY, eventCategory);
         customEventJson.put(BONetworkConstants.BO_EVENT_CATEGORY_SUBTYPE, eventSubCode);
         customEventJson.put(BONetworkConstants.BO_PROPERTIES, null);
         customEventJson.put(BONetworkConstants.BO_MESSAGE_ID, BOCommonUtils.getMessageIDForEvent(eventName));
