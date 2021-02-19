@@ -71,7 +71,7 @@ public void logPHIEvent(@NonNull String eventName, @Nullable HashMap<String, Obj
 #### Example
 ```js
 HashMap<String,Object> eventInfo = new HashMap<>();
-eventInfo.put("emailId","support@blotout.io");
+eventInfo.put("emailId","developers@blotout.io");
 eventInfo.put("gender","Male");
 
 BlotoutAnalytics.getInstance().logEvent("LoginView",null);
