@@ -1,7 +1,7 @@
 # Integration
 
 ## Add Blotout Analytics SDK into your project
-![Screenshot](assets/sdkintegration.png)
+![Screenshot](assets/images/sdkintegration.png)
 
 ## Add Required Gradle Dependency and libraries
 
