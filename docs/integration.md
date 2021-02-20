@@ -8,7 +8,7 @@ SDK Download Link: ​ https://download.blotout.io/v1.0/sdks/BOAndroidSDK.zip
 
 ## Add Blotout Analytics SDK into your project
 
-To add the SDK to the Android project, simply add the “SDK aar file to libs folder/directory into your Android project and follow the on screen instructions. Please refer to the image below for recommended settings, click finish.
+To add the SDK to the Android project, simply add the “SDK aar file to libs folder into your Android project and follow the on screen instructions. Please refer to the image below for recommended settings, click finish.
 
 ![Screenshot](assets/images/sdkintegration.png)
 

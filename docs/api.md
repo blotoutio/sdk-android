@@ -25,7 +25,8 @@ The `logEvent` method is used to record developer events. This allows you to sen
 
 ## Non-Timed Events
 Non-Timed events are generally events which are not time bound and do not contain duration information. For example, the Home Page loaded is non-timed but Home page loading started and home page loading ended, when grouped together, can be a timed event.
-These events are categorized under two main categories in Blotout’s SDK 
+These events are categorized under two main categories in Blotout’s SDK.
+
 1: SystemEvents:
 System events are those which the Blotout SDK captures automatically like App Launch, App Terminated etc. These kinds of non-timed events do not require any developer intervention except enable or disable.
 
@@ -37,17 +38,41 @@ public void logEvent(@NonNull String eventName, @Nullable HashMap<String, Object
 public void logEvent(@NonNull String eventName, @Nullable HashMap<String, Object> eventInfo, Date eventTime);
 ```
 
+#### Example
+```js
+HashMap<String,Object> eventInfo = new HashMap<>();
+eventInfo.put("emailId","developers@blotout.io");
+eventInfo.put("gender","Male");
+
+BlotoutAnalytics.getInstance().logEvent("LoginView",eventInfo);
+
+```
+
 ## Timed Events
 Timed events are generally events which are time bound and contain duration information as explained above. Timed events w.r.t Blotout’s SDK are developer codified events only.
 When developers want to log an event along with duration, then they can use the below mentioned APIs to log a timed event.
 
-There are two methods mentioned above:
-● startTimedEvent : This method will start the timer for the event name mentioned in the method call.
-● endTimedEvent : This method will end the timer for the event name mentioned in the method call.
+There are two methods mentioned below:
+
+1. startTimedEvent : This method will start the timer for the event name mentioned in the method call.
+
+2. endTimedEvent : This method will end the timer for the event name mentioned in the method call.
 
 ```html
 public void startTimedEvent(@NonNull String eventName, @Nullable HashMap<String, Object> startEventInfo);
 public void endTimedEvent(@NonNull String eventName, @Nullable HashMap<String, Object> endEventInfo);
+```
+Note: Make sure eventName in startTimedEvent and endTimedEvent must be same.
+
+#### Example
+```js
+HashMap<String,Object> eventInfo = new HashMap<>();
+eventInfo.put("emailId","developers@blotout.io");
+eventInfo.put("gender","Male");
+
+BlotoutAnalytics.getInstance().startTimedEvent("ProfileSearch",eventInfo);
+BlotoutAnalytics.getInstance().endTimedEvent("ProfileSearch",eventInfo);
+
 ```
 
 ## PII & PHI Events
@@ -74,7 +99,6 @@ HashMap<String,Object> eventInfo = new HashMap<>();
 eventInfo.put("emailId","developers@blotout.io");
 eventInfo.put("gender","Male");
 
-BlotoutAnalytics.getInstance().logEvent("LoginView",null);
 BlotoutAnalytics.getInstance().logPHIEvent("PHIEvent",eventInfo,null);
 BlotoutAnalytics.getInstance().logPIIEvent("PIIEvent",eventInfo,null);
 
