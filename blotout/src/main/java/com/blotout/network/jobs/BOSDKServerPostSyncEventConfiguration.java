@@ -75,8 +75,7 @@ public class BOSDKServerPostSyncEventConfiguration {
                 for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
-                    long evc = (long) singleEvent.get("evc");
-                    updateConfigForEvent(serverEventMid, evc, evcs, serverEventMid, this.sessionObject);
+                    updateConfigForEvent(serverEventMid, evcs, serverEventMid, this.sessionObject);
                 }
             }
         } catch (Exception e) {
@@ -91,8 +90,7 @@ public class BOSDKServerPostSyncEventConfiguration {
                 for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
-                    long evc = (long) singleEvent.get("evc");
-                    updateConfigForLifeTimeEvent(serverEventMid, evc, evcs, serverEventMid, this.lifetimeDataObject);
+                    updateConfigForLifeTimeEvent(serverEventMid, evcs, serverEventMid, this.lifetimeDataObject);
                 }
             }
         } catch (Exception e) {
@@ -107,8 +105,7 @@ public class BOSDKServerPostSyncEventConfiguration {
                 for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
-                    long evc = (long) singleEvent.get("evc");
-                    updateConfigForEvent(serverEventMid, evc, evcs, serverEventMid, sessionObjectModel);
+                    updateConfigForEvent(serverEventMid, evcs, serverEventMid, sessionObjectModel);
                 }
             }
         } catch (Exception e) {
@@ -123,8 +120,7 @@ public class BOSDKServerPostSyncEventConfiguration {
                 for (HashMap<String, Object> singleEvent : eventList) {
                     String serverEventMid = (String) singleEvent.get("mid");
                     long evcs = (long) singleEvent.get("evcs");
-                    long evc = (long) singleEvent.get("evc");
-                    updateConfigForLifeTimeEvent(serverEventMid, evc, evcs, serverEventMid, lifeTimeModel);
+                    updateConfigForLifeTimeEvent(serverEventMid, evcs, serverEventMid, lifeTimeModel);
                 }
             }
         } catch (Exception e) {
@@ -132,18 +128,18 @@ public class BOSDKServerPostSyncEventConfiguration {
         }
     }
 
-    public void updateConfigForEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppSessionDataModel sessionData) {
+    public void updateConfigForEvent(String serverEvent, long eventSubCode, String messageID, BOAppSessionDataModel sessionData) {
         try {
-            if ((eventCode >= BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) && (eventCode < BONetworkConstants.BO_EVENT_FUNNEL_KEY)) {
+            if ((eventSubCode >= BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) && (eventSubCode < BONetworkConstants.BO_EVENT_FUNNEL_KEY)) {
                 updateDeveloperCodifiedEvents(serverEvent, sessionObject);
-            } else if ((eventCode >= BONetworkConstants.BO_EVENT_RETENTION_KEY) && (eventCode < BONetworkConstants.BO_EVENT_EXCEPTION_KEY)) {
+            } else if ((eventSubCode >= BONetworkConstants.BO_EVENT_RETENTION_KEY) && (eventSubCode < BONetworkConstants.BO_EVENT_EXCEPTION_KEY)) {
                 updateSessionRetentionEvents(serverEvent, sessionObject);
-            } else if (eventCode >= BONetworkConstants.BO_EVENT_FUNNEL_KEY && eventCode < BONetworkConstants.BO_EVENT_RETENTION_KEY) {
+            } else if (eventSubCode >= BONetworkConstants.BO_EVENT_FUNNEL_KEY && eventSubCode < BONetworkConstants.BO_EVENT_RETENTION_KEY) {
                 updateFunnelCommonEvents(serverEvent, sessionObject);
-            } else if (eventCode >= BONetworkConstants.BO_EVENT_SEGMENT_KEY && eventCode < 80001) {
+            } else if (eventSubCode >= BONetworkConstants.BO_EVENT_SEGMENT_KEY && eventSubCode < 80001) {
                 //TODO: 80001 need to make constant for next base events
                 updateSegmentsCommonEvents(serverEvent, sessionObject);
-            } else if (eventCode >= BONetworkConstants.BO_EVENT_SYSTEM_KEY && eventCode < BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) {
+            } else if (eventSubCode >= BONetworkConstants.BO_EVENT_SYSTEM_KEY && eventSubCode < BONetworkConstants.BO_EVENT_DEVELOPER_CODED_KEY) {
                 updateSystemEvents(serverEvent, sessionObject);
             }
         } catch (Exception e) {
@@ -590,7 +586,7 @@ public class BOSDKServerPostSyncEventConfiguration {
         }
     }
 
-    public void updateConfigForLifeTimeEvent(String serverEvent, long eventCode, long subCode, String messageID, BOAppLifetimeData lifetimeData) {
+    public void updateConfigForLifeTimeEvent(String serverEvent, long eventSubCode, String messageID, BOAppLifetimeData lifetimeData) {
         // BOARetentionEvent
         try {
             updateRetentionEvents(serverEvent, lifetimeDataObject);
