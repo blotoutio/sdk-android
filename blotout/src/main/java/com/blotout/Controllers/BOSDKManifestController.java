@@ -106,11 +106,11 @@ public class BOSDKManifestController {
     private static long manifestRefreshInterval() {
 
         int delayHour = BOSDKManifestController.getInstance().intervalManifestRefresh;
-        if (delayHour > 0) {
+        if (delayHour >= 0) {
             return delayHour * 60 * 60 * 1000;
         }
 
-        return 24 * 60 * 60 * 1000; //default value
+        return 0; //default value
     }
 
     //set Default value when manifest success to load
@@ -180,10 +180,10 @@ public class BOSDKManifestController {
                                     reloadManifestData();
                                     setupManifestExtraParamOnSuccess();
                                 } else {
-                                    setupManifestExtraParamOnFailure();
+                                    //setupManifestExtraParamOnFailure();
                                 }
                             } else {
-                                setupManifestExtraParamOnFailure();
+                                //setupManifestExtraParamOnFailure();
                             }
 
                         } catch (Exception e) {

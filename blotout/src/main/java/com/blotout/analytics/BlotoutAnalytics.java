@@ -860,7 +860,7 @@ public class BlotoutAnalytics {
                         @Override
                         public void handleMessage(@NonNull BOMessage msg) {
 
-                            setupManifestValues();
+                            //setupManifestValues();
 
                             recordingDeviceEvents();
 
