@@ -210,7 +210,7 @@ public class BOSDKManifestController {
                         setupManifestExtraParamOnSuccess();
                     } else {
                         //error case
-                        setupManifestExtraParamOnFailure();
+                        //setupManifestExtraParamOnFailure();
                     }
 
                     if (BOSDKManifestController.this.sdkManifestModel == null) {
