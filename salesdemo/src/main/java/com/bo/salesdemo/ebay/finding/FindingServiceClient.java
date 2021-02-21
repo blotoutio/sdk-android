@@ -12,7 +12,7 @@ public class FindingServiceClient {
 	
 	// production
 	@NonNull
-    public static String eBayFindingServiceURLString = "http://svcs.ebay.com/services/search/FindingService/v1";
+    public static String eBayFindingServiceURLString = "https://svcs.ebay.com/services/search/FindingService/v1";
 	// sandbox
 	//public static String eBayFindingServiceURLString = "https://svcs.sandbox.ebay.com/services/search/FindingService/v1";
 	@NonNull

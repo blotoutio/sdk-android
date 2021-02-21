@@ -10,7 +10,7 @@ import com.leansoft.nano.annotation.*;
  * Reserved for future use.
  * 
  */
-@RootElement(name = "findItemsForFavoriteSearchResponse", namespace = "http://www.ebay.com/marketplace/search/v1/services")
+@RootElement(name = "findItemsForFavoriteSearchResponse", namespace = "https://www.ebay.com/marketplace/search/v1/services")
 public class FindItemsForFavoriteSearchResponse extends BaseFindingServiceResponse implements Serializable {
 
     private static final long serialVersionUID = -1L;

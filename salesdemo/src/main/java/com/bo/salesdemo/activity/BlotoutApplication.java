@@ -22,6 +22,7 @@ public class BlotoutApplication extends Application {
         //2M7U3RMRM54VJ36
         BlotoutAnalytics.getInstance().setEnabled(true);
         //BlotoutAnalytics.getInstance().initializeAnalyticsEngine(this,"YVQMSUX5VJUM8XN","http://dev.blotout.io");
+        //BlotoutAnalytics.getInstance().initializeAnalyticsEngine(this,"3Y465G7CJ48P9ZY","https://sales.blotout.io");
         BlotoutAnalytics.getInstance().initializeAnalyticsEngine(this,"7KAXV3Z2EGAPHGU","https://stage.blotout.io");
     }
 

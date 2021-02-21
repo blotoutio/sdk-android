@@ -10,7 +10,7 @@ public class ShoppingServiceClient {
 	
 	// production
 	@NonNull
-    public static String eBayShoppingServiceURLString = "http://open.api.ebay.com/shopping?";
+    public static String eBayShoppingServiceURLString = "https://open.api.ebay.com/shopping?";
 	//http://open.api.ebay.com/shopping?
 	// sandbox
 	//public static final String eBayShoppingServiceURLString = "http://open.api.sandbox.ebay.com/shopping";

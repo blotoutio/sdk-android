@@ -51,9 +51,9 @@ public class LoginActivity extends AppCompatActivity {
         //BlotoutAnalytics.getInstance().isProductionMode=false;
         //PGH92NV367NA5ZX
         //BlotoutAnalytics.getInstance().initializeAnalyticsEngine(this,"5DNGP7DR2KD9JSY","WYHDWZ8EHZT3SXE");
-        HashMap<String,Object> item2 = new HashMap<>();
-        item2.put("emailId","ankuradhikari08@gmail.com");
-        item2.put("gender","Male");
+//        HashMap<String,Object> item2 = new HashMap<>();
+//        item2.put("emailId","ankuradhikari08@gmail.com");
+//        item2.put("gender","Male");
 
         //BlotoutAnalytics.getInstance().mapId("abcd","mixpanel",null);
         //BlotoutAnalytics.getInstance().mapId("abcd","google",item2);
@@ -114,24 +114,24 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void onLogin(View view) {
 
-        HashMap<String,Object> item2 = new HashMap<>();
-        item2.put("emailId","ankuradhikari08@gmail.com");
-        item2.put("gender","Male");
+//        HashMap<String,Object> item2 = new HashMap<>();
+//        item2.put("emailId","ankuradhikari08@gmail.com");
+//        item2.put("gender","Male");
 
 
-        BlotoutAnalytics.getInstance().mapId("abcd","mixpanel",null);
-        BlotoutAnalytics.getInstance().mapId("abcd","google",item2);
+//        BlotoutAnalytics.getInstance().mapId("abcd","mixpanel",null);
+//        BlotoutAnalytics.getInstance().mapId("abcd","google",item2);
+//
+//        BlotoutAnalytics.getInstance().logPHIEvent("testPHIEvent",item2,null);
+//
+//        BlotoutAnalytics.getInstance().logPIIEvent("testPIIEvent",item2,null);
+//
+//        BlotoutAnalytics.getInstance().logEvent("InCart",item2);
 
-        BlotoutAnalytics.getInstance().logPHIEvent("testPHIEvent",item2,null);
-
-        BlotoutAnalytics.getInstance().logPIIEvent("testPIIEvent",item2,null);
-
-        BlotoutAnalytics.getInstance().logEvent("InCart",item2);
-
-        BlotoutAnalytics.getInstance().logEvent("LoginView",null);
-        BlotoutAnalytics.getInstance().logEvent("Item Selected",null);
-        BlotoutAnalytics.getInstance().logEvent("Add To Cart",null);
-        BlotoutAnalytics.getInstance().logEvent("List Item Cart View",null);
+//        BlotoutAnalytics.getInstance().logEvent("LoginView",null);
+//        BlotoutAnalytics.getInstance().logEvent("Item Selected",null);
+//        BlotoutAnalytics.getInstance().logEvent("Add To Cart",null);
+//        BlotoutAnalytics.getInstance().logEvent("List Item Cart View",null);
 
         BlotoutAnalytics.getInstance().logEvent("LoginView",null);
         Intent intent = new Intent(this, CategoryInfoActivity.class);
