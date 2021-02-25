@@ -2,7 +2,7 @@
 
 ## Download Link
 
-https://assets.blotout.io/latest/sdk/android.zip
+[https://assets.blotout.io/latest/sdk/android.zip](https://assets.blotout.io/latest/sdk/android.zip)
 
 ## Add Blotout Analytics SDK into your project
 
