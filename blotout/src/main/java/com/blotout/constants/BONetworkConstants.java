@@ -39,7 +39,8 @@ public final class BONetworkConstants {
     public static final String BO_SCREEN_NAME = "scrn";
     public static final String BO_SCREEN_FROM = "scrfrm";
     public static final String BO_SCREEN_TO = "scrto";
-    public static final String BO_PROPERTIES = "codifiedInfo";
+    public static final String BO_PROPERTIES = "properties";
+    public static final String BO_CODIFIED_INFO = "codifiedInfo";
     public static final String BO_OBJECT_TYPE = "objectType";
     public static final String BO_OBJECT_RECT = "objectRect";
     public static final String BO_OBJECT_SCREEN_RECT = "scrRect";
