@@ -47,8 +47,8 @@ public final class BOCommonConstants {
 
     //This is used for app release management
     private static final String MAJOR = "0";
-    private static final String MINOR = "5";
-    private static final String PATCH = "1";
+    private static final String MINOR = "6";
+    private static final String PATCH = "0";
     public static final String SDK_VERSION = MAJOR + "." + MINOR + "." + PATCH;
     public static final String TAG_PREFIX = "BOSDK:";
 
