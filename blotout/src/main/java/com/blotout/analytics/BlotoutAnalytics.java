@@ -9,9 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.blotout.Controllers.BODeviceAndAppFraudController;
-import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.Controllers.BOSDKManifestController;
-import com.blotout.Controllers.BOSegmentsSyncController;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
 import com.blotout.events.*;
@@ -23,10 +21,7 @@ import com.blotout.eventsExecutor.BODeviceOperationExecutorHelper;
 import com.blotout.eventsExecutor.BOGeoRetentionOperationExecutorHelper;
 import com.blotout.eventsExecutor.BOInitializationExecutorHelper;
 import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
-import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
-import com.blotout.eventsExecutor.BONetworkSegmentExecutorHelper;
 import com.blotout.eventsExecutor.BOWorkerHelper;
-import com.blotout.model.session.BODeveloperCodified;
 import com.blotout.model.session.BOPendingEvents;
 import com.blotout.network.service.BONetworkEventService;
 import com.blotout.storage.BOFileSystemManager;
@@ -346,29 +341,7 @@ public class BlotoutAnalytics {
         }
     }
 
-    /**
-     *
-     * @param segmentEventsEnabled default is true, set false to disable segment execution
-     */
-    public void setSegmentEventsEnabled(boolean segmentEventsEnabled) {
-        try {
-            BlotoutAnalytics_Internal.getInstance().setSegmentEventsEnabled(segmentEventsEnabled);
-            isSegmentEventsEnabled = segmentEventsEnabled;
 
-            BONetworkSegmentExecutorHelper.getInstance().post(new Runnable() {
-                @Override
-                public void run() {
-                    if (segmentEventsEnabled) {
-                        BOSegmentsSyncController.getInstance().prepareSegmentsSyncAndAnalyser();
-                    } else {
-                        BOSegmentsSyncController.getInstance().pauseSegmentsSyncAndAnalyser();
-                    }
-                }
-            });
-        }catch (Exception e) {
-            Logger.INSTANCE.e(TAG,e.toString());
-        }
-    }
 
     /**
      *
@@ -891,20 +864,6 @@ public class BlotoutAnalytics {
                                 }
                             });
 
-
-                            BONetworkSegmentExecutorHelper.getInstance().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    BOSegmentsSyncController.getInstance().prepareSegmentsSyncAndAnalyser();
-                                }
-                            });
-
-                            BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    BOFunnelSyncController.getInstance().prepareFunnelSyncAndAnalyser();
-                                }
-                            });
 
                             try {
                                 BOPiiEvents.getInstance().isEnabled = true;

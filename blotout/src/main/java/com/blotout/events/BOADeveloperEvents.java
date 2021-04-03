@@ -3,7 +3,6 @@ package com.blotout.events;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
 import com.blotout.analytics.BOSharedManager;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
@@ -129,7 +128,6 @@ public class BOADeveloperEvents extends BOAEvents {
             BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getDeveloperCodified().setTimedEvent(existingTimedEvent);
             //Funnel execution and testing based
             long eventSubCode = BOCommonUtils.codeForCustomCodifiedEvent(eventName);
-            BOFunnelSyncController.getInstance().recordDevEvent(eventName, eventSubCode, timeEventDict);
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }
@@ -175,7 +173,6 @@ public class BOADeveloperEvents extends BOAEvents {
                 List<BOCustomEvent> existingCustomEvent = BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getDeveloperCodified().getCustomEvent();
                 existingCustomEvent.add(customEventModel);
                 BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getDeveloperCodified().setCustomEvent(existingCustomEvent);
-                BOFunnelSyncController.getInstance().recordDevEvent(eventName, eventSubCode, customEventModelDict);
             }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());

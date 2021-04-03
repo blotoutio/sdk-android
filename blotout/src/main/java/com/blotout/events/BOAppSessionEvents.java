@@ -9,7 +9,6 @@ import android.os.SystemClock;
 import androidx.annotation.Nullable;
 
 import com.blotout.Controllers.BODeviceAndAppFraudController;
-import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.analytics.BOAnalyticsActivityLifecycleCallbacks;
 import com.blotout.analytics.BOSharedManager;
 import com.blotout.analytics.BlotoutAnalytics_Internal;
@@ -18,7 +17,6 @@ import com.blotout.constants.BONetworkConstants;
 import com.blotout.deviceinfo.device.DeviceInfo;
 import com.blotout.eventsExecutor.BOGeoRetentionOperationExecutorHelper;
 import com.blotout.eventsExecutor.BOLifetimeOperationExecutorHelper;
-import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.model.lifetime.BOAppLifetimeData;
 import com.blotout.model.session.BOApp;
 import com.blotout.model.session.BOAppInfo;
@@ -404,14 +402,6 @@ public class BOAppSessionEvents extends BOAEvents {
                 }
             }, 30 * 1000);
 
-            BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                @Override
-                public void run() {
-                    if (BOSharedPreferenceImpl.getInstance().isSDKFirstLaunched()) {
-                        BOFunnelSyncController.getInstance().appLaunchedWithInfo(null);
-                    }
-                }
-            });
 
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
@@ -442,7 +432,6 @@ public class BOAppSessionEvents extends BOAEvents {
                 existingData.add(appStates);
                 BOAppSessionDataModel.sharedInstanceFromJSONDictionary(null).getSingleDaySessions().getAppStates().setAppInBackground(existingData);
 
-                BOFunnelSyncController.getInstance().appInBackgroundWithInfo(null);
             }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
@@ -557,7 +546,6 @@ public class BOAppSessionEvents extends BOAEvents {
             this.recordLifeTimeOnDayChangeOrAppTermination();
             this.resetAverageSessionDuration();
             BOPiiEvents.getInstance().stopCollectingUserLocationEvent();
-            BOFunnelSyncController.getInstance().appWillTerminatWithInfo(null);
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.getMessage());
         }

@@ -11,22 +11,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.events.BOAEvents;
 import com.blotout.events.BOAppSessionEvents;
-import com.blotout.eventsExecutor.BONetworkFunnelExecutorHelper;
 import com.blotout.model.session.BOAppNavigation;
 import com.blotout.model.session.BOAppSessionDataModel;
 import com.blotout.storage.BOSharedPreferenceImpl;
 import com.blotout.utilities.Logger;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Blotout on 17,November,2019
@@ -108,14 +104,6 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
         try {
             if (!appInForeground) {
                 appInForeground = true;
-                if (BlotoutAnalytics_Internal.getInstance().isSDKEnabled) {
-                    BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            BOAppSessionEvents.getInstance().applicationWillEnterForegroundNotification();
-                        }
-                    });
-                }
             }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());
@@ -142,12 +130,6 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
                     firstLaunch.set(false);
                     BOSharedPreferenceImpl.getInstance().removeKey(BO_FIRST_ACTIVITY);
 
-                    BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            BOAppSessionEvents.getInstance().applicationWillTerminateNotification();
-                        }
-                    });
                     BOAEvents.unRegisterDayChangeEvent();
                 }
             }
@@ -265,16 +247,6 @@ public class BOAnalyticsActivityLifecycleCallbacks implements Application.Activi
             if (level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN && appInForeground) {
                 // lifecycleDelegate instance was passed in on the constructor
                 appInForeground = false;
-                if (BlotoutAnalytics_Internal.getInstance().isSDKEnabled) {
-                    BONetworkFunnelExecutorHelper.getInstance().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            BOAppSessionEvents.getInstance().applicationDidEnterBackgroundNotification();
-                            //Android doesn't guranteed for app termination so we make this call when app is in background
-                            BOAppSessionEvents.getInstance().applicationWillTerminateNotification();
-                        }
-                    });
-                }
             }
         } catch (Exception e) {
             Logger.INSTANCE.e(TAG, e.toString());

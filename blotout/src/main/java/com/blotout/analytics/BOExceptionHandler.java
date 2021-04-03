@@ -2,7 +2,6 @@ package com.blotout.analytics;
 
 import androidx.annotation.NonNull;
 
-import com.blotout.Controllers.BOFunnelSyncController;
 import com.blotout.constants.BOCommonConstants;
 import com.blotout.constants.BONetworkConstants;
 import com.blotout.events.BOAEvents;
@@ -65,8 +64,6 @@ public class BOExceptionHandler implements Thread.UncaughtExceptionHandler {
 
                 BOAppSessionEvents appSessionEventL = BOAppSessionEvents.getInstance();
                 appSessionEventL.appTerminationFunctionalityOnDayChange();
-
-                BOFunnelSyncController.getInstance().appWillTerminatWithInfo(null);
             }
         } catch (Exception exception) {
             Logger.INSTANCE.e(TAG, e.getMessage());
