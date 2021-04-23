@@ -16,6 +16,22 @@ buildscript {
     }
 }
 
+ext.versions =[
+        retrofitVersion : "2.8.1",
+        okhttpVersion:"4.5.0",
+        rxRetrofitAdapterVersion:"2.9.0"
+
+]
+
+ext.deps =[
+        'retrofit' : "com.squareup.retrofit2:retrofit:$versions.retrofitVersion",
+        'retrofit_gson_converter' : "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion",
+        'okhttp': "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
+        'okhttp_logging_interceptor': "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion",
+        'rxRetrofitAdapter': "com.squareup.retrofit2:adapter-rxjava2:$versions.rxRetrofitAdapterVersion"
+
+]
+
 allprojects {
     repositories {
         google()

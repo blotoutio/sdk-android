@@ -162,9 +162,9 @@ public class MainFragment extends Fragment implements AdInfo.AdIdCallback{
                     adapter = new CustomListAdapter(mActivity, userApps);
 
                 case 8: //call contacts
-                    UserContactInfo userContactInfo = new UserContactInfo(mActivity);
+                    /*UserContactInfo userContactInfo = new UserContactInfo(mActivity);
                     List<UserContacts> userContacts = userContactInfo.getContacts();
-                    adapter = new CustomListAdapter(mActivity, userContacts);
+                    adapter = new CustomListAdapter(mActivity, userContacts);*/
 
             }
 
