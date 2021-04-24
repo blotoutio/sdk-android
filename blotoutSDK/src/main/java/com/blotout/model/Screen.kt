@@ -1,23 +1,20 @@
 package com.blotout.model
 
+import android.content.Context
+import com.blotout.deviceinfo.device.DeviceInfo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Screen (
+class Screen(context: Context) {
+
 
     @SerializedName("width")
     @Expose
-    private val width: Int? = null,
+    private val width: Int? = DeviceInfo(context).screenWidth
 
     @SerializedName("height")
     @Expose
-    private val height: Int? = null,
+    private val height: Int? = DeviceInfo(context).screenHeight
 
-    @SerializedName("docHeight")
-    @Expose
-    private val docHeight: Int? = null,
 
-    @SerializedName("docWidth")
-    @Expose
-    private val docWidth: Int? = null
-)
+}

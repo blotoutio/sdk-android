@@ -11,27 +11,33 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 import kotlin.experimental.and
 
-class EncryptionUtils {
-    val ALGORITHM_AES_CBC_PKCS5Padding = "AES/CBC/PKCS5Padding"
-    private val CRYPTO_IVX = "Q0BG17E2819IWZYQ".toByteArray()
-    val CRYPTO_IVX_STRING = "Q0BG17E2819IWZYQ"
-    private val TAG = "SimpleCrypto"
-    val MODE_128BIT = 128
-    val MODE_256BIT = 256
-    val MODE_DEFAULT = 1
+class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) {
+
+    companion object {
+        val ALGORITHM_AES_CBC_PKCS5Padding = "AES/CBC/PKCS5Padding"
+        private val CRYPTO_IVX = "Q0BG17E2819IWZYQ".toByteArray()
+        val CRYPTO_IVX_STRING = "Q0BG17E2819IWZYQ"
+        val TAG = "SimpleCrypto"
+        val MODE_128BIT = 128
+        val MODE_256BIT = 256
+        val MODE_DEFAULT = 1
+    }
+
     private val BASE64_FLAGS = Base64.NO_WRAP
 
     private var algorithm: String? = null
     private lateinit var rawKey: ByteArray
 
-    fun BOEncryptionManager(algorithm: String?, passphrase: String, mode: Int) {
+    init {
         this.algorithm = algorithm
-        when (mode) {
-            MODE_128BIT -> rawKey = getKeyBytes(passphrase, MODE_128BIT)
-            MODE_256BIT -> rawKey = getKeyBytes(passphrase, MODE_256BIT)
-            else -> rawKey = passphrase.toByteArray()
+        rawKey = when (mode) {
+            MODE_128BIT -> getKeyBytes(passphrase, MODE_128BIT)
+            MODE_256BIT -> getKeyBytes(passphrase, MODE_256BIT)
+            else -> passphrase.toByteArray()
         }
     }
+
+
 
     fun encrypt(v: String): String? {
         return try {

@@ -1,8 +1,9 @@
 package com.blotout.util
 
+import android.util.Base64
 import android.util.Log
 import com.blotout.DependencyInjectorImpl
-import java.util.*
+import kotlin.collections.HashMap
 
 
 fun Long.sizeFormatter(): String {
@@ -63,4 +64,17 @@ fun stringToIntSum(eventName: String): Int  {
 
 fun generateSubCode(eventSum: Int): Int  {
     return Constant.BO_DEV_EVENT_CUSTOM_KEY +(eventSum % 8899)
+}
+
+fun String.encrypt(publicKey:String):HashMap<String,Any>{
+    var secretKey: String = CommonUtils().getUUID()!!
+    secretKey = secretKey.replace("-", "")
+    val encryptionManager = EncryptionUtils(EncryptionUtils.ALGORITHM_AES_CBC_PKCS5Padding, secretKey, EncryptionUtils.MODE_256BIT)
+    var encryptedData = Base64.encodeToString(encryptionManager.encrypt(this.toByteArray()), Base64.NO_WRAP)
+    var encryptedSecretKey = EncryptionUtils().encryptText(secretKey.toByteArray(), publicKey)
+    var personalInformation = HashMap<String,Any>()
+    personalInformation.put("data" , encryptedData)
+    personalInformation.put("iv", EncryptionUtils.CRYPTO_IVX_STRING)
+    personalInformation.put("key ",encryptedSecretKey!!)
+    return personalInformation
 }

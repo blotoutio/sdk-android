@@ -1,7 +1,6 @@
 package com.blotout
 
 import android.app.Application
-import android.content.Context
 
 interface BlotoutAnalyticsInterface {
 

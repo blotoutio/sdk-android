@@ -11,4 +11,5 @@ class Events {
     @SerializedName("events")
     @Expose
     var events: List<Event>? = null
+
 }

@@ -1,5 +1,7 @@
 package com.blotout.util
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.text.TextUtils
 import android.util.Log
 import com.blotout.DependencyInjectorImpl
@@ -134,4 +136,6 @@ class CommonUtils {
     fun getUUID(): String? {
         return UUID.randomUUID().toString()
     }
+
+
 }

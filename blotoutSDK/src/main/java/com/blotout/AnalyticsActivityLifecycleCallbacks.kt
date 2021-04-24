@@ -30,47 +30,10 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
 
-    private val stubOwner: LifecycleOwner = object : LifecycleOwner {
-        var stubLifecycle: Lifecycle = object : Lifecycle() {
-            override fun addObserver(observer: LifecycleObserver) {
-            }
-
-            override fun removeObserver(observer: LifecycleObserver) {
-            }
-
-            override fun getCurrentState(): State {
-                return State.DESTROYED
-            }
-        }
-
-        override fun getLifecycle(): Lifecycle {
-            return stubLifecycle
-        }
-    }
-
-    override fun onStart(owner: LifecycleOwner) {
-        if (numberOfActivities!!.incrementAndGet() == 1) {
-            eventRepository.prepareSystemEvent("Application Opened", null, Constant.BO_APPLICATION_OPENED)
-        }
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-
-        // App in background
-        if (numberOfActivities!!.decrementAndGet() == 0) {
-            eventRepository.prepareSystemEvent("Application Backgrounded", null, Constant.BO_APPLICATION_BACKGROUNDED)
-        }
-    }
-
-    override fun onCreate(owner: LifecycleOwner) {
-        numberOfActivities!!.set(0)
-        firstLaunch!!.set(true)
-
-    }
-
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
 
-        onCreate(stubOwner)
+        numberOfActivities!!.set(0)
+        firstLaunch!!.set(true)
         trackApplicationLifecycleEvents(activity)
         trackDeepLink(activity)
     }
@@ -85,7 +48,9 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
     override fun onActivityStarted(activity: Activity) {
-        onStart(stubOwner)
+        if (numberOfActivities!!.incrementAndGet() == 1) {
+            eventRepository.prepareSystemEvent(activity,"Application Opened", null, Constant.BO_APPLICATION_OPENED)
+        }
 
     }
 
@@ -98,7 +63,9 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
     override fun onActivityStopped(activity: Activity) {
-        onStop(stubOwner)
+        if (numberOfActivities!!.decrementAndGet() == 0) {
+            eventRepository.prepareSystemEvent(activity,"Application Backgrounded", null, Constant.BO_APPLICATION_BACKGROUNDED)
+        }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -135,7 +102,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
             }
         }
         properties.put("url", uri.toString())
-        eventRepository.prepareSystemEvent("Deep Link Opened", properties,Constant.BO_DEEP_LINK_OPENED)
+        eventRepository.prepareSystemEvent(activity,"Deep Link Opened", properties,Constant.BO_DEEP_LINK_OPENED)
     }
 
     fun trackApplicationLifecycleEvents(activity: Activity) {
@@ -144,10 +111,10 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
 
         var previousVersion = secureStorage.fetchString((Constant.BO_VERSION_KEY))
         if (previousVersion.isNullOrEmpty()) {
-            eventRepository.prepareSystemEvent("Application Installed", null, Constant.BO_APPLICATION_INSTALLED)
+            eventRepository.prepareSystemEvent(activity,"Application Installed", null, Constant.BO_APPLICATION_INSTALLED)
 
         } else if (!previousVersion.equals(currentVersion)) {
-            eventRepository.prepareSystemEvent("Application Updated", null, Constant.BO_APPLICATION_UPDATED)
+            eventRepository.prepareSystemEvent(activity,"Application Updated", null, Constant.BO_APPLICATION_UPDATED)
         }
 
         secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion!!)

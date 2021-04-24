@@ -13,16 +13,16 @@ import retrofit2.Call
 
 class ManifestRepository(private val configurationDataManager: ConfigurationDataManager) {
 
-    var eventDeviceInfoGrain = 0
-    var serverBaseURL: String? = null
-    var eventPath: String? = null
-    var sdkPushSystemEvents = false
-    var sdkPIIPublicKey: String? = null
-    var sdkPHIPublicKey: String? = null
+    //var eventDeviceInfoGrain = 0
+    //var serverBaseURL: String? = null
+    //var eventPath: String? = null
+    public var sdkPushSystemEvents = false
+    public var sdkPIIPublicKey: String? = null
+    public var sdkPHIPublicKey: String? = null
 
-    enum class EventDeviceInfoGrainType(var type: Int){
+    /*enum class EventDeviceInfoGrainType(var type: Int){
         DO_NOT_PUSH(0),PUSH_ONLY_OS_VERSSION_DEVICE_MANUFATURE_DEVICE_MODEL(1),PUSH(2)
-    }
+    }*/
 
     fun fetchManifestConfiguration() {
 
@@ -44,34 +44,37 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
             }
 
-            override fun onSuccess(data: ManifestConfigurationResponse?) {
-                Log.d("onSuccess", data?.variables?.get(0)?.variableName!!)
-                var fileService = DependencyInjectorImpl.getInstance().getFileService()
+            override fun onSuccess(manifestConfigurationResponse:  ManifestConfigurationResponse?) {
+                Log.d("onSuccess", manifestConfigurationResponse?.variables?.get(0)?.variableName!!)
+                /*var fileService = DependencyInjectorImpl.getInstance().getFileService()
                 var manifestFileName = Constant.MANIFEST_FILE_NAME.manifestFileName()
                 if (fileService.checkFileExist(manifestFileName))
                     fileService.deleteFilesAndDir(manifestFileName)
 
-                fileService.writeToFile(manifestFileName, Gson().toJson(data))
-                //initManifestConfiguration()
+                fileService.writeToFile(manifestFileName, Gson().toJson(data))*/
+                initManifestConfiguration(manifestConfigurationResponse)
 
             }
 
         })
     }
 
-    fun initManifestConfiguration() {
-        var fileService = DependencyInjectorImpl.getInstance().getFileService()
+    fun initManifestConfiguration(manifestConfigurationResponse: ManifestConfigurationResponse) {
+        /*var fileService = DependencyInjectorImpl.getInstance().getFileService()
         var manifestFileName = Constant.MANIFEST_FILE_NAME.manifestFileName()
         var manifestContent = fileService.readContentOfFileAtPath(manifestFileName)
-        var manifetObject = Gson().fromJson(manifestContent, ManifestConfigurationResponse::class.java)
-        var manifestConfigurations = manifetObject.variables?.get(0)
-        when (manifestConfigurations?.variableName) {
-            Constant.Event_DeviceInfoGrain -> eventDeviceInfoGrain = manifestConfigurations?.value!!.toInt()
-            Constant.Api_Endpoint -> serverBaseURL = manifestConfigurations?.value!!
-            Constant.EVENT_PATH -> eventPath = manifestConfigurations?.value!!
-            Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestConfigurations?.value!!.toBoolean()
-            Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestConfigurations?.value!!
-            Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestConfigurations?.value!!
+        var manifetObject = Gson().fromJson(manifestContent, ManifestConfigurationResponse::class.java)*/
+        var manifestConfigurations = manifestConfigurationResponse.variables?.get(0)
+        for(manifestData in manifestConfigurationResponse.variables) {
+
+            when (manifestConfigurations?.variableName) {
+                //Constant.Event_DeviceInfoGrain -> eventDeviceInfoGrain = manifestConfigurations?.value!!.toInt()
+                //Constant.Api_Endpoint -> serverBaseURL = manifestConfigurations?.value!!
+                //Constant.EVENT_PATH -> eventPath = manifestConfigurations?.value!!
+                Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestConfigurations?.value!!.toBoolean()
+                Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestConfigurations?.value!!
+                Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestConfigurations?.value!!
+            }
         }
 
     }

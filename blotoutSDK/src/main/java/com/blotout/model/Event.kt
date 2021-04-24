@@ -48,4 +48,6 @@ data class Event(
         @SerializedName("additionalData")
         @Expose
         var additionalData: HashMap<String, Any>? = null
+
+
 )
