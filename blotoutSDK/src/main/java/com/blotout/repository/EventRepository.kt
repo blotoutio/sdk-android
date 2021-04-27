@@ -20,11 +20,10 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun prepareMetaData(): Meta {
         val meta = Meta()
         val context = DependencyInjectorImpl.getInstance().getContext()
-        meta.sdkv = secureStorage.fetchString(Constant.BO_VERSION_KEY)
+        meta.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
         meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
         meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
         meta.plf = Constant.BO_Android_All
-        meta.appn = context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)).toString()
         meta.osv = Build.VERSION.RELEASE
         meta.appv = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_META_DATA).versionName
         meta.dmft = Build.MANUFACTURER
@@ -38,7 +37,6 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) {
         val context = DependencyInjectorImpl.getInstance().getContext()
         val event = Event()
-        event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
         event.mid = eventName.getMessageIDForEvent()
         event.userid = CommonUtils().getDeviceId()
         event.evn = eventName
@@ -66,7 +64,6 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, eventCode: Int) {
         val event = Event()
         val context = DependencyInjectorImpl.getInstance().getContext()
-        event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
         event.mid = eventName.getMessageIDForEvent()
         event.type = Constant.BO_CODIFIED
         event.userid = CommonUtils().getDeviceId()
@@ -84,7 +81,6 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         //{
             val event = Event()
             val context = DependencyInjectorImpl.getInstance().getContext()
-            event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
             event.mid = eventName.getMessageIDForEvent()
             event.type = Constant.BO_SYSTEM
             event.userid = CommonUtils().getDeviceId()

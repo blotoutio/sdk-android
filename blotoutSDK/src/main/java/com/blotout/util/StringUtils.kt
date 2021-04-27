@@ -3,6 +3,7 @@ package com.blotout.util
 import android.util.Base64
 import android.util.Log
 import com.blotout.DependencyInjectorImpl
+import okio.ByteString.Companion.decodeBase64
 import kotlin.collections.HashMap
 
 
@@ -39,7 +40,7 @@ fun String.manifestFileName():String{
 
 
 fun String.getMessageIDForEvent(): String? {
-    return "" + CommonUtils().getAsciiCustomIntSum(this!!, false) + this.codeForDevEvent() + CommonUtils().getStringMD5CustomIntSumWithCharIndexAdded(this, false) + DateTimeUtils().get13DigitNumberObjTimeStamp()
+    return Base64.encodeToString(this.toByteArray(),Base64.DEFAULT)+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
 }
 
 fun String.codeForDevEvent(): Int  {
