@@ -13,4 +13,13 @@ class SharedPrefernceSecureVaultImpl(private val prefernce:SharedPreferences, pr
         val data = prefernce.getString(key,"")
         data!!.let { return it }
     }
+
+    override fun storeLong(key: String, value: Long) {
+        prefernce.edit().putLong(key,value).apply()
+    }
+
+    override fun fetchLong(key: String): Long {
+        val data = prefernce.getLong(key,0)
+        data!!.let { return it }
+    }
 }

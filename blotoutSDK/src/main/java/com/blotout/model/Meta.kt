@@ -15,7 +15,7 @@ class Meta {
 
     @SerializedName("user_id_created")
     @Expose
-    var userIdCreated:String? = null
+    var userIdCreated:Long? = null
 
     @SerializedName("plf")
     @Expose

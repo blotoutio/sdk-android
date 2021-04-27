@@ -1,7 +1,5 @@
 package com.blotout.util
 
-import android.app.Activity
-import android.content.pm.PackageManager
 import android.text.TextUtils
 import android.util.Log
 import com.blotout.DependencyInjectorImpl
@@ -135,6 +133,22 @@ class CommonUtils {
 
     fun getUUID(): String? {
         return UUID.randomUUID().toString()
+    }
+
+    fun getUserBirthTimeStamp(): Long {
+        var userCreatedTimestamp: Long = 0
+        try {
+            userCreatedTimestamp =
+                DependencyInjectorImpl.getInstance().getSecureStorageService().fetchLong(Constant.BO_ANALYTICS_USER_BIRTH_TIME_STAMP)
+
+            if (userCreatedTimestamp == 0L) {
+                userCreatedTimestamp = DateTimeUtils().get13DigitNumberObjTimeStamp()
+                DependencyInjectorImpl.getInstance().getSecureStorageService().storeLong(Constant.BO_ANALYTICS_USER_BIRTH_TIME_STAMP,userCreatedTimestamp)
+            }
+        } catch (e: java.lang.Exception) {
+
+        }
+        return userCreatedTimestamp
     }
 
 

@@ -1,2 +1,2 @@
 include ':blotoutSDK'
-include ':app', ':blotout', ':salesdemo',':lvl'
+include ':app', ':blotout'

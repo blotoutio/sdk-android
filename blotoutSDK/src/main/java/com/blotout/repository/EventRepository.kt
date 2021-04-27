@@ -22,7 +22,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         val context = DependencyInjectorImpl.getInstance().getContext()
         meta.sdkv = secureStorage.fetchString(Constant.BO_VERSION_KEY)
         meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
-        meta.userIdCreated = CommonUtils().getUUID()
+        meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
         meta.plf = Constant.BO_Android_All
         meta.appn = context.packageManager.getApplicationLabel(context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)).toString()
         meta.osv = Build.VERSION.RELEASE
@@ -38,7 +38,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) {
         val context = DependencyInjectorImpl.getInstance().getContext()
         val event = Event()
-        event.sdkv = (Constant.BOSDK_MAJOR_VERSION+Constant.BOSDK_MINOR_VERSION+Constant.BOSDK_PATCH_VERSION).toString()
+        event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
         event.mid = eventName.getMessageIDForEvent()
         event.userid = CommonUtils().getDeviceId()
         event.evn = eventName
@@ -66,7 +66,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, eventCode: Int) {
         val event = Event()
         val context = DependencyInjectorImpl.getInstance().getContext()
-        event.sdkv = (Constant.BOSDK_MAJOR_VERSION+Constant.BOSDK_MINOR_VERSION+Constant.BOSDK_PATCH_VERSION).toString()
+        event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
         event.mid = eventName.getMessageIDForEvent()
         event.type = Constant.BO_CODIFIED
         event.userid = CommonUtils().getDeviceId()
@@ -80,10 +80,11 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     }
 
     fun prepareSystemEvent(activity: Activity, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int) {
-        if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents) {
+        //if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents)
+        //{
             val event = Event()
             val context = DependencyInjectorImpl.getInstance().getContext()
-            event.sdkv = (Constant.BOSDK_MAJOR_VERSION + Constant.BOSDK_MINOR_VERSION + Constant.BOSDK_PATCH_VERSION).toString()
+            event.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
             event.mid = eventName.getMessageIDForEvent()
             event.type = Constant.BO_SYSTEM
             event.userid = CommonUtils().getDeviceId()
@@ -95,7 +96,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
             event.sessionId = DependencyInjectorImpl.getSessionId().toString()
             event.additionalData = eventInfo
             pushEvents(event)
-        }
+       // }
     }
 
     private fun pushEvents(event: Event) {
