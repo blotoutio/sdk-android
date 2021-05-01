@@ -2,7 +2,7 @@ package com.blotout
 
 import android.app.Application
 import android.content.Context
-import androidx.lifecycle.Lifecycle
+import com.blotout.data.database.EventDatabase
 import com.blotout.network.HostConfiguration
 import com.blotout.network.RemoteApiClient
 import com.blotout.network.RemoteApiService
@@ -12,18 +12,20 @@ import com.blotout.repository.data.ConfigurationDataManager
 import com.blotout.repository.data.SharedPrefernceSecureVault
 import com.blotout.repository.impl.DataManagerImpl
 import com.blotout.repository.impl.FileManagerImpl
-import com.blotout.repository.impl.SharedPrefernceSecureVaultImpl
+import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.DateTimeUtils
 
 class DependencyInjectorImpl private constructor(private val context: Context,
                                                  secureStorageService: SharedPrefernceSecureVault,
                                                  hostConfiguration: HostConfiguration,
-                                                 fileManagerImpl: FileManagerImpl) : DependencyInjector {
+                                                 fileManagerImpl: FileManagerImpl,
+                                                 eventDatabase: EventDatabase) : DependencyInjector {
 
 
     private val mSecureStorageService = secureStorageService
     private val mHostConfiguration = hostConfiguration
     private val mFileManagerImpl = fileManagerImpl
+    private val mEventDatabase = eventDatabase
     private val mContext = context
 
 
@@ -35,15 +37,17 @@ class DependencyInjectorImpl private constructor(private val context: Context,
                 application: Application,
                 blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration
         ) {
-            val secureVault = SharedPrefernceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
+            val secureVault = SharedPreferenceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
             var hostConfiguration = HostConfiguration(baseUrl = blotoutAnalyticsConfiguration.endPointUrl,baseKey = blotoutAnalyticsConfiguration.blotoutSDKKey)
             var fileManagerImpl = FileManagerImpl(application)
             var eventRepository = EventRepository(secureVault)
             var activityLifeCycleCallback = AnalyticsActivityLifecycleCallbacks(eventRepository,secureVault)
+            var eventDB = EventDatabase.invoke(application)
             application.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
-            instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl)
+            instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl,eventDB)
             sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
             blotoutAnalyticsConfiguration.save()
+            eventRepository.publishEvent()
         }
 
         fun getInstance(): DependencyInjectorImpl {
@@ -82,9 +86,9 @@ class DependencyInjectorImpl private constructor(private val context: Context,
         return dataManager.getConfigurationDataManager()
     }
 
-    override fun getManifestRepository(): ManifestRepository {
-        return mManifestRepository
-    }
+    override fun getEventDatabase(): EventDatabase = mEventDatabase
+
+    override fun getManifestRepository(): ManifestRepository = mManifestRepository
 
     override fun getSecureStorageService(): SharedPrefernceSecureVault {
         return mSecureStorageService

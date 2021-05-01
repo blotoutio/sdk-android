@@ -1,12 +1,12 @@
 package com.blotout.util
 
 object Constant {
+
+    const val IS_SDK_ENABLE = "IS_SDK_ENABLE"
     const val BO_ANALYTICS_USER_BIRTH_TIME_STAMP = "BO_ANALYTICS_USER_BIRTH_TIME_STAMP"
     const val SDK_KEY = "sdk_key"
     const val SDK_END_POINT_URL = "SDK_END_POINT_URL"
-    const val SDK_MANIFEST_SYNC_TIME = "SDK_MANIFEST_SYNC_TIME"
     const val BO_SDK_ROOT_DIRECTORY_NAME = "BOSDKRootDir"
-    const val MANIFEST_FILE_NAME :String = "sdkManifest"
 
 
     const val BO_APPLICATION_OPENED = 11001

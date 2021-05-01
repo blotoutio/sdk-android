@@ -23,18 +23,6 @@ import com.blotout.app.R;
 import com.blotout.app.adapter.CustomListAdapter;
 import com.blotout.deviceinfo.ads.Ad;
 import com.blotout.deviceinfo.ads.AdInfo;
-import com.blotout.deviceinfo.device.model.App;
-import com.blotout.deviceinfo.device.model.Battery;
-import com.blotout.deviceinfo.device.model.Device;
-import com.blotout.deviceinfo.device.model.Memory;
-import com.blotout.deviceinfo.device.model.Network;
-import com.blotout.deviceinfo.location.DeviceLocation;
-import com.blotout.deviceinfo.location.LocationInfo;
-import com.blotout.deviceinfo.permission.PermissionUtils;
-import com.blotout.deviceinfo.userapps.UserAppInfo;
-import com.blotout.deviceinfo.userapps.UserApps;
-import com.blotout.deviceinfo.usercontacts.UserContactInfo;
-import com.blotout.deviceinfo.usercontacts.UserContacts;
 
 import java.util.List;
 
@@ -45,7 +33,6 @@ public class MainFragment extends Fragment implements AdInfo.AdIdCallback{
 
     private RecyclerView recyclerView;
     private CustomListAdapter adapter;
-    private PermissionUtils permissionUtils;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -73,7 +60,6 @@ public class MainFragment extends Fragment implements AdInfo.AdIdCallback{
         if (getArguments() != null) {
             position = getArguments().getInt("pos");
         }
-        permissionUtils = new PermissionUtils(mActivity);
     }
 
     @Nullable
@@ -115,52 +101,19 @@ public class MainFragment extends Fragment implements AdInfo.AdIdCallback{
     }
 
     private void getPermission(@NonNull String permission) {
-        PermissionUtils permissionUtils = new PermissionUtils(mActivity);
-        if (!permissionUtils.isPermissionGranted(permission)) {
 
-        } else {
             initialize();
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void initialize() {
         new Handler().post(() -> {
             switch (position) {
-                case 0: //call location
-                    LocationInfo locationInfo = new LocationInfo(mActivity);
-                    DeviceLocation location = locationInfo.getLocation();
-                    adapter = new CustomListAdapter(mActivity, location);
-                    break;
-                case 1: //call apps
-                    App app = new App(mActivity);
-                    adapter = new CustomListAdapter(mActivity, app);
+
 
                 case 2: //call ads
                     AdInfo adInfo = new AdInfo(mActivity);
                     adInfo.getAndroidAdId(MainFragment.this);
-
-                case 3: //call battery
-                    Battery battery = new Battery(mActivity);
-                    adapter = new CustomListAdapter(mActivity, battery);
-
-                case 4: //call device
-                    Device device = new Device(mActivity);
-                    adapter = new CustomListAdapter(mActivity, device);
-
-                case 5: //call memory
-                    Memory memory = new Memory(mActivity);
-                    adapter = new CustomListAdapter(mActivity, memory);
-
-                case 6: //call network
-                    Network network = new Network(mActivity);
-                    adapter = new CustomListAdapter(mActivity, network);
-
-                case 7: //call installed apps
-                    UserAppInfo userAppInfo = new UserAppInfo(mActivity);
-                    List<UserApps> userApps = userAppInfo.getInstalledApps(true);
-                    adapter = new CustomListAdapter(mActivity, userApps);
-
                 case 8: //call contacts
                     /*UserContactInfo userContactInfo = new UserContactInfo(mActivity);
                     List<UserContacts> userContacts = userContactInfo.getContacts();

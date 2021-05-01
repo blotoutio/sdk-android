@@ -9,17 +9,14 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import com.blotout.repository.EventRepository
-import com.blotout.repository.impl.SharedPrefernceSecureVaultImpl
+import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,var secureStorage: SharedPrefernceSecureVaultImpl): Application.ActivityLifecycleCallbacks, ComponentCallbacks2, DefaultLifecycleObserver {
+class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,var secureStorage: SharedPreferenceSecureVaultImpl): Application.ActivityLifecycleCallbacks, ComponentCallbacks2, DefaultLifecycleObserver {
 
     private var numberOfActivities: AtomicInteger? = null
     private var firstLaunch: AtomicBoolean? = null

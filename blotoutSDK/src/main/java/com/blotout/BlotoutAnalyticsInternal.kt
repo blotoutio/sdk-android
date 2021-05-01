@@ -1,12 +1,7 @@
 package com.blotout
 
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.Observer
-import com.blotout.network.HostConfiguration
 import com.blotout.repository.EventRepository
-import com.blotout.repository.impl.FileManagerImpl
-import com.blotout.repository.impl.SharedPrefernceSecureVaultImpl
 import com.blotout.util.Constant
 import com.blotout.util.Errors
 import java.lang.Exception
@@ -27,10 +22,10 @@ open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
                 DependencyInjectorImpl.getInstance().getManifestRepository().fetchManifestConfiguration()
             }
         }
-
     }
 
     override fun setEnabled(enabled:Boolean){
+        DependencyInjectorImpl.getInstance().getSecureStorageService().storeBoolean(Constant.IS_SDK_ENABLE,enabled)
     }
 
     override fun capture(eventName :String, eventInfo:HashMap<String, Any>){

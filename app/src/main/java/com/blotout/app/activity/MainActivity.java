@@ -17,16 +17,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.blotout.app.R;
-import com.blotout.deviceinfo.permission.PermissionUtils;
-import com.blotout.storage.BOFileSystemManager;
-import com.blotout.utilities.BOCommonUtils;
+
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String TAG = "MainActivity";
-    private BOFileSystemManager mBOFileSystemManager;
-    private PermissionUtils permissionUtils;
+
     private Context mContext;
 
     @Override
@@ -47,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mContext =this;
 
-        permissionUtils = new PermissionUtils(this);
+
 
 
         //TODO: Need to do all initialization in application class
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //BOCommonUtils.getWifiBroadcastAddress(this);
 
-        BOCommonUtils.getUsedMemorySize();
+
 
 
     }
@@ -105,29 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        askPermission();
     }
 
-    private void askPermission() {
-        String permission = null;
 
-                permission = Manifest.permission.ACCESS_FINE_LOCATION;
 
-                //permission = Manifest.permission.READ_PHONE_STATE;
-                //permission = Manifest.permission.READ_CONTACTS;
 
-        if (permission != null) {
-            getPermission(permission);
-        }
-
-    }
-
-    private void getPermission(@NonNull String permission) {
-        PermissionUtils permissionUtils = new PermissionUtils(mContext);
-        if (!permissionUtils.isPermissionGranted(permission)) {
-
-        }
-    }
 
 
 
