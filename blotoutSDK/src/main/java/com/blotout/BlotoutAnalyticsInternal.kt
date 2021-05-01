@@ -47,5 +47,9 @@ open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
 
     }
 
+    override fun getUserId(): String {
+        return DependencyInjectorImpl.getInstance().getSecureStorageService().fetchString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY)
+    }
+
 
 }

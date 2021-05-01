@@ -39,7 +39,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
             val context = DependencyInjectorImpl.getInstance().getContext()
             val event = Event()
             event.mid = eventName.getMessageIDForEvent()
-            event.userid = CommonUtils().getDeviceId()
+            event.userid = CommonUtils().getUserID()
             event.evn = eventName
             event.screen = Screen(context)
             event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
@@ -69,7 +69,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
             val context = DependencyInjectorImpl.getInstance().getContext()
             event.mid = eventName.getMessageIDForEvent()
             event.type = Constant.BO_CODIFIED
-            event.userid = CommonUtils().getDeviceId()
+            event.userid = CommonUtils().getUserID()
             event.evn = eventName
             event.screen = Screen(context)
             event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
@@ -88,7 +88,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
             val context = DependencyInjectorImpl.getInstance().getContext()
             event.mid = eventName.getMessageIDForEvent()
             event.type = Constant.BO_SYSTEM
-            event.userid = CommonUtils().getDeviceId()
+            event.userid = CommonUtils().getUserID()
             event.evn = eventName
             event.scrn = activity.getScreenName()
             event.screen = Screen(context)

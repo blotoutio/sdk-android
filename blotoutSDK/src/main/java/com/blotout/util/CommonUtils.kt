@@ -74,7 +74,7 @@ class CommonUtils {
     private infix fun Byte.and(that: Int): Int = this.toInt().and(that)
 
 
-    fun getDeviceId(): String? {
+    fun getUserID(): String? {
         //user id generation update =
         //Epoc 13 Digit Time at start +
         // Client SDK Token + UUID generate once +
