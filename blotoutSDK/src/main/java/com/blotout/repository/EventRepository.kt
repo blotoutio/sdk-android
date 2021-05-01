@@ -20,12 +20,12 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     fun prepareMetaData(): Meta {
         val meta = Meta()
         val context = DependencyInjectorImpl.getInstance().getContext()
-        meta.sdkv = ""+Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
+        meta.sdkv = "".getVersion()
         meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
         meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
         meta.plf = Constant.BO_Android_All
         meta.osv = Build.VERSION.RELEASE
-        meta.appv = context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_META_DATA).versionName
+        meta.appv = context.getVersion()
         meta.dmft = Build.MANUFACTURER
         meta.dm = Build.MODEL
         val fields: Array<Field> = Build.VERSION_CODES::class.java.fields
