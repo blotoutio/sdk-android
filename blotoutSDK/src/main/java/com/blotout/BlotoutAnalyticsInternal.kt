@@ -24,7 +24,7 @@ open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
         }
     }
 
-    override fun setEnabled(enabled:Boolean){
+    override fun enable(enabled:Boolean){
         DependencyInjectorImpl.getInstance().getSecureStorageService().storeBoolean(Constant.IS_SDK_ENABLE,enabled)
     }
 

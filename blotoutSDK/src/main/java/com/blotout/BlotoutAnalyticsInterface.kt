@@ -6,7 +6,7 @@ interface BlotoutAnalyticsInterface {
 
     fun init(context: Application, blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration)
 
-    fun setEnabled( enabled:Boolean)
+    fun enable( enabled:Boolean)
 
     fun capture( eventName :String, eventInfo:HashMap<String, Any>)
 

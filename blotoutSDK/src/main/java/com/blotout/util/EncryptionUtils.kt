@@ -26,7 +26,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
     private val BASE64_FLAGS = Base64.NO_WRAP
 
     private var algorithm: String? = null
-    private lateinit var rawKey: ByteArray
+    private  var rawKey: ByteArray
 
     init {
         this.algorithm = algorithm
