@@ -95,8 +95,7 @@ class CommonUtils {
                 stringBuilder.append(generateNumber())
                 stringBuilder.append(DateTimeUtils().get13DigitNumberObjTimeStamp())
                 val guidString: String = convertTo64CharUUID(EncryptionUtils().sha256(stringBuilder.toString()))!!
-                deviceId = guidString
-                        ?: UUID.nameUUIDFromBytes(stringBuilder.toString().toByteArray()).toString()
+                deviceId = guidString ?: UUID.nameUUIDFromBytes(stringBuilder.toString().toByteArray()).toString()
                 //check for if SHA256 conversion failed
                 deviceId = deviceId ?: getUUID()!!
                 DependencyInjectorImpl.getInstance().getSecureStorageService().storeString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY, deviceId)

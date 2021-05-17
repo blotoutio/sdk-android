@@ -19,6 +19,14 @@ object Constant {
     const val BO_APPLICATION_BACKGROUNDED = 11008;
     const val BO_APP_TRACKING = 11009;
     const val BO_TRANSACTION_COMPLETED = 11010;
+    const val BO_EVENT_SDK_START = 11130;
+    const val BO_SDK_START= "sdk_start";
+
+    const val BO_EVENT_VISIBILITY_VISIBLE = 11131;
+    const val BO_VISIBILITY_VISIBLE= "visibility_visible";
+
+    const val BO_EVENT_VISIBILITY_HIDDEN = 11132;
+    const val BO_VISIBILITY_HIDDEN= "visibility_hidden";
 
     const val Api_Endpoint = "Api_Endpoint";
     const val EVENT_PATH = "Event_Path";

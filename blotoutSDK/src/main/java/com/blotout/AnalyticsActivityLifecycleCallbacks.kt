@@ -33,6 +33,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
         firstLaunch!!.set(true)
         trackApplicationLifecycleEvents(activity)
         trackDeepLink(activity)
+        eventRepository.prepareSystemEvent(activity,Constant.BO_SDK_START, null, Constant.BO_EVENT_SDK_START)
     }
 
     fun getPackageInfo(context: Context): PackageInfo? {
@@ -52,11 +53,15 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
     override fun onActivityResumed(activity: Activity) {
-
+        if (numberOfActivities!!.incrementAndGet() == 1) {
+            eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_VISIBLE, null, Constant.BO_EVENT_VISIBILITY_VISIBLE)
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {
-
+        if (numberOfActivities!!.incrementAndGet() == 1) {
+            eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
+        }
     }
 
     override fun onActivityStopped(activity: Activity) {

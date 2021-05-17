@@ -30,7 +30,7 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
                 lastUpdatedTime = "00",
                 bundleId = "com.blotout.analytics"
         )
-        val manifestPath = ""
+
 
         configurationDataManager.downloadManifestConfiguration(manifestConfigurationRequest, object : ApiDataProvider<ManifestConfigurationResponse?>() {
             override fun onFailed(errorCode: Int, message: String, call: Call<ManifestConfigurationResponse?>) {
