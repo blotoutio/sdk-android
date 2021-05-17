@@ -39,11 +39,11 @@ open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
         eventsRepository.preparePersonalEvent(eventName,eventInfo,isPHI)
     }
 
-    override fun mapID(userId:String, provider:String, withInformation:HashMap<String,Any>){
-        withInformation.put(Constant.BO_EVENT_MAP_ID,userId)
-        withInformation.put(Constant.BO_EVENT_MAP_Provider,provider)
+    override fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?){
+        withInformation?.put(Constant.BO_EVENT_MAP_ID, userId!!)
+        withInformation?.put(Constant.BO_EVENT_MAP_Provider, provider!!)
         var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID,eventInfo = withInformation,eventCode = Constant.BO_DEV_EVENT_MAP_ID)
+        eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID,eventInfo = withInformation!!,eventCode = Constant.BO_DEV_EVENT_MAP_ID)
 
     }
 

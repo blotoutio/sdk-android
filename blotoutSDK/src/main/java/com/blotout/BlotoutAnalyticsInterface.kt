@@ -12,7 +12,7 @@ interface BlotoutAnalyticsInterface {
 
     fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any> ,isPHI : Boolean)
 
-    fun mapID(userId:String, provider:String, withInformation:HashMap<String,Any>)
+    fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?)
 
     fun getUserId():String
 }
