@@ -36,17 +36,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
 
     fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) {
         if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
-            val context = DependencyInjectorImpl.getInstance().getContext()
-            val event = Event()
-            event.mid = eventName.getMessageIDForEvent()
-            event.userid = CommonUtils().getUserID()
-            event.evn = eventName
-            event.screen = Screen(context)
-            event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
-            event.evcs = eventName.codeForDevEvent()
-            event.sessionId = DependencyInjectorImpl.getSessionId().toString()
-
-
+            val event = prepareEvents(eventName,0)
             when (isPHI) {
                 true -> {
                     event.type = Constant.BO_PHI
@@ -57,24 +47,15 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
                     event.additionalData = DependencyInjectorImpl.getInstance().getManifestRepository().sdkPIIPublicKey?.let { Gson().toJson(eventInfo).encrypt(it) }
                 }
             }
-
             pushEvents(event)
         }
     }
 
 
-    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, eventCode: Int) {
+    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int) {
         if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
-            val event = Event()
-            val context = DependencyInjectorImpl.getInstance().getContext()
-            event.mid = eventName.getMessageIDForEvent()
+            val event = prepareEvents(eventName,withEventCode)
             event.type = Constant.BO_CODIFIED
-            event.userid = CommonUtils().getUserID()
-            event.evn = eventName
-            event.screen = Screen(context)
-            event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
-            event.evcs = if (eventCode != 0) eventCode else eventName.codeForDevEvent()
-            event.sessionId = DependencyInjectorImpl.getSessionId().toString()
             event.additionalData = eventInfo
             pushEvents(event)
         }
@@ -84,17 +65,9 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents ||
                 secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
         {
-            val event = Event()
-            val context = DependencyInjectorImpl.getInstance().getContext()
-            event.mid = eventName.getMessageIDForEvent()
-            event.type = Constant.BO_SYSTEM
-            event.userid = CommonUtils().getUserID()
-            event.evn = eventName
+            val event = prepareEvents(eventName,withEventCode)
             event.scrn = activity.getScreenName()
-            event.screen = Screen(context)
-            event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
-            event.evcs = withEventCode
-            event.sessionId = DependencyInjectorImpl.getSessionId().toString()
+            event.type = Constant.BO_SYSTEM
             event.additionalData = eventInfo
             pushEvents(event)
         }
@@ -118,6 +91,19 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
 
     fun publishEvent(){
         EventDatabaseService().getEvents()
+    }
+
+    private fun prepareEvents(eventName: String,  withEventCode: Int):Event{
+        val event = Event()
+        val context = DependencyInjectorImpl.getInstance().getContext()
+        event.mid = eventName.getMessageIDForEvent()
+        event.userid = CommonUtils().getUserID()
+        event.evn = eventName
+        event.screen = Screen(context)
+        event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
+        event.evcs = if (withEventCode != 0) withEventCode else eventName.codeForDevEvent()
+        event.sessionId = DependencyInjectorImpl.getSessionId().toString()
+        return event
     }
 
 }
