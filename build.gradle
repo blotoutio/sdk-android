@@ -19,7 +19,9 @@ buildscript {
 ext.versions =[
         retrofitVersion : "2.8.1",
         okhttpVersion:"4.5.0",
-        rxRetrofitAdapterVersion:"2.9.0"
+        rxRetrofitAdapterVersion:"2.9.0",
+        junitVersion:"4.12",
+        mockitoCoreVersion:"3.4.6"
 
 ]
 
@@ -28,7 +30,12 @@ ext.deps =[
         'retrofit_gson_converter' : "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion",
         'okhttp': "com.squareup.okhttp3:okhttp:$versions.okhttpVersion",
         'okhttp_logging_interceptor': "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion",
-        'rxRetrofitAdapter': "com.squareup.retrofit2:adapter-rxjava2:$versions.rxRetrofitAdapterVersion"
+        'rxRetrofitAdapter': "com.squareup.retrofit2:adapter-rxjava2:$versions.rxRetrofitAdapterVersion",
+
+        //test
+        'junit' :"junit:junit:$versions.junitVersion",
+        'mockito_android' :"org.mockito:mockito-core:$versions.mockitoCoreVersion",
+        'mockito' :"org.mockito:mockito-android:$versions.mockitoCoreVersion"
 
 ]
 

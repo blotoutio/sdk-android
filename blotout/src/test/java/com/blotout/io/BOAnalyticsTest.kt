@@ -1,6 +1,7 @@
 package com.blotout.io
 
 import android.app.Application
+import com.birbit.android.jobqueue.BuildConfig
 import com.blotout.analytics.BlotoutAnalytics
 import com.blotout.events.BOAEvents
 import com.nhaarman.mockitokotlin2.whenever

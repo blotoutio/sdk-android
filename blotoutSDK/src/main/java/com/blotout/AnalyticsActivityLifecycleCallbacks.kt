@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.blotout.repository.EventRepository
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
@@ -16,27 +17,29 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,var secureStorage: SharedPreferenceSecureVaultImpl): Application.ActivityLifecycleCallbacks, ComponentCallbacks2, DefaultLifecycleObserver {
+class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, var secureStorage: SharedPreferenceSecureVaultImpl): Application.ActivityLifecycleCallbacks, ComponentCallbacks2, DefaultLifecycleObserver {
 
     private var numberOfActivities: AtomicInteger? = null
+    private var trackedApplicationLifecycleEvents: AtomicBoolean? = null
     private var firstLaunch: AtomicBoolean? = null
 
     init {
         numberOfActivities = AtomicInteger(1)
         firstLaunch = AtomicBoolean(false)
+        trackedApplicationLifecycleEvents = AtomicBoolean(false)
     }
 
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-
-        numberOfActivities!!.set(0)
-        firstLaunch!!.set(true)
-        trackApplicationLifecycleEvents(activity)
-        trackDeepLink(activity)
-        eventRepository.prepareSystemEvent(activity,Constant.BO_SDK_START, null, Constant.BO_EVENT_SDK_START)
+        if (!trackedApplicationLifecycleEvents!!.getAndSet(true)) {
+            numberOfActivities!!.set(0)
+            firstLaunch!!.set(true)
+            trackApplicationLifecycleEvents(activity)
+            trackDeepLink(activity)
+        }
     }
 
-    fun getPackageInfo(context: Context): PackageInfo? {
+    private fun getPackageInfo(context: Context): PackageInfo? {
         val packageManager = context.packageManager
         return try {
             return packageManager.getPackageInfo(context.packageName, 0)
@@ -46,28 +49,21 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
     override fun onActivityStarted(activity: Activity) {
-        if (numberOfActivities!!.incrementAndGet() == 1) {
-            eventRepository.prepareSystemEvent(activity,"Application Opened", null, Constant.BO_APPLICATION_OPENED)
-        }
-
+            eventRepository.prepareSystemEvent(activity, "Application Opened", null, Constant.BO_APPLICATION_OPENED)
     }
 
     override fun onActivityResumed(activity: Activity) {
-        if (numberOfActivities!!.incrementAndGet() == 1) {
             eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_VISIBLE, null, Constant.BO_EVENT_VISIBILITY_VISIBLE)
-        }
+
     }
 
     override fun onActivityPaused(activity: Activity) {
-        if (numberOfActivities!!.incrementAndGet() == 1) {
             eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
-        }
+            eventRepository.prepareSystemEvent(activity, "Application Backgrounded", null, Constant.BO_APPLICATION_BACKGROUNDED)
     }
 
     override fun onActivityStopped(activity: Activity) {
-        if (numberOfActivities!!.decrementAndGet() == 0) {
-            eventRepository.prepareSystemEvent(activity,"Application Backgrounded", null, Constant.BO_APPLICATION_BACKGROUNDED)
-        }
+
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -75,6 +71,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
     }
 
     override fun onActivityDestroyed(activity: Activity) {
+        eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
 
     }
 
@@ -104,7 +101,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
             }
         }
         properties.put("url", uri.toString())
-        eventRepository.prepareSystemEvent(activity,"Deep Link Opened", properties,Constant.BO_DEEP_LINK_OPENED)
+        eventRepository.prepareSystemEvent(activity, "Deep Link Opened", properties, Constant.BO_DEEP_LINK_OPENED)
     }
 
     fun trackApplicationLifecycleEvents(activity: Activity) {
@@ -113,10 +110,10 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository,v
 
         var previousVersion = secureStorage.fetchString((Constant.BO_VERSION_KEY))
         if (previousVersion.isNullOrEmpty()) {
-            eventRepository.prepareSystemEvent(activity,"Application Installed", null, Constant.BO_APPLICATION_INSTALLED)
+            eventRepository.prepareSystemEvent(activity, "Application Installed", null, Constant.BO_APPLICATION_INSTALLED)
 
-        } else if (!previousVersion.equals(currentVersion)) {
-            eventRepository.prepareSystemEvent(activity,"Application Updated", null, Constant.BO_APPLICATION_UPDATED)
+        } else if (previousVersion != currentVersion) {
+            eventRepository.prepareSystemEvent(activity, "Application Updated", null, Constant.BO_APPLICATION_UPDATED)
         }
 
         secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion!!)

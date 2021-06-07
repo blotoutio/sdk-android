@@ -13,6 +13,7 @@ import com.blotout.repository.data.SharedPrefernceSecureVault
 import com.blotout.repository.impl.DataManagerImpl
 import com.blotout.repository.impl.FileManagerImpl
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
+import com.blotout.util.Constant
 import com.blotout.util.DateTimeUtils
 
 class DependencyInjectorImpl private constructor(private val context: Context,
@@ -29,25 +30,32 @@ class DependencyInjectorImpl private constructor(private val context: Context,
     private val mContext = context
 
 
+
     companion object {
         private lateinit var instance: DependencyInjectorImpl
         private var sessionID :Long = 0
+        private lateinit var eventRepository :EventRepository
 
         fun init(
                 application: Application,
                 blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration
-        ) {
-            val secureVault = SharedPreferenceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
-            var hostConfiguration = HostConfiguration(baseUrl = blotoutAnalyticsConfiguration.endPointUrl,baseKey = blotoutAnalyticsConfiguration.blotoutSDKKey)
-            var fileManagerImpl = FileManagerImpl(application)
-            var eventRepository = EventRepository(secureVault)
-            var activityLifeCycleCallback = AnalyticsActivityLifecycleCallbacks(eventRepository,secureVault)
-            var eventDB = EventDatabase.invoke(application)
-            application.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
-            instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl,eventDB)
-            sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
-            blotoutAnalyticsConfiguration.save()
-            eventRepository.publishEvent()
+        ) :Boolean{
+            try {
+                val secureVault = SharedPreferenceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
+                var hostConfiguration = HostConfiguration(baseUrl = blotoutAnalyticsConfiguration.endPointUrl, baseKey = blotoutAnalyticsConfiguration.blotoutSDKKey)
+                var fileManagerImpl = FileManagerImpl(application)
+                eventRepository = EventRepository(secureVault)
+                var activityLifeCycleCallback = AnalyticsActivityLifecycleCallbacks(eventRepository, secureVault)
+                var eventDB = EventDatabase.invoke(application)
+                application.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
+                instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl, eventDB)
+                sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
+                blotoutAnalyticsConfiguration.save()
+
+            }catch (e:Exception){
+                return false
+            }
+            return true
         }
 
         fun getInstance(): DependencyInjectorImpl {
@@ -56,6 +64,10 @@ class DependencyInjectorImpl private constructor(private val context: Context,
 
         fun getSessionId():Long{
             return sessionID
+        }
+
+        fun getEventRepository():EventRepository{
+            return eventRepository
         }
     }
 

@@ -1,5 +1,6 @@
 package com.blotout.data.database
 
+import android.util.Log
 import com.blotout.DependencyInjectorImpl
 import com.blotout.data.database.entity.EventEntity
 import com.blotout.model.Events
@@ -23,23 +24,29 @@ class EventDatabaseService {
 
      fun getEvents(){
         GlobalScope.launch(Dispatchers.IO) {
+            var idTable =   ArrayList<Int>()
             evenDao?.getEvents().collect { data ->
                 data.forEach {
-                    var eventData = it.eventData
-                    var eventObject = Gson().fromJson(eventData, Events::class.java)
-                    DependencyInjectorImpl.getInstance().getConfigurationManager().publishEvents(eventObject, object : ApiDataProvider<Any?>() {
-                        override fun onFailed(errorCode: Int, message: String, call: Call<Any?>) {
-                        }
-
-                        override fun onError(t: Throwable, call: Call<Any?>) {
-                        }
-
-                        override fun onSuccess(data: Any?) {
-                            GlobalScope.launch(Dispatchers.IO) {
-                                evenDao.deleteEvent(it)
+                    if(!idTable.contains(it.id)) {
+                        idTable.add(it.id)
+                        var eventData = it.eventData
+                        Log.d("###Pushing id ", "" + it.id)
+                        var eventObject = Gson().fromJson(eventData, Events::class.java)
+                        DependencyInjectorImpl.getInstance().getConfigurationManager().publishEvents(eventObject, object : ApiDataProvider<Any?>() {
+                            override fun onFailed(errorCode: Int, message: String, call: Call<Any?>) {
                             }
-                        }
-                    })
+
+                            override fun onError(t: Throwable, call: Call<Any?>) {
+                            }
+
+                            override fun onSuccess(data: Any?) {
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    Log.d("###deleting id ", "" + it.id)
+                                    evenDao.deleteEvent(it)
+                                }
+                            }
+                        })
+                    }
                 }
             }
         }

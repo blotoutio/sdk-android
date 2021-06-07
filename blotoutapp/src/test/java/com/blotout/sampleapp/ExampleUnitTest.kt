@@ -1,4 +1,4 @@
-package com.botout
+package com.blotout.sampleapp
 
 import org.junit.Test
 

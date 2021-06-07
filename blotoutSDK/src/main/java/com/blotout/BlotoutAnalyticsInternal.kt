@@ -1,12 +1,13 @@
 package com.blotout
 
 import android.app.Application
+import com.blotout.model.EventStatus
 import com.blotout.repository.EventRepository
 import com.blotout.util.Constant
 import com.blotout.util.Errors
 import java.lang.Exception
 
-open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
+open class BlotoutAnalyticsInternal :BlotoutAnalyticsInterface {
 
     companion object{
         const val TAG ="BlotoutAnalyticsInternal"
@@ -28,23 +29,22 @@ open class BlotoutAnalyticsInternal:BlotoutAnalyticsInterface {
         DependencyInjectorImpl.getInstance().getSecureStorageService().storeBoolean(Constant.IS_SDK_ENABLE,enabled)
     }
 
-    override fun capture(eventName :String, eventInfo:HashMap<String, Any>){
+    override fun capture(eventName :String, eventInfo:HashMap<String, Any>): EventStatus {
         var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        eventsRepository.prepareCodifiedEvent(eventName=eventName,eventInfo = eventInfo,eventCode = 0)
+        return eventsRepository.prepareCodifiedEvent(eventName=eventName,eventInfo = eventInfo,withEventCode = 0)
 
     }
 
-    override fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any>, isPHI : Boolean){
+    override fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any>, isPHI : Boolean):EventStatus{
         var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        eventsRepository.preparePersonalEvent(eventName,eventInfo,isPHI)
+        return eventsRepository.preparePersonalEvent(eventName,eventInfo,isPHI)
     }
 
-    override fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?){
+    override fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?):EventStatus{
         withInformation?.put(Constant.BO_EVENT_MAP_ID, userId!!)
         withInformation?.put(Constant.BO_EVENT_MAP_Provider, provider!!)
         var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID,eventInfo = withInformation!!,eventCode = Constant.BO_DEV_EVENT_MAP_ID)
-
+        return eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID,eventInfo = withInformation!!,withEventCode = Constant.BO_DEV_EVENT_MAP_ID)
     }
 
     override fun getUserId(): String {

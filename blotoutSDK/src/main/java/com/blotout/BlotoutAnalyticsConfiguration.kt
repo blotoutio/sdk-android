@@ -1,5 +1,6 @@
 package com.blotout
 
+import android.webkit.URLUtil
 import com.blotout.util.Constant
 import com.blotout.util.Errors
 
@@ -13,7 +14,7 @@ class BlotoutAnalyticsConfiguration {
     fun validateRequest():Int {
         if (blotoutSDKKey.isNullOrEmpty())
             return Errors.ERROR_KEY_NOT_PROPER
-        else if (endPointUrl.isNullOrEmpty())
+        else if (endPointUrl.isNullOrEmpty() || !URLUtil.isValidUrl(endPointUrl))
             return Errors.ERROR_URL_NOT_PROPER
 
         return Errors.ERROR_CODE_NO_ERROR

@@ -1,6 +1,7 @@
 package com.blotout
 
 import android.app.Application
+import com.blotout.model.EventStatus
 
 interface BlotoutAnalyticsInterface {
 
@@ -8,11 +9,11 @@ interface BlotoutAnalyticsInterface {
 
     fun enable( enabled:Boolean)
 
-    fun capture( eventName :String, eventInfo:HashMap<String, Any>)
+    fun capture( eventName :String, eventInfo:HashMap<String, Any>): EventStatus
 
-    fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any> ,isPHI : Boolean)
+    fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any> ,isPHI : Boolean):EventStatus
 
-    fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?)
+    fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?):EventStatus
 
     fun getUserId():String
 }

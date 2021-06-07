@@ -6,10 +6,7 @@ import android.os.Build
 import com.blotout.DependencyInjectorImpl
 import com.blotout.data.database.EventDatabaseService
 import com.blotout.data.database.entity.EventEntity
-import com.blotout.model.Event
-import com.blotout.model.Events
-import com.blotout.model.Meta
-import com.blotout.model.Screen
+import com.blotout.model.*
 import com.blotout.repository.data.SharedPrefernceSecureVault
 import com.blotout.util.*
 import com.google.gson.Gson
@@ -34,7 +31,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         return meta
     }
 
-    fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) {
+    fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) :EventStatus{
         if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
             val event = prepareEvents(eventName,0)
             when (isPHI) {
@@ -47,33 +44,36 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
                     event.additionalData = DependencyInjectorImpl.getInstance().getManifestRepository().sdkPIIPublicKey?.let { Gson().toJson(eventInfo).encrypt(it) }
                 }
             }
-            pushEvents(event)
+            return pushEvents(event)
         }
+        return EventStatus()
     }
 
 
-    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int) {
+    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int) :EventStatus{
         if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
             val event = prepareEvents(eventName,withEventCode)
             event.type = Constant.BO_CODIFIED
             event.additionalData = eventInfo
-            pushEvents(event)
+            return pushEvents(event)
         }
+        return EventStatus()
     }
 
-    fun prepareSystemEvent(activity: Activity, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int) {
-        if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents ||
-                secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
-        {
+    fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int):EventStatus {
+        if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents &&
+                secureStorage.fetchBoolean(Constant.IS_SD
             val event = prepareEvents(eventName,withEventCode)
-            event.scrn = activity.getScreenName()
+            if(activity !=null)
+                event.scrn = activity!!.localClassName.substringAfterLast(delimiter = '.')
             event.type = Constant.BO_SYSTEM
             event.additionalData = eventInfo
-            pushEvents(event)
+            return pushEvents(event)
         }
+        return EventStatus()
     }
 
-    private fun pushEvents(event: Event) {
+    private fun pushEvents(event: Event):EventStatus {
         val events = Events()
         events.meta = prepareMetaData()
         var eventList = mutableListOf<Event>()
@@ -81,6 +81,9 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         events.events = eventList
         var eventEntity = EventEntity(Gson().toJson(events))
         EventDatabaseService().insertEvent(eventEntity)
+        var eventStatus = EventStatus()
+        eventStatus.isSuccess = true
+        return eventStatus
     }
 
     fun Activity.getScreenName(): String  {

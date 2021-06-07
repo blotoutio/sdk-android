@@ -121,7 +121,7 @@ class DeviceInfo(private val context: Context) {
             return scrType
         }
 
-    // deprecated
+
     val screenHeight: Int
         get() {
             var height = 0

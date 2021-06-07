@@ -1,0 +1,14 @@
+
+
+<resources>
+
+    <string name="app_name">Blotout</string>
+    <string name="action_settings">Settings</string>
+    <string name="standard">Standard</string>
+    <string name="crash_text">Oops Crashe Occurred</string>
+    <string name="offer_banner">"Be the first to get one when you use offer code AFAIK to save $20."</string>
+    <string name="checkout">CheckOut</string>
+    <string name="similar_product">You may also like</string>
+
+
+</resources>

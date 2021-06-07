@@ -1,2 +1,3 @@
+include ':blotoutapp'
 include ':blotoutSDK'
 include ':app', ':blotout'

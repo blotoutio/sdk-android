@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/logo_img"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/blotout_logo" />
+
+        <ImageView
+            android:id="@+id/logo_img_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_margin="10dp"
+            android:layout_below="@id/logo_img"
+            android:layout_above="@+id/button_demo"
+            android:src="@drawable/blotout_description" />
+
+
+
+        <ImageView
+            android:id="@+id/button_demo"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/button_slack"
+            android:onClick="getDemo"
+            android:src="@drawable/button_one" />
+
+        <ImageView
+            android:id="@+id/button_slack"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"
+            android:onClick="joinSlack"
+            android:layout_above="@+id/button_blotout_app"
+            android:src="@drawable/button_two" />
+
+        <ImageView
+            android:id="@+id/button_blotout_app"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:onClick="launchBlotoutApp"
+            android:layout_centerInParent="true"
+            android:layout_above="@+id/logo_img_more_description"
+            android:src="@drawable/button_three" />
+
+
+
+        <ImageView
+            android:id="@+id/logo_img_more_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:src="@drawable/blotout_more_description" />
+
+
+    </RelativeLayout>
+
+</FrameLayout>
