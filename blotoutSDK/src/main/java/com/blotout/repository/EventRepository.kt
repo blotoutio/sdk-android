@@ -62,7 +62,8 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
 
     fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int):EventStatus {
         if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents &&
-                secureStorage.fetchBoolean(Constant.IS_SD
+                secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
+        {
             val event = prepareEvents(eventName,withEventCode)
             if(activity !=null)
                 event.scrn = activity!!.localClassName.substringAfterLast(delimiter = '.')
