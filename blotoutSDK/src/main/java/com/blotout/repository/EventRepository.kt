@@ -60,10 +60,22 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         return EventStatus()
     }
 
-    fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int):EventStatus {
-        if(DependencyInjectorImpl.getInstance().getManifestRepository().sdkPushSystemEvents &&
-                secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
+    fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int): EventStatus? {
+
+        var manifestRepository = DependencyInjectorImpl.getInstance().getManifestRepository()
+        //is all system events allowed 
+        var isAllSystemEventsAllowed = manifestRepository.sdkPushSystemEvents
+        when(isAllSystemEventsAllowed){
+            false -> {
+                //now check what system events allowed
+                var filterEventCode = manifestRepository.sdkSystemEevntsAllowed?.filter { it.key == withEventCode }
+                if(filterEventCode.isNullOrEmpty())
+                    return null
+            }
+        }
+        if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
         {
+
             val event = prepareEvents(eventName,withEventCode)
             if(activity !=null)
                 event.scrn = activity!!.localClassName.substringAfterLast(delimiter = '.')

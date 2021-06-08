@@ -13,7 +13,7 @@ public class MySampleApplication extends Application {
     public void onCreate() {
         super.onCreate();
         BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
-        blotoutAnalyticsConfiguration.setBlotoutSDKKey("KHPREXFRED7HMGB");
+        blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
         blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
         BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration);
     }

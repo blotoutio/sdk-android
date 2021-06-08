@@ -34,6 +34,7 @@ object Constant {
     const val Event_PII_Public_Key = "PII_Public_Key";
     const val Event_DeviceInfoGrain = "Event_Deviceinfo_Grain";
     const val Event_Push_System_Events = "SDK_Push_System_Events";
+    const val Event_Push_System_Events_Allowed = "SDK_System_Events"
 
     const val BO_SYSTEM = "system";
     const val BO_CODIFIED = "codified";

@@ -4,6 +4,7 @@ import android.util.Log
 import com.blotout.DependencyInjectorImpl
 import com.blotout.model.ManifestConfigurationRequest
 import com.blotout.model.ManifestConfigurationResponse
+import com.blotout.model.VariableOption
 import com.blotout.network.ApiDataProvider
 import com.blotout.repository.data.ConfigurationDataManager
 import com.blotout.util.Constant
@@ -15,6 +16,7 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
      var sdkPushSystemEvents = false
      var sdkPIIPublicKey: String? = null
      var sdkPHIPublicKey: String? = null
+     var sdkSystemEevntsAllowed : List<VariableOption>? = null
 
 
     fun fetchManifestConfiguration() {
@@ -49,12 +51,13 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
     fun initManifestConfiguration(manifestConfigurationResponse: ManifestConfigurationResponse) {
 
-        var manifestConfigurations = manifestConfigurationResponse.variables?.get(0)
+        //var manifestConfigurations = manifestConfigurationResponse.variables?.get(0)
         for(manifestData in manifestConfigurationResponse.variables) {
-            when (manifestConfigurations?.variableName) {
-                Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestConfigurations?.value!!.toBoolean()
-                Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestConfigurations?.value!!
-                Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestConfigurations?.value!!
+            when (manifestData?.variableName) {
+                Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestData?.value!!.toBoolean()
+                Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestData?.value!!
+                Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestData?.value!!
+                Constant.Event_Push_System_Events_Allowed -> sdkSystemEevntsAllowed = manifestData?.variableOptions
             }
         }
         initEvents()
