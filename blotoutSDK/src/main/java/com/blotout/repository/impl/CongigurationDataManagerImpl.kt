@@ -9,8 +9,8 @@ import com.blotout.repository.data.ConfigurationDataManager
 class CongigurationDataManagerImpl(private val service: RemoteApiService, private val context: Context) : ConfigurationDataManager {
 
 
-    override fun downloadManifestConfiguration(manifestRequest: ManifestConfigurationRequest, handler: ApiDataProvider<ManifestConfigurationResponse?>) {
-        service.getSDKManifest(manifestRequest)?.enqueue(handler)
+    override fun downloadManifestConfiguration(handler: ApiDataProvider<ManifestConfigurationResponse?>) {
+        service.getSDKManifest()?.enqueue(handler)
     }
 
     override fun publishEvents(events: Events, handler: ApiDataProvider<Any?>) {

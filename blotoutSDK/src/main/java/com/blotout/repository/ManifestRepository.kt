@@ -2,7 +2,6 @@ package com.blotout.repository
 
 import android.util.Log
 import com.blotout.DependencyInjectorImpl
-import com.blotout.model.ManifestConfigurationRequest
 import com.blotout.model.ManifestConfigurationResponse
 import com.blotout.model.VariableOption
 import com.blotout.network.ApiDataProvider
@@ -21,13 +20,7 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
     fun fetchManifestConfiguration() {
 
-        val manifestConfigurationRequest = ManifestConfigurationRequest(
-                lastUpdatedTime = "00",
-                bundleId = "com.blotout.analytics"
-        )
-
-
-        configurationDataManager.downloadManifestConfiguration(manifestConfigurationRequest, object : ApiDataProvider<ManifestConfigurationResponse?>() {
+        configurationDataManager.downloadManifestConfiguration(object : ApiDataProvider<ManifestConfigurationResponse?>() {
             override fun onFailed(errorCode: Int, message: String, call: Call<ManifestConfigurationResponse?>) {
                 Log.d("onFailed", errorCode.toString())
                 Log.d("onFailed", message)

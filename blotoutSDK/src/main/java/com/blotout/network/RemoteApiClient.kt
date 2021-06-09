@@ -36,7 +36,9 @@ class RemoteApiClient(private val hostConfiguration: HostConfiguration) {
             })
 
             .addInterceptor { chain ->
-                val request: Request = chain.request().newBuilder().addHeader("token", hostConfiguration.baseKey!!).build()
+                val request: Request = chain.request().newBuilder().
+                addHeader("token", hostConfiguration.baseKey!!).
+                addHeader("Content-Type","application/json").build()
                 chain.proceed(request)
             }
 
