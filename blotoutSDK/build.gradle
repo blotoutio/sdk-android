@@ -72,6 +72,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-process:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
+    implementation 'com.android.installreferrer:installreferrer:2.1'
+
     //Retrofit
     implementation deps.retrofit
     implementation deps.retrofit_gson_converter

@@ -6,6 +6,7 @@ import com.blotout.data.database.EventDatabase
 import com.blotout.network.HostConfiguration
 import com.blotout.network.RemoteApiClient
 import com.blotout.network.RemoteApiService
+import com.blotout.referral.InstallRefferal
 import com.blotout.repository.EventRepository
 import com.blotout.repository.ManifestRepository
 import com.blotout.repository.data.ConfigurationDataManager
@@ -51,6 +52,7 @@ class DependencyInjectorImpl private constructor(private val context: Context,
                 instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl, eventDB)
                 sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
                 blotoutAnalyticsConfiguration.save()
+                InstallRefferal().startClient(application)
 
             }catch (e:Exception){
                 return false
