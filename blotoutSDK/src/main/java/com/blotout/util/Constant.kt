@@ -21,6 +21,8 @@ object Constant {
     const val BO_TRANSACTION_COMPLETED = 11010;
     const val BO_EVENT_SDK_START = 11130;
     const val BO_SDK_START= "sdk_start";
+    const val BO_EVENT_ERROR = 11111
+    const val BO_EVENT_ERROR_NAME= "error";
 
     const val BO_EVENT_VISIBILITY_VISIBLE = 11131;
     const val BO_VISIBILITY_VISIBLE= "visibility_visible";

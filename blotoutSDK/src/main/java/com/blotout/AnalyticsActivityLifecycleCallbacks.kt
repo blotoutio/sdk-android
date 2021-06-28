@@ -8,7 +8,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -20,6 +19,7 @@ import com.blotout.util.Constant
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.system.exitProcess
 
 
 class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, var secureStorage: SharedPreferenceSecureVaultImpl):
@@ -54,6 +54,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
         activityReference = WeakReference(activity)
         val view = activity.window.decorView.rootView
         view.setOnTouchListener(this)
+        handleUncaughtException()
     }
 
     private fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -173,5 +174,17 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
 
     override fun onMultiTap(motionEvent: MotionEvent?, clicks: Int) {
         eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_MULTI_CLICK_NAME, null, Constant.BO_EVENT_MULTI_CLICK)
+    }
+
+    /**
+     * Catch the Errors that are not handled by application and log to backend
+     */
+    private fun handleUncaughtException(){
+        Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
+            val properties = hashMapOf<String, Any>()
+            properties.put(Constant.BO_EVENT_ERROR_NAME,paramThrowable.localizedMessage!!)
+            eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_ERROR_NAME, properties, Constant.BO_EVENT_ERROR)
+            exitProcess(1)
+        }
     }
 }

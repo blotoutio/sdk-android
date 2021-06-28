@@ -31,6 +31,8 @@ public class SplashActivity extends FragmentActivity {
         if (savedInstanceState == null) {
             flyIn();
         }
+
+        //throw new RuntimeException();
     }
 
     private void flyIn() {
