@@ -28,6 +28,24 @@ object Constant {
     const val BO_EVENT_VISIBILITY_HIDDEN = 11132;
     const val BO_VISIBILITY_HIDDEN= "visibility_hidden";
 
+    //Geasture Events
+    const val BO_EVENT_SCROLL = 11114
+    const val BO_EVENT_SCROLL_NAME= "scroll";
+    const val BO_EVENT_CLICK = 11113
+    const val BO_EVENT_CLICK_NAME= "click";
+    const val BO_EVENT_MULTI_CLICK = 11112
+    const val BO_EVENT_MULTI_CLICK_NAME= "multiclick";
+    const val BO_EVENT_TOUCH = 11115
+    const val BO_EVENT_TOUCH_NAME= "touchend";
+    const val BO_EVENT_LONG_TOUCH = 11116
+    const val BO_EVENT_LONG_TOUCH_NAME= "longtouch";
+    const val BO_EVENT_KEY_RELEASE = 11117
+    const val BO_EVENT_KEY_RELEASE_NAME= "keyrelease";
+
+
+
+
+
     const val Api_Endpoint = "Api_Endpoint";
     const val EVENT_PATH = "Event_Path";
     const val Event_PHI_Public_Key = "PHI_Public_Key";

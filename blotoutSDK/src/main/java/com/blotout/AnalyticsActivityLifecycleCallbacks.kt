@@ -8,25 +8,39 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
+import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
+import com.blotout.geasture.Gesture
+import com.blotout.geasture.GestureListener
 import com.blotout.repository.EventRepository
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
+import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
 
-class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, var secureStorage: SharedPreferenceSecureVaultImpl): Application.ActivityLifecycleCallbacks, ComponentCallbacks2, DefaultLifecycleObserver {
+class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, var secureStorage: SharedPreferenceSecureVaultImpl):
+        Application.ActivityLifecycleCallbacks,
+        ComponentCallbacks2,
+        DefaultLifecycleObserver,
+        View.OnTouchListener ,
+        GestureListener{
 
     private var numberOfActivities: AtomicInteger? = null
     private var trackedApplicationLifecycleEvents: AtomicBoolean? = null
     private var firstLaunch: AtomicBoolean? = null
+    private var gesture:Gesture?=null
+    private var activityReference: WeakReference<Activity>? = null
 
     init {
         numberOfActivities = AtomicInteger(1)
         firstLaunch = AtomicBoolean(false)
         trackedApplicationLifecycleEvents = AtomicBoolean(false)
+        gesture = Gesture()
+        gesture!!.addListener(this)
     }
 
 
@@ -37,6 +51,14 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
             trackApplicationLifecycleEvents(activity)
             trackDeepLink(activity)
         }
+        activityReference = WeakReference(activity)
+        val view = activity.window.decorView.rootView
+        view.setOnTouchListener(this)
+    }
+
+    private fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        gesture!!.dispatchTouchEvent(event)
+        return true
     }
 
     private fun getPackageInfo(context: Context): PackageInfo? {
@@ -118,5 +140,38 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
 
         secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion!!)
 
+    }
+
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        dispatchTouchEvent(event)
+        return true
+    }
+
+    override fun onPress(motionEvent: MotionEvent?) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_CLICK_NAME, null, Constant.BO_EVENT_CLICK)
+    }
+
+    override fun onTap(motionEvent: MotionEvent?) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_TOUCH_NAME, null, Constant.BO_EVENT_TOUCH)
+    }
+
+    override fun onDrag(motionEvent: MotionEvent?) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_SCROLL_NAME, null, Constant.BO_EVENT_SCROLL)
+    }
+
+    override fun onMove(motionEvent: MotionEvent?) {
+        //eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
+    }
+
+    override fun onRelease(motionEvent: MotionEvent?) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_KEY_RELEASE_NAME, null, Constant.BO_EVENT_KEY_RELEASE)
+    }
+
+    override fun onLongPress(motionEvent: MotionEvent?) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_LONG_TOUCH_NAME, null, Constant.BO_EVENT_LONG_TOUCH)
+    }
+
+    override fun onMultiTap(motionEvent: MotionEvent?, clicks: Int) {
+        eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_MULTI_CLICK_NAME, null, Constant.BO_EVENT_MULTI_CLICK)
     }
 }
