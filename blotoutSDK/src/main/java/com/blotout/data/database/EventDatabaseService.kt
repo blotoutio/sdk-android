@@ -30,7 +30,8 @@ class EventDatabaseService {
                     if(!idTable.contains(it.id)) {
                         idTable.add(it.id)
                         var eventData = it.eventData
-                        Log.d("###Pushing id ", "" + it.id)
+                        Log.d("###Pushing id ", "" + it.id )
+                        Log.d("###Pushing events ", "" + eventData )
                         var eventObject = Gson().fromJson(eventData, Events::class.java)
                         DependencyInjectorImpl.getInstance().getConfigurationManager().publishEvents(eventObject, object : ApiDataProvider<Any?>() {
                             override fun onFailed(errorCode: Int, message: String, call: Call<Any?>) {

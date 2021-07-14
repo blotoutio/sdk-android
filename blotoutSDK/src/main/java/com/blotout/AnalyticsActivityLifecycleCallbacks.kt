@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Process.killProcess
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -16,6 +17,10 @@ import com.blotout.geasture.GestureListener
 import com.blotout.repository.EventRepository
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -181,10 +186,12 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
      */
     private fun handleUncaughtException(){
         Thread.setDefaultUncaughtExceptionHandler { paramThread, paramThrowable ->
-            val properties = hashMapOf<String, Any>()
-            properties.put(Constant.BO_EVENT_ERROR_NAME,paramThrowable.localizedMessage!!)
-            eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_ERROR_NAME, properties, Constant.BO_EVENT_ERROR)
-            exitProcess(1)
+            GlobalScope.launch(context = Dispatchers.IO) {
+                val properties = hashMapOf<String, Any>()
+                properties.put(Constant.BO_EVENT_ERROR_NAME,paramThrowable.localizedMessage!!)
+                eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_ERROR_NAME, properties, Constant.BO_EVENT_ERROR)
+                delay(5000)
+            }
         }
     }
 }

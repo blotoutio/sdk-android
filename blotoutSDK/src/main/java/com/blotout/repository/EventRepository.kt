@@ -6,6 +6,8 @@ import android.os.Build
 import com.blotout.DependencyInjectorImpl
 import com.blotout.data.database.EventDatabaseService
 import com.blotout.data.database.entity.EventEntity
+import com.blotout.deviceinfo.DeviceAndAppFraudController
+import com.blotout.deviceinfo.device.DeviceInfo
 import com.blotout.model.*
 import com.blotout.repository.data.SharedPrefernceSecureVault
 import com.blotout.util.*
@@ -14,9 +16,10 @@ import java.lang.reflect.Field
 
 class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
 
-    fun prepareMetaData(): Meta {
+    private fun prepareMetaData(): Meta {
         val meta = Meta()
         val context = DependencyInjectorImpl.getInstance().getContext()
+        val deviceAndAppFraudController = DeviceAndAppFraudController(context)
         meta.sdkv = "".getVersion()
         meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
         meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
@@ -28,12 +31,17 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         val fields: Array<Field> = Build.VERSION_CODES::class.java.fields
         val osName: String = fields[Build.VERSION.SDK_INT].name
         meta.osn = osName
+        meta.referrer = DependencyInjectorImpl.getInstance().mReferrerDetails?.installReferrer
+        meta.jbrkn = DeviceInfo(context).isDeviceRooted
+        meta.vpn = deviceAndAppFraudController.isVPN()
+        meta.dcomp = deviceAndAppFraudController.isDeviceCompromised()
+        meta.acomp = deviceAndAppFraudController.isAppCompromised()
         return meta
     }
 
-    fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean) :EventStatus{
-        if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
-            val event = prepareEvents(eventName,0)
+    fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean): EventStatus {
+        if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
+            val event = prepareEvents(eventName, 0)
             when (isPHI) {
                 true -> {
                     event.type = Constant.BO_PHI
@@ -50,9 +58,9 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
     }
 
 
-    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int) :EventStatus{
-        if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
-            val event = prepareEvents(eventName,withEventCode)
+    fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int): EventStatus {
+        if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
+            val event = prepareEvents(eventName, withEventCode)
             event.type = Constant.BO_CODIFIED
             event.additionalData = eventInfo
             return pushEvents(event)
@@ -60,24 +68,23 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         return EventStatus()
     }
 
-    fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int): EventStatus? {
+    suspend fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int): EventStatus? {
 
         var manifestRepository = DependencyInjectorImpl.getInstance().getManifestRepository()
         //is all system events allowed 
         var isAllSystemEventsAllowed = manifestRepository.sdkPushSystemEvents
-        when(isAllSystemEventsAllowed){
+        when (isAllSystemEventsAllowed) {
             false -> {
                 //now check what system events allowed
                 var filterEventCode = manifestRepository.sdkSystemEevntsAllowed?.filter { it.key == withEventCode }
-                if(filterEventCode.isNullOrEmpty())
+                if (filterEventCode.isNullOrEmpty())
                     return null
             }
         }
-        if(secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE))
-        {
+        if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
 
-            val event = prepareEvents(eventName,withEventCode)
-            if(activity !=null)
+            val event = prepareEvents(eventName, withEventCode)
+            if (activity != null)
                 event.scrn = activity!!.localClassName.substringAfterLast(delimiter = '.')
             event.type = Constant.BO_SYSTEM
             event.additionalData = eventInfo
@@ -86,7 +93,7 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         return EventStatus()
     }
 
-    private fun pushEvents(event: Event):EventStatus {
+    private fun pushEvents(event: Event): EventStatus {
         val events = Events()
         events.meta = prepareMetaData()
         var eventList = mutableListOf<Event>()
@@ -99,17 +106,17 @@ class EventRepository(var secureStorage: SharedPrefernceSecureVault) {
         return eventStatus
     }
 
-    fun Activity.getScreenName(): String  {
+    fun Activity.getScreenName(): String {
         val packageManager = this.packageManager
         return packageManager.getActivityInfo(
                 this.componentName, PackageManager.GET_META_DATA).loadLabel(packageManager).toString()
     }
 
-    fun publishEvent(){
+    fun publishEvent() {
         EventDatabaseService().getEvents()
     }
 
-    private fun prepareEvents(eventName: String,  withEventCode: Int):Event{
+    private fun prepareEvents(eventName: String, withEventCode: Int): Event {
         val event = Event()
         val context = DependencyInjectorImpl.getInstance().getContext()
         event.mid = eventName.getMessageIDForEvent()

@@ -49,4 +49,24 @@ class Meta {
     @Expose
     var osn: String? = null
 
+    @SerializedName("jbrkn")
+    @Expose
+    var jbrkn: Boolean? = null
+
+    @SerializedName("referrer")
+    @Expose
+    var referrer: String? = null
+
+    @SerializedName("vpn")
+    @Expose
+    var vpn: Boolean? = null
+
+    @SerializedName("dcomp")
+    @Expose
+    var dcomp: Boolean? = null
+
+    @SerializedName("acomp")
+    @Expose
+    var acomp: Boolean? = null
+
 }

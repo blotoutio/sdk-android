@@ -56,6 +56,12 @@ public class SplashActivity extends FragmentActivity {
         HashMap<String,Object> eventInfo = new HashMap<>();
         eventInfo.put("Get Blotout Demo",0);
         BlotoutAnalytics.INSTANCE.capture("custom",eventInfo);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, "sales@blotout.io");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Get Demo");
+        intent.setType("message/rfc822");
+        startActivity(Intent.createChooser(intent, "Select email"));
     }
 
     public void joinSlack(View view) {

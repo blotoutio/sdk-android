@@ -2,6 +2,7 @@ package com.blotout
 
 import android.app.Application
 import android.content.Context
+import com.android.installreferrer.api.ReferrerDetails
 import com.blotout.data.database.EventDatabase
 import com.blotout.network.HostConfiguration
 import com.blotout.network.RemoteApiClient
@@ -29,6 +30,7 @@ class DependencyInjectorImpl private constructor(private val context: Context,
     private val mFileManagerImpl = fileManagerImpl
     private val mEventDatabase = eventDatabase
     private val mContext = context
+    var mReferrerDetails: ReferrerDetails? = null
 
 
 

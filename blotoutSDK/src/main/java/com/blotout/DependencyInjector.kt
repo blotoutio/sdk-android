@@ -1,6 +1,7 @@
 package com.blotout
 
 import android.content.Context
+import com.android.installreferrer.api.ReferrerDetails
 import com.blotout.data.database.EventDatabase
 import com.blotout.network.HostConfiguration
 import com.blotout.network.RemoteApiService

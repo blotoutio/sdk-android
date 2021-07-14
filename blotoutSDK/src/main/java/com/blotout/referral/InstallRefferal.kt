@@ -4,12 +4,14 @@ import android.app.Application
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
+import com.blotout.DependencyInjectorImpl
+import java.util.*
 
-class InstallRefferal  {
+class InstallRefferal {
 
     private lateinit var referrerClient: InstallReferrerClient
 
-    fun startClient(app:Application) {
+    fun startClient(app: Application) {
 
         referrerClient = InstallReferrerClient.newBuilder(app).build()
 
@@ -34,14 +36,17 @@ class InstallRefferal  {
     }
 
 
- private fun getReferrerData() {
+    private fun getReferrerData() {
+        /*val response: ReferrerDetails = referrerClient.installReferrer
+        val referrerUrl: String = response.installReferrer
+        val referrerClickTime: Long = response.referrerClickTimestampSeconds
+        val appInstallTime: Long = response.installBeginTimestampSeconds
+        val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
+        val eventInfo = HashMap<String, Any>()
+        eventInfo["installReferrer"] = response.installReferrer
+        eventInfo["ireferrerUrl"] = referrerUrl*/
 
-    val response: ReferrerDetails = referrerClient.installReferrer
-    val referrerUrl: String = response.installReferrer
-    val referrerClickTime: Long = response.referrerClickTimestampSeconds
-    val appInstallTime: Long = response.installBeginTimestampSeconds
-    val instantExperienceLaunched: Boolean = response.googlePlayInstantParam
-
-    referrerClient.endConnection()
-}
+        DependencyInjectorImpl.getInstance().mReferrerDetails = referrerClient.installReferrer
+        referrerClient.endConnection()
+    }
 }
