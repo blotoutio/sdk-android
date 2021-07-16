@@ -77,7 +77,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
     }
 
     override fun onActivityStarted(activity: Activity) {
-            eventRepository.prepareSystemEvent(activity, "Application Opened", null, Constant.BO_APPLICATION_OPENED)
+            eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_OPENED, null, Constant.BO_EVENT_APPLICATION_OPENED)
     }
 
     override fun onActivityResumed(activity: Activity) {
@@ -87,7 +87,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
 
     override fun onActivityPaused(activity: Activity) {
             eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
-            eventRepository.prepareSystemEvent(activity, "Application Backgrounded", null, Constant.BO_APPLICATION_BACKGROUNDED)
+            eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_BACKGROUNDED, null, Constant.BO_EVENT_APPLICATION_BACKGROUNDED)
     }
 
     override fun onActivityStopped(activity: Activity) {
@@ -99,7 +99,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
+        //eventRepository.prepareSystemEvent(activity, Constant.BO_VISIBILITY_HIDDEN, null, Constant.BO_EVENT_VISIBILITY_HIDDEN)
 
     }
 
@@ -129,7 +129,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
             }
         }
         properties.put("url", uri.toString())
-        eventRepository.prepareSystemEvent(activity, "Deep Link Opened", properties, Constant.BO_DEEP_LINK_OPENED)
+        eventRepository.prepareSystemEvent(activity, Constant.BO_DEEP_LINK_OPENED, properties, Constant.BO_EVENT_DEEP_LINK_OPENED)
     }
 
     fun trackApplicationLifecycleEvents(activity: Activity) {
@@ -138,10 +138,10 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
 
         var previousVersion = secureStorage.fetchString((Constant.BO_VERSION_KEY))
         if (previousVersion.isNullOrEmpty()) {
-            eventRepository.prepareSystemEvent(activity, "Application Installed", null, Constant.BO_APPLICATION_INSTALLED)
+            eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_INSTALLED, null, Constant.BO_EVENT_APPLICATION_INSTALLED)
 
         } else if (previousVersion != currentVersion) {
-            eventRepository.prepareSystemEvent(activity, "Application Updated", null, Constant.BO_APPLICATION_UPDATED)
+            eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_UPDATED, null, Constant.BO_EVENT_APPLICATION_UPDATED)
         }
 
         secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion!!)
@@ -190,7 +190,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
                 val properties = hashMapOf<String, Any>()
                 properties.put(Constant.BO_EVENT_ERROR_NAME,paramThrowable.localizedMessage!!)
                 eventRepository.prepareSystemEvent(activityReference!!.get(), Constant.BO_EVENT_ERROR_NAME, properties, Constant.BO_EVENT_ERROR)
-                delay(5000)
+                delay(500)
             }
         }
     }

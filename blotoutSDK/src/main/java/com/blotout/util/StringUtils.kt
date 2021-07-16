@@ -34,15 +34,8 @@ fun Long.sizeFormatter(): String {
      return java.lang.Long.toString(size)
     }
 
-fun String.manifestFileName():String{
-    var manifestDirName = DependencyInjectorImpl.getInstance().getFileService().getSDKManifestDirectoryPath()
-    return manifestDirName + "/" + this + ".txt";
-}
-
-
-
 fun String.getMessageIDForEvent(): String? {
-    return Base64.encodeToString(this.toByteArray(),Base64.DEFAULT)+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
+    return Base64.encodeToString(this.toByteArray(charset("UTF-8")), Base64.NO_WRAP)+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
 }
 
 fun String.codeForDevEvent(): Int  {

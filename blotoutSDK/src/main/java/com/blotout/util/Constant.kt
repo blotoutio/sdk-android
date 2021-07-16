@@ -9,14 +9,19 @@ object Constant {
     const val BO_SDK_ROOT_DIRECTORY_NAME = "BOSDKRootDir"
 
 
-    const val BO_APPLICATION_OPENED = 11001
-    const val BO_APPLICATION_INSTALLED = 11002;
-    const val BO_APPLICATION_UPDATED = 11003;
+    const val BO_EVENT_APPLICATION_OPENED = 11001
+    const val BO_APPLICATION_OPENED = "Application Opened"
+    const val BO_EVENT_APPLICATION_INSTALLED = 11002;
+    const val BO_APPLICATION_INSTALLED = "Application Installed"
+    const val BO_EVENT_APPLICATION_UPDATED = 11003;
+    const val BO_APPLICATION_UPDATED ="Application Updated"
     const val BO_PUSH_NOTIFICATION_TAPPED = 11004;
     const val BO_PUSH_NOTIFICATION_RECEIVED = 11005;
     const val BO_REGISTER_FOR_REMOTE_NOTIFICATION = 11006;
-    const val BO_DEEP_LINK_OPENED = 11007;
-    const val BO_APPLICATION_BACKGROUNDED = 11008;
+    const val BO_EVENT_DEEP_LINK_OPENED = 11007;
+    const val BO_DEEP_LINK_OPENED = "Deep Link Opened"
+    const val BO_EVENT_APPLICATION_BACKGROUNDED = 11008;
+    const val BO_APPLICATION_BACKGROUNDED="Application Backgrounded"
     const val BO_APP_TRACKING = 11009;
     const val BO_TRANSACTION_COMPLETED = 11010;
     const val BO_EVENT_SDK_START = 11130;

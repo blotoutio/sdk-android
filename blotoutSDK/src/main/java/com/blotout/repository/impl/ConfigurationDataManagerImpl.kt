@@ -6,7 +6,7 @@ import com.blotout.network.ApiDataProvider
 import com.blotout.network.RemoteApiService
 import com.blotout.repository.data.ConfigurationDataManager
 
-class CongigurationDataManagerImpl(private val service: RemoteApiService, private val context: Context) : ConfigurationDataManager {
+class ConfigurationDataManagerImpl(private val service: RemoteApiService) : ConfigurationDataManager {
 
 
     override fun downloadManifestConfiguration(handler: ApiDataProvider<ManifestConfigurationResponse?>) {

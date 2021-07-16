@@ -43,7 +43,7 @@ class EventDatabaseService {
                             override fun onSuccess(data: Any?) {
                                 GlobalScope.launch(Dispatchers.IO) {
                                     Log.d("###deleting id ", "" + it.id)
-                                    evenDao.deleteEvent(it)
+                                    //evenDao.deleteEvent(it)
                                 }
                             }
                         })

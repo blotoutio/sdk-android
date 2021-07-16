@@ -34,9 +34,7 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
             override fun onSuccess(manifestConfigurationResponse:  ManifestConfigurationResponse?) {
                 Log.d("onSuccess", manifestConfigurationResponse?.variables?.get(0)?.variableName!!)
-
                 initManifestConfiguration(manifestConfigurationResponse)
-
             }
 
         })
@@ -44,7 +42,6 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
     fun initManifestConfiguration(manifestConfigurationResponse: ManifestConfigurationResponse) {
 
-        //var manifestConfigurations = manifestConfigurationResponse.variables?.get(0)
         for(manifestData in manifestConfigurationResponse.variables) {
             when (manifestData?.variableName) {
                 Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestData?.value!!.toBoolean()
@@ -53,11 +50,5 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
                 Constant.Event_Push_System_Events_Allowed -> sdkSystemEevntsAllowed = manifestData?.variableOptions
             }
         }
-        initEvents()
-    }
-
-    private fun initEvents(){
-        DependencyInjectorImpl.getEventRepository().prepareSystemEvent(null, Constant.BO_SDK_START, null, Constant.BO_EVENT_SDK_START)
-        DependencyInjectorImpl.getEventRepository().publishEvent()
     }
 }

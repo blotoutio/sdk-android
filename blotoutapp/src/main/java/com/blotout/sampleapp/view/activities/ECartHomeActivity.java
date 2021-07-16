@@ -376,7 +376,7 @@ public class ECartHomeActivity extends AppCompatActivity {
             public void onDismiss(DialogInterface dialog) {
                 HashMap<String,Object> eventInfo = new HashMap<>();
                 eventInfo.put("Order status","Order Placed Successfully");
-                BlotoutAnalytics.INSTANCE.capture("custom",eventInfo);
+                BlotoutAnalytics.INSTANCE.capture("Order status",eventInfo);
                 Snackbar.make(ECartHomeActivity.this.getWindow().getDecorView().findViewById(android.R.id.content)
                         , "Order Placed Successfully, Happy Shopping !!", Snackbar.LENGTH_LONG)
                         .setAction("View Apriori Output", new View.OnClickListener() {

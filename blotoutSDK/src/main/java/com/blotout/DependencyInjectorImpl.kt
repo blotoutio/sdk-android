@@ -13,7 +13,6 @@ import com.blotout.repository.ManifestRepository
 import com.blotout.repository.data.ConfigurationDataManager
 import com.blotout.repository.data.SharedPrefernceSecureVault
 import com.blotout.repository.impl.DataManagerImpl
-import com.blotout.repository.impl.FileManagerImpl
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
 import com.blotout.util.DateTimeUtils
@@ -21,13 +20,11 @@ import com.blotout.util.DateTimeUtils
 class DependencyInjectorImpl private constructor(private val context: Context,
                                                  secureStorageService: SharedPrefernceSecureVault,
                                                  hostConfiguration: HostConfiguration,
-                                                 fileManagerImpl: FileManagerImpl,
                                                  eventDatabase: EventDatabase) : DependencyInjector {
 
 
     private val mSecureStorageService = secureStorageService
     private val mHostConfiguration = hostConfiguration
-    private val mFileManagerImpl = fileManagerImpl
     private val mEventDatabase = eventDatabase
     private val mContext = context
     var mReferrerDetails: ReferrerDetails? = null
@@ -46,14 +43,14 @@ class DependencyInjectorImpl private constructor(private val context: Context,
             try {
                 val secureVault = SharedPreferenceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
                 var hostConfiguration = HostConfiguration(baseUrl = blotoutAnalyticsConfiguration.endPointUrl, baseKey = blotoutAnalyticsConfiguration.blotoutSDKKey)
-                var fileManagerImpl = FileManagerImpl(application)
                 eventRepository = EventRepository(secureVault)
                 var activityLifeCycleCallback = AnalyticsActivityLifecycleCallbacks(eventRepository, secureVault)
-                var eventDB = EventDatabase.invoke(application)
                 application.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
-                instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, fileManagerImpl, eventDB)
+                instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, EventDatabase.invoke(application))
                 sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
                 blotoutAnalyticsConfiguration.save()
+                eventRepository.prepareSystemEvent(null, Constant.BO_SDK_START, null, Constant.BO_EVENT_SDK_START)
+                eventRepository.publishEvent()
                 InstallRefferal().startClient(application)
 
             }catch (e:Exception){
@@ -88,10 +85,6 @@ class DependencyInjectorImpl private constructor(private val context: Context,
     override fun getHostService():HostConfiguration{
         return mHostConfiguration
 
-    }
-
-    override fun getFileService(): FileManagerImpl {
-        return mFileManagerImpl
     }
 
     override fun getContext(): Context {

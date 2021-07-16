@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.blotout.BlotoutAnalytics;
+import com.blotout.BlotoutAnalyticsInternal;
 import com.blotout.sampleapp.R;
 
 import java.util.HashMap;
@@ -31,8 +32,6 @@ public class SplashActivity extends FragmentActivity {
         if (savedInstanceState == null) {
             flyIn();
         }
-
-        //throw new RuntimeException();
     }
 
     private void flyIn() {
@@ -45,9 +44,10 @@ public class SplashActivity extends FragmentActivity {
     public void launchBlotoutApp(View view) {
         HashMap<String,Object> eventInfo = new HashMap<>();
         eventInfo.put("Launch Blotout app",0);
-        BlotoutAnalytics.INSTANCE.capture("custom",eventInfo);
-        Intent intent = new Intent(getApplicationContext(),
-                ECartHomeActivity.class);
+        BlotoutAnalytics.INSTANCE.capture("custom event",eventInfo);
+        BlotoutAnalytics.INSTANCE.capturePersonal("custom phi event",eventInfo,true);
+        BlotoutAnalytics.INSTANCE.capturePersonal("custom pii event",eventInfo,false);
+        Intent intent = new Intent(getApplicationContext(), ECartHomeActivity.class);
         startActivity(intent);
         finish();
     }

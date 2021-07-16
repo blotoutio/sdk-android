@@ -7,6 +7,6 @@ import com.blotout.repository.data.DataManager
 class DataManagerImpl(private val dependencyInjector: DependencyInjector) : DataManager {
 
     override fun getConfigurationDataManager(): ConfigurationDataManager {
-        return CongigurationDataManagerImpl(dependencyInjector.getRemoteAPIService(),dependencyInjector.getContext())
+        return ConfigurationDataManagerImpl(dependencyInjector.getRemoteAPIService())
     }
 }
