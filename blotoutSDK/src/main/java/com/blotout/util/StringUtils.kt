@@ -35,7 +35,9 @@ fun Long.sizeFormatter(): String {
     }
 
 fun String.getMessageIDForEvent(): String? {
-    return Base64.encodeToString(this.toByteArray(charset("UTF-8")), Base64.NO_WRAP)+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
+    var base64Encoded = Base64.encodeToString(toByteArray(charset("UTF-8")), Base64.NO_WRAP)
+    var trimForExtraChar = base64Encoded.substringBefore("=")
+    return trimForExtraChar+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
 }
 
 fun String.codeForDevEvent(): Int  {

@@ -25,29 +25,29 @@ object Constant {
     const val BO_APP_TRACKING = 11009;
     const val BO_TRANSACTION_COMPLETED = 11010;
     const val BO_EVENT_SDK_START = 11130;
-    const val BO_SDK_START= "sdk_start";
+    const val BO_SDK_START= "sdk_start"
     const val BO_EVENT_ERROR = 11111
-    const val BO_EVENT_ERROR_NAME= "error";
+    const val BO_EVENT_ERROR_NAME= "error"
 
     const val BO_EVENT_VISIBILITY_VISIBLE = 11131;
-    const val BO_VISIBILITY_VISIBLE= "visibility_visible";
+    const val BO_VISIBILITY_VISIBLE= "visibility_visible"
 
     const val BO_EVENT_VISIBILITY_HIDDEN = 11132;
-    const val BO_VISIBILITY_HIDDEN= "visibility_hidden";
+    const val BO_VISIBILITY_HIDDEN= "visibility_hidden"
 
     //Geasture Events
     const val BO_EVENT_SCROLL = 11114
-    const val BO_EVENT_SCROLL_NAME= "scroll";
+    const val BO_EVENT_SCROLL_NAME= "scroll"
     const val BO_EVENT_CLICK = 11113
-    const val BO_EVENT_CLICK_NAME= "click";
+    const val BO_EVENT_CLICK_NAME= "click"
     const val BO_EVENT_MULTI_CLICK = 11112
-    const val BO_EVENT_MULTI_CLICK_NAME= "multiclick";
+    const val BO_EVENT_MULTI_CLICK_NAME= "multiclick"
     const val BO_EVENT_TOUCH = 11115
-    const val BO_EVENT_TOUCH_NAME= "touchend";
+    const val BO_EVENT_TOUCH_NAME= "touchend"
     const val BO_EVENT_LONG_TOUCH = 11116
-    const val BO_EVENT_LONG_TOUCH_NAME= "longtouch";
+    const val BO_EVENT_LONG_TOUCH_NAME= "longtouch"
     const val BO_EVENT_KEY_RELEASE = 11117
-    const val BO_EVENT_KEY_RELEASE_NAME= "keyrelease";
+    const val BO_EVENT_KEY_RELEASE_NAME= "keyrelease"
 
 
 
