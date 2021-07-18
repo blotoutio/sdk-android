@@ -1,5 +1,3 @@
-
-
 package com.blotout.sampleapp.view.activities;
 
 import android.app.Dialog;
@@ -19,7 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.blotout.BlotoutAnalytics;
+import com.analytics.blotout.BlotoutAnalytics;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.blotout.sampleapp.R;

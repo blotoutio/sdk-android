@@ -12,9 +12,6 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
@@ -45,7 +42,7 @@ android {
 publishing {
     publications {
         BlotoutPublication(MavenPublication) {
-            groupId 'com.blotout'
+            groupId 'com.analytics.blotout'
             version '0.8.0'
             artifactId 'BlotOut'
             artifact("$buildDir/outputs/aar/blotoutSDK-release.aar")

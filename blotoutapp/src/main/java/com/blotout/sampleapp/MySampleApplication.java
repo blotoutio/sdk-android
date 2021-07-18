@@ -2,8 +2,8 @@ package com.blotout.sampleapp;
 
 import android.app.Application;
 
-import com.blotout.BlotoutAnalytics;
-import com.blotout.BlotoutAnalyticsConfiguration;
+import com.analytics.blotout.BlotoutAnalytics;
+import com.analytics.blotout.BlotoutAnalyticsConfiguration;
 
 public class MySampleApplication extends Application {
 

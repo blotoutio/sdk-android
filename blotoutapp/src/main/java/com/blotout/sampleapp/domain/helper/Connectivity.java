@@ -5,21 +5,7 @@ package com.blotout.sampleapp.domain.helper;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.TrafficStats;
-import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Vibrator;
-import android.telephony.TelephonyManager;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Check device's network connectivity and speed

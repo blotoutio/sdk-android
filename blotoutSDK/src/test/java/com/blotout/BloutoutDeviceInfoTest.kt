@@ -1,4 +1,4 @@
-package com.blotout
+package com.analytics.blotout
 
 import android.app.Application
 import android.content.Context
@@ -6,8 +6,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.view.Display
 import android.view.WindowManager
-import com.blotout.deviceinfo.device.DeviceInfo
-import com.blotout.util.Errors
+import com.analytics.blotout.deviceinfo.device.DeviceInfo
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

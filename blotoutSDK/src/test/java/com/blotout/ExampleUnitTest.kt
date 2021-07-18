@@ -1,4 +1,4 @@
-package com.blotout
+package com.analytics.blotout
 
 import org.junit.Test
 

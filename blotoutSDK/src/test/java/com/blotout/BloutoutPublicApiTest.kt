@@ -1,7 +1,7 @@
-package com.blotout
+package com.analytics.blotout
 
 import android.app.Application
-import com.blotout.util.Errors
+import com.analytics.blotout.util.Errors
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

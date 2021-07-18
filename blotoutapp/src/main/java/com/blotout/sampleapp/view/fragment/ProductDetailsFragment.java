@@ -19,7 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.blotout.BlotoutAnalytics;
+import com.analytics.blotout.BlotoutAnalytics;
 import com.blotout.sampleapp.R;
 import com.blotout.sampleapp.model.CenterRepository;
 import com.blotout.sampleapp.model.entities.Money;

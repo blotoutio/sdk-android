@@ -11,8 +11,7 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.blotout.BlotoutAnalytics;
-import com.blotout.BlotoutAnalyticsInternal;
+import com.analytics.blotout.BlotoutAnalytics;
 import com.blotout.sampleapp.R;
 
 import java.util.HashMap;

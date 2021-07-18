@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.blotout.BlotoutAnalytics;
+import com.analytics.blotout.BlotoutAnalytics;
 import com.blotout.sampleapp.R;
 import com.blotout.sampleapp.util.Utils;
 import com.blotout.sampleapp.util.Utils.AnimationType;

@@ -1,5 +1,3 @@
-
-
 package com.blotout.sampleapp.view.activities;
 
 import android.animation.Animator;
@@ -18,7 +16,6 @@ import com.blotout.sampleapp.util.Animatrix;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 
 public class APrioriResultActivity extends AppCompatActivity  {
