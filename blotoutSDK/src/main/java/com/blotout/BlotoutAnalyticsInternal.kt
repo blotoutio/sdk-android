@@ -7,15 +7,15 @@ import com.blotout.util.Constant
 import com.blotout.util.Errors
 import java.lang.Exception
 
-open class BlotoutAnalyticsInternal :BlotoutAnalyticsInterface {
+open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
 
-    companion object{
-        const val TAG ="BlotoutAnalyticsInternal"
+    companion object {
+        const val TAG = "BlotoutAnalyticsInternal"
     }
 
 
-    override fun init(application:Application, blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration){
-        when(blotoutAnalyticsConfiguration.validateRequest()){
+    override fun init(application: Application, blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration) {
+        when (blotoutAnalyticsConfiguration.validateRequest()) {
             Errors.ERROR_KEY_NOT_PROPER -> throw Exception("SDK key is invalid")
             Errors.ERROR_URL_NOT_PROPER -> throw  Exception("End point url is invalid")
             Errors.ERROR_CODE_NO_ERROR -> {
@@ -25,30 +25,49 @@ open class BlotoutAnalyticsInternal :BlotoutAnalyticsInterface {
         }
     }
 
-    override fun enable(enabled:Boolean){
-        DependencyInjectorImpl.getInstance().getSecureStorageService().storeBoolean(Constant.IS_SDK_ENABLE,enabled)
+    override fun enable(enabled: Boolean) {
+        DependencyInjectorImpl.getInstance().getSecureStorageService().storeBoolean(Constant.IS_SDK_ENABLE, enabled)
     }
 
-    override fun capture(eventName :String, eventInfo:HashMap<String, Any>): EventStatus {
-        var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        return eventsRepository.prepareCodifiedEvent(eventName=eventName,eventInfo = eventInfo,withEventCode = 0)
+    override fun capture(eventName: String, eventInfo: HashMap<String, Any>): EventStatus {
+        try {
+            var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+            return eventsRepository.prepareCodifiedEvent(eventName = eventName, eventInfo = eventInfo, withEventCode = 0)
+        } catch (e: Exception) {
+        }
 
+        return EventStatus()
     }
 
-    override fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any>, isPHI : Boolean):EventStatus{
-        var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        return eventsRepository.preparePersonalEvent(eventName,eventInfo,isPHI)
+    override fun capturePersonal(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean): EventStatus {
+        try {
+            var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+            return eventsRepository.preparePersonalEvent(eventName, eventInfo, isPHI)
+        } catch (e: Exception) {
+        }
+
+        return EventStatus()
     }
 
-    override fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?):EventStatus{
-        withInformation?.put(Constant.BO_EVENT_MAP_ID, userId!!)
-        withInformation?.put(Constant.BO_EVENT_MAP_Provider, provider!!)
-        var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-        return eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID,eventInfo = withInformation!!,withEventCode = Constant.BO_DEV_EVENT_MAP_ID)
+    override fun mapID(userId: String?, provider: String?, withInformation: HashMap<String, Any>?): EventStatus {
+        try {
+            withInformation?.put(Constant.BO_EVENT_MAP_ID, userId!!)
+            withInformation?.put(Constant.BO_EVENT_MAP_Provider, provider!!)
+            var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+            return eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID, eventInfo = withInformation!!, withEventCode = Constant.BO_DEV_EVENT_MAP_ID)
+        } catch (e: Exception) {
+        }
+
+        return EventStatus()
     }
 
     override fun getUserId(): String {
-        return DependencyInjectorImpl.getInstance().getSecureStorageService().fetchString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY)
+        try {
+            return DependencyInjectorImpl.getInstance().getSecureStorageService().fetchString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY)
+        } catch (e: Exception) {
+        }
+
+        return ""
     }
 
 

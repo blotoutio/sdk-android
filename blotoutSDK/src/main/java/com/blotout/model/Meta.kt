@@ -21,9 +21,6 @@ class Meta {
     @Expose
     var plf: Int? = null
 
-    @SerializedName("appn")
-    @Expose
-    var appn: String? = null
 
     @SerializedName("osv")
     @Expose

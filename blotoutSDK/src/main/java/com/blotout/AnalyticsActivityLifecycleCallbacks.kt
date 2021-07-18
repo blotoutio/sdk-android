@@ -132,7 +132,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
         eventRepository.prepareSystemEvent(activity, Constant.BO_DEEP_LINK_OPENED, properties, Constant.BO_EVENT_DEEP_LINK_OPENED)
     }
 
-    fun trackApplicationLifecycleEvents(activity: Activity) {
+    private fun trackApplicationLifecycleEvents(activity: Activity) {
         val packageInfo: PackageInfo? = getPackageInfo(activity)
         val currentVersion = packageInfo?.versionName
 
@@ -144,7 +144,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
             eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_UPDATED, null, Constant.BO_EVENT_APPLICATION_UPDATED)
         }
 
-        secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion!!)
+        secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion)
 
     }
 

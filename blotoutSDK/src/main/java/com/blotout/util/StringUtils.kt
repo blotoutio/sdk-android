@@ -52,8 +52,8 @@ fun String.getVersion():String{
     return this + Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
 }
 
-fun Context.getVersion():String{
-    return this.packageManager.getPackageInfo(this.packageName, PackageManager.GET_META_DATA).versionName
+fun Context.getVersion():String?{
+    return this.packageManager?.getPackageInfo(this.packageName, PackageManager.GET_META_DATA)?.versionName
 }
 
 fun stringToIntSum(eventName: String): Int  {

@@ -1,11 +1,11 @@
 package com.blotout.repository.impl
 
 import android.content.SharedPreferences
-import com.blotout.repository.data.SharedPrefernceSecureVault
+import com.blotout.repository.data.SharedPreferenceSecureVault
 
-class SharedPreferenceSecureVaultImpl(private val preference:SharedPreferences, private val cryptoService: String) : SharedPrefernceSecureVault{
+class SharedPreferenceSecureVaultImpl(private val preference:SharedPreferences, private val cryptoService: String) : SharedPreferenceSecureVault{
 
-    override fun storeString(key: String, value: String) {
+    override fun storeString(key: String, value: String?) {
         preference.edit().putString(key,value).apply()
     }
 

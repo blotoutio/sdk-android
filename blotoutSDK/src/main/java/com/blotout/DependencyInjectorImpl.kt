@@ -11,14 +11,14 @@ import com.blotout.referral.InstallRefferal
 import com.blotout.repository.EventRepository
 import com.blotout.repository.ManifestRepository
 import com.blotout.repository.data.ConfigurationDataManager
-import com.blotout.repository.data.SharedPrefernceSecureVault
+import com.blotout.repository.data.SharedPreferenceSecureVault
 import com.blotout.repository.impl.DataManagerImpl
 import com.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.blotout.util.Constant
 import com.blotout.util.DateTimeUtils
 
 class DependencyInjectorImpl private constructor(private val context: Context,
-                                                 secureStorageService: SharedPrefernceSecureVault,
+                                                 secureStorageService: SharedPreferenceSecureVault,
                                                  hostConfiguration: HostConfiguration,
                                                  eventDatabase: EventDatabase) : DependencyInjector {
 
@@ -99,7 +99,7 @@ class DependencyInjectorImpl private constructor(private val context: Context,
 
     override fun getManifestRepository(): ManifestRepository = mManifestRepository
 
-    override fun getSecureStorageService(): SharedPrefernceSecureVault {
+    override fun getSecureStorageService(): SharedPreferenceSecureVault {
         return mSecureStorageService
     }
 }
