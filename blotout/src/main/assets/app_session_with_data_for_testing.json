@@ -1,0 +1,979 @@
+{
+    "appBundle": "com.blotout.demo",
+    "date": "05-08-2019",
+    "singleDaySessions":
+    {
+        "sentToServer": true,
+        "systemUptime": [140000],
+        "lastServerSyncTimeStamp": 12345678,
+        "allEventsSyncTimeStamp": 12345678,
+        "appInfo": [
+        {
+            "sentToServer": false,
+            "timeStamp": 12345678,
+            "version": "1.0.0",
+            "sdkVersion": "1.0.0",
+            "name": "DemoApp",
+            "bundle": "com.blotout.DemoApp",
+            "language": "english",
+            "launchTimeStamp": 12345678,
+            "terminationTimeStamp": 12345678,
+            "sessionsDuration": 3000,
+            "averageSessionsDuration": 1000,
+            "launchReason": "user",
+            "currentLocation":
+            {
+                "city": "bengaluru",
+                "state": "karnataka",
+                "country": "india",
+                "zip": "560100"
+            }
+        }],
+        "ubiAutoDetected":
+        {
+            "screenShotsTaken": [
+            {
+                "currentView": "v.o",
+                "timeStamp": 12345678,
+                "sentToServer": false
+            }],
+            "appNavigation": [
+            {
+                "sentToServer": true,
+                "timeStamp": 12345678,
+                "from": "Login",
+                "to": "Dashboard",
+                "action": "what caused the action",
+                "actionObject": "button",
+                "actionObjectTitle": "action object title",
+                "actionTime": 5,
+                "networkIndicatorVisible": true,
+                "timeSpent": 300
+            }],
+            "appGesture":
+            {
+                "touchOrClick": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "drag": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "4.0",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "flick": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "myname",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "swipe": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "visible",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "doubleTap": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "first",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "moreThanDoubleTap": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "twoFingerTap": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "moreThanTwoFingerTap": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "pinch": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "touchAndHold": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "shake": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "rotate": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "objectRect":
+                    {
+                        "objX": 20,
+                        "objY": 30,
+                        "objHeight": 100,
+                        "objWidth": 300
+                    },
+                    "screenRect":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }],
+                "screenEdgePan": [
+                {
+                    "sentToServer": false,
+                    "timeStamp": 12345678,
+                    "objectType": "",
+                    "visibleClassName": "",
+                    "screenRectFrom":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    },
+                    "screenRectTo":
+                    {
+                        "screenX": 100,
+                        "screenY": 200
+                    }
+                }]
+            }
+        },
+        "developerCodified":
+        {
+            "touchClick": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "drag": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "flick": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "swipe": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "doubleTap": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "moreThanDoubleTap": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "twoFingerTap": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "moreThanTwoFingerTap": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "pinch": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "touchAndHold": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "shake": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "rotate": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "objectRect":
+                {
+                    "objX": 20,
+                    "objY": 30,
+                    "objHeight": 100,
+                    "objWidth": 300
+                },
+                "screenRect":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "screenEdgePan": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "objectType": "",
+                "visibleClassName": "",
+                "screenRectFrom":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                },
+                "screenRectTo":
+                {
+                    "screenX": 100,
+                    "screenY": 200
+                }
+            }],
+            "view": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "viewClassName": "",
+                "viewInfo":
+                {}
+            }],
+            "addToCart": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "cartClassName": "",
+                "additionalInfo":
+                {}
+            }],
+            "chargeTransaction": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "transactionClassName": "",
+                "transactionInfo":
+                {}
+            }],
+            "listUpdated": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "listClassName": "",
+                "updatesInfo":
+                {}
+            }],
+            "timedEvent": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "eventName": "test event",
+                "startTime": 12345678,
+                "startVisibleClassName": "",
+                "endVisibleClassName": "",
+                "endTime": 12345678,
+                "eventDuration": 12345678,
+                "timedEvenInfo":
+                {}
+            }],
+            "customEvent": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "eventName": "my event",
+                "visibleClassName": "",
+                "eventInfo":
+                {}
+            }]
+        },
+        "appStates":
+        {
+            "sentToServer": false,
+            "appLaunched": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": "v.o.i"
+            }],
+            "appActive": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": "2.3"
+            }],
+            "appResignActive": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": "master"
+            }],
+            "appInBackground": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": "client"
+            }],
+            "appInForeground": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appBackgroundRefreshAvailable": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appReceiveMemoryWarning": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appSignificantTimeChange": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appOrientationPortrait": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appOrientationLandscape": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appStatusbarFrameChange": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appBackgroundRefreshStatusChange": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appNotificationReceived": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appNotificationViewed": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }],
+            "appNotificationClicked": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "visibleClassName": ""
+            }]
+        },
+        "deviceInfo":
+        {
+            "multitaskingEnabled": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "proximitySensorEnabled": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "debuggerAttached": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "pluggedIn": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "jailBroken": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "numberOfActiveProcessors": [
+            {
+                "sentToServer": false,
+                "number": 4,
+                "timeStamp": 12345678
+            }],
+            "processorsUsage": [
+            {
+                "sentToServer": false,
+                "processorID": 1,
+                "usagePercentage": 44,
+                "timeStamp": 12345678
+            }],
+            "accessoriesAttached": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "headphoneAttached": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "numberOfAttachedAccessories": [
+            {
+                "sentToServer": false,
+                "number": 3,
+                "timeStamp": 12345678
+            }],
+            "nameOfAttachedAccessories": [
+            {
+                "sentToServer": false,
+                "names": ["camera", "stand"],
+                "timeStamp": 12345678
+            }],
+            "batteryLevel": [
+            {
+                "sentToServer": false,
+                "percentage": 50,
+                "timeStamp": 12345678
+            }],
+            "isCharging": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "fullyCharged": [
+            {
+                "sentToServer": false,
+                "status": true,
+                "timeStamp": 12345678
+            }],
+            "deviceOrientation": [
+            {
+                "sentToServer": false,
+                "orientation": "portrait",
+                "timeStamp": 12345678
+            }],
+            "cfUUID": [
+            {
+                "sentToServer": false,
+                "cfUUID": "12345",
+                "timeStamp": 12345678
+            }],
+            "vendorID": [
+            {
+                "vendorID": "12324",
+                "sentToServer": false,
+                "timeStamp": 12345678
+            }]
+        },
+        "networkInfo":
+        {
+            "currentIPAddress": [
+            {
+                "sentToServer": false,
+                "ipAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "externalIPAddress": [
+            {
+                "sentToServer": false,
+                "ipAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "cellIPAddress": [
+            {
+                "sentToServer": false,
+                "ipAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "cellNetMask": [
+            {
+                "sentToServer": false,
+                "netmask": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "cellBroadcastAddress": [
+            {
+                "sentToServer": false,
+                "broadcastAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "wifiIPAddress": [
+            {
+                "sentToServer": false,
+                "ipAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "wifiNetMask": [
+            {
+                "sentToServer": false,
+                "netmask": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "wifiBroadcastAddress": [
+            {
+                "sentToServer": false,
+                "broadcastAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "wifiRouterAddress": [
+            {
+                "sentToServer": false,
+                "routerAddress": "198.1.1.60",
+                "timeStamp": 12345678
+            }],
+            "wifiSSID": [
+            {
+                "sentToServer": false,
+                "ssid": "mywifi",
+                "timeStamp": 12345678
+            }],
+            "connectedToWifi": [
+            {
+                "sentToServer": false,
+                "isConnected": true,
+                "timeStamp": 12345678
+            }],
+            "connectedToCellNetwork": [
+            {
+                "sentToServer": false,
+                "isConnected": true,
+                "timeStamp": 12345678
+            }]
+        },
+        "storageInfo": [
+        {
+            "sentToServer": false,
+            "timeStamp": 12345678,
+            "unit": "GB",
+            "totalDiskSpace": "500 gb",
+            "usedDiskSpace": "300 gb",
+            "freeDiskSpace": "200 gb"
+        }],
+        "memoryInfo": [
+        {
+            "sentToServer": false,
+            "timeStamp": 12345678,
+            "totalRAM": 2048,
+            "usedMemory": 1024,
+            "wiredMemory": 1024,
+            "activeMemory": 1024,
+            "inActiveMemory": 1024,
+            "freeMemory": 1024,
+            "purgeableMemory": 1024,
+            "atMeoryWarning": false
+        }],
+        "location": [
+        {
+            "sentToServer": false,
+            "timeStamp": 12345678,
+            "piiLocation":
+            {
+                "sentToServer": false,
+                "latitude": "78.1234",
+                "longitude": "67.766544"
+            },
+            "nonPIILocation":
+            {
+                "sentToServer": false,
+                "city": "bengaluru",
+                "state": "karnatana",
+                "zip": "560100",
+                "country": "india",
+                "activity": "running",
+                "source": "ip/geo"
+            }
+        }],
+        "crashDetails": [
+        {
+            "sentToServer": true,
+            "timeStamp": 12345678,
+            "name": "main thread crash",
+            "reason": "recurring operation on main thread",
+            "info":
+            {},
+            "callStackSymbols": ["method1"],
+            "callStackReturnAddress": [1234, 1233]
+        }],
+        "retentionEvent":
+        {
+            "sentToServer": false,
+            "dau":
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "dauInfo":{}
+            },
+            "dpu":
+            {
+                "sentToServer": false,
+                "timeStamp": 12354678,
+                "dpuInfo":{}
+            },
+            "appInstalled":
+            {
+                "sentToServer": false,
+                "isFirstLaunch": false,
+                "timeStamp": 12345678,
+                "appInstalledInfo":{}
+            },
+            "newUser":
+            {
+                "sentToServer": false,
+                "isNewUser": false,
+                "timeStamp": 12345678,
+                "theNewUserInfo":{}
+            },
+            "DAST":
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "averageSessionTime": 12345876,
+                "payload":{}
+            },
+            "customEvents": [
+            {
+                "sentToServer": false,
+                "timeStamp": 12345678,
+                "eventName": "My personal Event",
+                "eventInfo":{}
+            }]
+        }
+
+    }
+}

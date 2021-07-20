@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<string name="app_name">Sales Demo</string>
+	<string name="main_no_items" tools:ignore="ExtraTranslation">Please enter keyword to search</string>
+	<string name="price">--</string>
+	<string name="timeleft">--</string>
+	<string name="title_detail_activity">Item Detail</string>
+	<string name="ebay_id">Impetus06-f40e-4ba2-b112-1c3659ce305</string>
+</resources>
