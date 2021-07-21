@@ -2,6 +2,7 @@ package com.analytics.blotout
 
 import android.app.Application
 import com.analytics.blotout.model.EventStatus
+import com.analytics.blotout.model.MapIDData
 
 interface BlotoutAnalyticsInterface {
 
@@ -13,7 +14,7 @@ interface BlotoutAnalyticsInterface {
 
     fun capturePersonal(eventName :String, eventInfo:HashMap<String, Any> ,isPHI : Boolean):EventStatus
 
-    fun mapID(userId:String?, provider:String?, withInformation:HashMap<String,Any>?):EventStatus
+    fun mapID(mapIDData: MapIDData, withInformation:HashMap<String,Any>?):EventStatus
 
     fun getUserId():String
 }

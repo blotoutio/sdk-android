@@ -2,6 +2,7 @@ package com.analytics.blotout
 
 import android.app.Application
 import com.analytics.blotout.model.EventStatus
+import com.analytics.blotout.model.MapIDData
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.Errors
@@ -46,10 +47,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
         return EventStatus()
     }
 
-    override fun mapID(userId: String?, provider: String?, withInformation: HashMap<String, Any>?): EventStatus {
+    override fun mapID(mapIDData: MapIDData, withInformation: HashMap<String, Any>?): EventStatus {
         try {
-            withInformation?.put(Constant.BO_EVENT_MAP_ID, userId!!)
-            withInformation?.put(Constant.BO_EVENT_MAP_Provider, provider!!)
+            withInformation?.put(Constant.BO_EVENT_MAP_ID, mapIDData.externalID!!)
+            withInformation?.put(Constant.BO_EVENT_MAP_Provider, mapIDData.provider!!)
             var eventsRepository = EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
             return eventsRepository.prepareCodifiedEvent(eventName = Constant.BO_EVENT_MAP_ID, eventInfo = withInformation!!, withEventCode = Constant.BO_DEV_EVENT_MAP_ID)
         } catch (e: Exception) { }

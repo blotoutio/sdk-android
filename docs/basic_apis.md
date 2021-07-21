@@ -103,29 +103,3 @@ BlotoutAnalytics.getInstance().logPHIEvent("PHIEvent",eventInfo,null);
 BlotoutAnalytics.getInstance().logPIIEvent("PIIEvent",eventInfo,null);
 
 ```
-
-
-## mapID
-The `mapID` method allows you to map external services to Blotout ID.
-
-#### Input
-`public void mapId(@NonNull String id, @NonNull String provider, @Nullable HashMap<String, Object> eventInfo)`
-
-|||||
-|---|---|---|---|
-| `externalID` | `String` |  | External ID that you want to link to Blotout ID |
-| `provider` | `String` |  | Provider that generated external ID, for example `hubspot` |
-| `eventInfo` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
-
-#### Example
-```js
-HashMap<String,Object> eventInfo = new HashMap<>();
-eventInfo.put("emailId","support@blotout.io");
-eventInfo.put("gender","Male");
-
-BlotoutAnalytics.getInstance().mapId("92j2jr230r-232j9j2342j3-jiji","hubspot",null);
-BlotoutAnalytics.getInstance().mapId("92j2jr230r-232j9j2342j3-jiji","hubspot",eventInfo);
-```
-
-
-
