@@ -39,19 +39,24 @@ android {
 
 }
 
-publishing {
-    publications {
-        BlotoutPublication(MavenPublication) {
-            groupId 'com.analytics.blotout'
-            version '0.8.0'
-            artifactId 'BlotOut'
-            artifact("$buildDir/outputs/aar/blotoutSDK-release.aar")
-        }
+allprojects{
+    repositories{
+        maven {url 'https://jitpack.io'}
     }
+}
 
-    publishing{
-        repositories {
-            mavenCentral()
+
+
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId 'com.analytics.blotout'
+                version '0.9.0'
+                artifactId 'Blotout'
+            }
         }
     }
 }
@@ -81,6 +86,9 @@ dependencies {
 
     implementation "androidx.room:room-ktx:2.3.0"
     kapt "androidx.room:room-compiler:2.3.0"
+
+
+
 
     //test
     testImplementation deps.mockito
