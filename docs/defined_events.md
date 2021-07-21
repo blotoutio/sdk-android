@@ -8,10 +8,10 @@ The `mapID` method allows you to map external services to Blotout ID.
 
 |||||
 |---|---|---|---|
-| `mapIDData` | `Object` | Required | See data table. |
+| `mapIDData` | `MapIDData` | Required | See data table. |
 | `eventInfo` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
-#### Data
+#### MapIDData
 
 |              |          |          |                                                            |
 | ------------ | -------- | -------- | ---------------------------------------------------------- |
@@ -29,6 +29,6 @@ var data = MapIDData()
 data.externalID = "92j2jr230r-232j9j2342j3-jiji"
 data.provider = "sass"
 
-BlotoutAnalytics.getInstance().mapId(data, null);
-BlotoutAnalytics.getInstance().mapId(data, eventInfo);
+BlotoutAnalytics.INSTANCE..mapID(data, null);
+BlotoutAnalytics.INSTANCE..mapID(data, eventInfo);
 ```
