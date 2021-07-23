@@ -29,11 +29,10 @@ implementation 'com.github.blotoutio:sdk-android:0.9.0'
 ```kotlin
 import com.blotout.analytics.BlotoutAnalytics;
 
-
-        BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
-        blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
-        blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
-        BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration);
+BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
+blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
+blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
+BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration);
 
 ```
 
@@ -42,6 +41,7 @@ import com.blotout.analytics.BlotoutAnalytics;
 var blotoutAnalyticsConfiguration = BlotoutAnalyticsConfiguration()
 blotoutAnalyticsConfiguration.blotoutSDKKey = "EADAH5FV8B5MMVZ"
 blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
+
 BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration)
 
 ```

@@ -4,7 +4,7 @@
 The `mapID` method allows you to map external services to Blotout ID.
 
 #### Input
-`public void mapId(@NonNull MapIDData mapIDData, @Nullable HashMap<String, Object> eventInfo)`
+`mapID(mapIDData: MapIDData, withInformation: HashMap<String, Any>?)`
 
 |||||
 |---|---|---|---|
@@ -12,7 +12,6 @@ The `mapID` method allows you to map external services to Blotout ID.
 | `eventInfo` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### MapIDData
-
 |              |          |          |                                                            |
 | ------------ | -------- | -------- | ---------------------------------------------------------- |
 | `externalID` | `String` | Required | External ID that you want to link to Blotout ID.           |
@@ -22,8 +21,7 @@ The `mapID` method allows you to map external services to Blotout ID.
 #### Example
 ```kotlin
 HashMap<String,Any> eventInfo = new HashMap<>();
-eventInfo.put("emailId","support@blotout.io");
-eventInfo.put("gender","Male");
+eventInfo.put("language","en");
 
 var data = MapIDData()
 data.externalID = "92j2jr230r-232j9j2342j3-jiji"
