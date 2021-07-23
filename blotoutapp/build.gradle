@@ -24,6 +24,12 @@ android {
     }
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
 dependencies {
     //Material design
 
@@ -40,12 +46,8 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
 
-    //implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-
     //Loading animations
     implementation 'com.wang.avi:library:1.0.5'
     implementation 'com.nineoldandroids:library:2.4.0'
-
-    implementation project(':blotoutSDK')
-
+    implementation 'com.github.blotoutio:sdk-android:0.9.0'
 }
