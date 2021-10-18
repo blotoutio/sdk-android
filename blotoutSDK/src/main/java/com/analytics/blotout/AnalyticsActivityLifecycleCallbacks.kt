@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.analytics.blotout.geasture.Gesture
 import com.analytics.blotout.geasture.GestureListener
 import com.analytics.blotout.repository.EventRepository
@@ -75,7 +76,7 @@ class AnalyticsActivityLifecycleCallbacks(var eventRepository: EventRepository, 
     }
 
     override fun onActivityStarted(activity: Activity) {
-            eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_OPENED, null, Constant.BO_EVENT_APPLICATION_OPENED)
+        eventRepository.prepareSystemEvent(activity, Constant.BO_APPLICATION_OPENED, null, Constant.BO_EVENT_APPLICATION_OPENED)
     }
 
     override fun onActivityResumed(activity: Activity) {

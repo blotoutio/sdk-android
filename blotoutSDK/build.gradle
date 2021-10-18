@@ -77,6 +77,10 @@ dependencies {
 
     implementation 'com.android.installreferrer:installreferrer:2.1'
 
+    implementation deps.androidx_lifecycle_ext
+    implementation deps.androidx_lifecycle_vm_ktx
+
+
     //Retrofit
     implementation deps.retrofit
     implementation deps.retrofit_gson_converter
@@ -94,4 +98,5 @@ dependencies {
     testImplementation deps.mockito
     testImplementation deps.mockito_android
     testImplementation deps.junit
+    testImplementation deps.coroutine_test
 }

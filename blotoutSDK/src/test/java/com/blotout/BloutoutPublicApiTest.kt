@@ -1,9 +1,18 @@
 package com.analytics.blotout
 
+import android.app.Activity
 import android.app.Application
+import com.analytics.blotout.model.EventStatus
+import com.analytics.blotout.model.Result
+import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.util.Errors
+import com.blotout.CoroutineTestRule
+import com.blotout.MockTestConstants
+import junit.framework.Assert.assertFalse
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
@@ -16,35 +25,35 @@ import java.util.*
 class BloutoutPublicApiTest {
 
     lateinit var context: Application
-    var blotoutAnalyticsConfiguration =  BlotoutAnalyticsConfiguration()
+
+    @get:Rule
+    val coroutineTestRule = CoroutineTestRule()
+
 
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         context = Mockito.mock(Application::class.java)
-
-
     }
 
     @Test
     fun testKeysForPositive() {
-        blotoutAnalyticsConfiguration.blotoutSDKKey = "KHPREXFRED7HMGB"
-        blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
         var errorCode = blotoutAnalyticsConfiguration.validateRequest()
         Assert.assertEquals(Errors.ERROR_CODE_NO_ERROR, errorCode)
     }
 
     @Test
     fun testKeysForNegative() {
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
         blotoutAnalyticsConfiguration.blotoutSDKKey = ""
-        blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
         var errorCode = blotoutAnalyticsConfiguration.validateRequest()
         Assert.assertEquals(Errors.ERROR_KEY_NOT_PROPER, errorCode)
     }
 
     @Test
     fun testUrlsForNegative() {
-        blotoutAnalyticsConfiguration.blotoutSDKKey = "KHPREXFRED7HMGB"
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
         blotoutAnalyticsConfiguration.endPointUrl = ""
         var errorCode = blotoutAnalyticsConfiguration.validateRequest()
         Assert.assertEquals(Errors.ERROR_URL_NOT_PROPER, errorCode)
@@ -52,19 +61,115 @@ class BloutoutPublicApiTest {
 
     @Test
     fun testSDKStart() {
-        var sdkStart = DependencyInjectorImpl.init(context, blotoutAnalyticsConfiguration)
+        var sdkStart = DependencyInjectorImpl.init(context, MockTestConstants.setupBlotoutAnalyticsConfiguration())
         Assert.assertEquals(false, sdkStart)
     }
 
     @Test
     fun testCaptureApi(){
-        blotoutAnalyticsConfiguration.blotoutSDKKey = "KHPREXFRED7HMGB"
-        blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
-        BlotoutAnalytics.getInstance()?.init(context, blotoutAnalyticsConfiguration)
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+            override fun onSuccess() {
+
+            }
+            override fun onError() {
+            }
+        })
         val eventInfo = HashMap<String, Any>()
         eventInfo["Join Blotout Slack"] = 0
-        var eventStatus = BlotoutAnalytics.capture("hello",eventInfo)
-        Assert.assertEquals(true, eventStatus.isSuccess)
+        var eventsRepository =
+            EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+        coroutineTestRule.runBlockingTest {
+            var result = eventsRepository.prepareCodifiedEvent(
+                eventName = "eventName",
+                eventInfo = eventInfo,
+                withEventCode = 0
+            )
+            when (result) {
+                is Result.Success -> assertTrue(result.data !=null)
+                is Result.Error -> assertFalse(result.errorData!=null)
+            }
+        }
+
     }
 
+    @Test
+    fun testCapturePersonalisPHIApi(){
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+            override fun onSuccess() {
+
+            }
+            override fun onError() {
+            }
+        })
+        val eventInfo = HashMap<String, Any>()
+        eventInfo["Join Blotout Slack"] = 0
+        var eventsRepository =
+            EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+        coroutineTestRule.runBlockingTest {
+            var result = eventsRepository.preparePersonalEvent(
+                eventName = "Personal PHI events",
+                eventInfo = eventInfo,
+                isPHI = true
+            )
+            when (result) {
+                is Result.Success -> assertTrue(result.data !=null)
+                is Result.Error -> assertFalse(result.errorData!=null)
+            }
+        }
+
+    }
+
+    @Test
+    fun testCapturePersonalApi(){
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+            override fun onSuccess() {
+
+            }
+            override fun onError() {
+            }
+        })
+        val eventInfo = HashMap<String, Any>()
+        eventInfo["Join Blotout Slack"] = 0
+        var eventsRepository =
+            EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+        coroutineTestRule.runBlockingTest {
+            var result = eventsRepository.preparePersonalEvent(
+                eventName = "Non PHI Personal event",
+                eventInfo = eventInfo,
+                isPHI = false
+            )
+            when (result) {
+                is Result.Success -> assertTrue(result.data !=null)
+                is Result.Error -> assertFalse(result.errorData!=null)
+            }
+        }
+
+    }
+
+    @Test
+    fun testCaptureSystemEventsApi(){
+        var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+            override fun onSuccess() {
+
+            }
+            override fun onError() {
+            }
+        })
+        val eventInfo = HashMap<String, Any>()
+        eventInfo["Join Blotout Slack"] = 0
+        var eventsRepository =
+            EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+        coroutineTestRule.runBlockingTest {
+            eventsRepository.prepareSystemEvent(
+                activity = context as Activity,
+                eventName = "SDK Start",
+                eventInfo = eventInfo,
+                withEventCode = 11130
+            )
+        }
+    }
 }
