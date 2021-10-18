@@ -20,7 +20,7 @@ class SharedPreferenceSecureVaultImpl(private val preference:SharedPreferences, 
 
     override fun fetchLong(key: String): Long {
         val data = preference.getLong(key,0)
-        data!!.let { return it }
+        data.let { return it }
     }
 
     override fun storeBoolean(key: String, value: Boolean) {
@@ -29,6 +29,6 @@ class SharedPreferenceSecureVaultImpl(private val preference:SharedPreferences, 
 
     override fun fetchBoolean(key: String): Boolean {
         val data = preference.getBoolean(key,true)
-        data!!.let { return it }
+        data.let { return it }
     }
 }

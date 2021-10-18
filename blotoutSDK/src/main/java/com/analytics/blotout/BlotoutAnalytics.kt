@@ -1,5 +1,3 @@
 package com.analytics.blotout
 
-object  BlotoutAnalytics: BlotoutAnalyticsInternal() {
-
-}
+object  BlotoutAnalytics: BlotoutAnalyticsInternal()

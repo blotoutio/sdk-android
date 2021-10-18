@@ -1,7 +1,7 @@
 package com.analytics.blotout
 
 import android.app.Application
-import com.analytics.blotout.model.EventStatus
+import com.analytics.blotout.model.CompletionHandler
 import com.analytics.blotout.model.MapIDData
 import com.analytics.blotout.model.Result
 import com.analytics.blotout.repository.EventRepository
@@ -9,7 +9,6 @@ import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.Errors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -23,7 +22,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     override fun init(
         application: Application,
         blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration,
-        eventStatus: EventStatus
+        completionHandler: CompletionHandler
     ) {
         when (blotoutAnalyticsConfiguration.validateRequest()) {
             Errors.ERROR_KEY_NOT_PROPER -> {
@@ -42,10 +41,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         .fetchManifestConfiguration()
                     when(result){
                         is Result.Success->{
-                            eventStatus.onSuccess()
+                            completionHandler.onSuccess()
                         }
                         is Result.Error->{
-                            eventStatus.onError()
+                            completionHandler.onError()
                         }
                     }
                 }
@@ -92,8 +91,8 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     override fun mapID(mapIDData: MapIDData, withInformation: HashMap<String, Any>?) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
-                withInformation?.put(Constant.BO_EVENT_MAP_ID, mapIDData.externalID!!)
-                withInformation?.put(Constant.BO_EVENT_MAP_Provider, mapIDData.provider!!)
+                withInformation?.put(Constant.BO_EVENT_MAP_ID, mapIDData.externalID)
+                withInformation?.put(Constant.BO_EVENT_MAP_Provider, mapIDData.provider)
                 var eventsRepository =
                     EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
                 var result = eventsRepository.prepareCodifiedEvent(

@@ -1,6 +1,6 @@
 package com.analytics.blotout.model
 
-interface EventStatus {
+interface CompletionHandler {
         fun onSuccess()
         fun onError()
 }

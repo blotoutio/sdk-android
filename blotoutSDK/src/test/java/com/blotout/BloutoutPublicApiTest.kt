@@ -1,13 +1,13 @@
-package com.analytics.blotout
+package com.blotout
 
 import android.app.Activity
 import android.app.Application
-import com.analytics.blotout.model.EventStatus
+import com.analytics.blotout.BlotoutAnalytics
+import com.analytics.blotout.DependencyInjectorImpl
+import com.analytics.blotout.model.CompletionHandler
 import com.analytics.blotout.model.Result
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.util.Errors
-import com.blotout.CoroutineTestRule
-import com.blotout.MockTestConstants
 import junit.framework.Assert.assertFalse
 import org.junit.Assert
 import org.junit.Assert.assertTrue
@@ -61,14 +61,17 @@ class BloutoutPublicApiTest {
 
     @Test
     fun testSDKStart() {
-        var sdkStart = DependencyInjectorImpl.init(context, MockTestConstants.setupBlotoutAnalyticsConfiguration())
+        var sdkStart = DependencyInjectorImpl.init(
+            context,
+            MockTestConstants.setupBlotoutAnalyticsConfiguration()
+        )
         Assert.assertEquals(false, sdkStart)
     }
 
     @Test
     fun testCaptureApi(){
         var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
-        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : CompletionHandler{
             override fun onSuccess() {
 
             }
@@ -96,7 +99,7 @@ class BloutoutPublicApiTest {
     @Test
     fun testCapturePersonalisPHIApi(){
         var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
-        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : CompletionHandler{
             override fun onSuccess() {
 
             }
@@ -124,7 +127,7 @@ class BloutoutPublicApiTest {
     @Test
     fun testCapturePersonalApi(){
         var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
-        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : CompletionHandler{
             override fun onSuccess() {
 
             }
@@ -152,7 +155,7 @@ class BloutoutPublicApiTest {
     @Test
     fun testCaptureSystemEventsApi(){
         var blotoutAnalyticsConfiguration = MockTestConstants.setupBlotoutAnalyticsConfiguration()
-        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : EventStatus{
+        BlotoutAnalytics.init(context, blotoutAnalyticsConfiguration,object : CompletionHandler{
             override fun onSuccess() {
 
             }

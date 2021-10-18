@@ -33,9 +33,9 @@ allprojects {
 dependencies {
     //Material design
 
-    implementation 'com.google.android.material:material:1.3.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.2.0'
+    implementation deps.androidx_appcompact
+    implementation deps.google_material
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
@@ -49,5 +49,6 @@ dependencies {
     //Loading animations
     implementation 'com.wang.avi:library:1.0.5'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.github.blotoutio:sdk-android:0.9.0'
+    implementation project(':blotoutSDK')
+    //implementation 'com.github.blotoutio:sdk-android:0.9.0'
 }

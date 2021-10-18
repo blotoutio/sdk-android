@@ -10,11 +10,11 @@ class Screen(context: Context) {
 
     @SerializedName("width")
     @Expose
-    private val width: Int? = DeviceInfo(context).screenWidth
+    private val width: Int = DeviceInfo(context).screenWidth
 
     @SerializedName("height")
     @Expose
-    private val height: Int? = DeviceInfo(context).screenHeight
+    private val height: Int = DeviceInfo(context).screenHeight
 
 
 }

@@ -2,7 +2,6 @@ package com.analytics.blotout.repository
 
 import android.util.Log
 import com.analytics.blotout.model.ManifestConfigurationResponse
-import com.analytics.blotout.model.Meta
 import com.analytics.blotout.model.Result
 import com.analytics.blotout.model.VariableOption
 import com.analytics.blotout.network.ApiDataProvider
@@ -58,10 +57,10 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
 
         for(manifestData in manifestConfigurationResponse.variables) {
             when (manifestData?.variableName) {
-                Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestData?.value!!.toBoolean()
-                Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestData?.value!!
-                Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestData?.value!!
-                Constant.Event_Push_System_Events_Allowed -> sdkSystemEevntsAllowed = manifestData?.variableOptions
+                Constant.Event_Push_System_Events -> sdkPushSystemEvents = manifestData.value!!.toBoolean()
+                Constant.Event_PII_Public_Key -> sdkPIIPublicKey = manifestData.value!!
+                Constant.Event_PHI_Public_Key -> sdkPHIPublicKey = manifestData.value!!
+                Constant.Event_Push_System_Events_Allowed -> sdkSystemEevntsAllowed = manifestData.variableOptions
             }
         }
         return Result.Success("")

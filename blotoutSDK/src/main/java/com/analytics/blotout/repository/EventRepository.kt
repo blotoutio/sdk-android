@@ -19,7 +19,7 @@ import java.lang.reflect.Field
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class EventRepository(var secureStorage: SharedPreferenceSecureVault) {
+class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
 
     private suspend fun prepareMetaData() = suspendCoroutine<Result<Meta>> {    continuation->
          try {
@@ -74,17 +74,17 @@ class EventRepository(var secureStorage: SharedPreferenceSecureVault) {
 
 
     suspend fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int):Result<String>{
-        try {
+        return try {
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName, withEventCode)
                 event.type = Constant.BO_CODIFIED
                 event.additionalData = eventInfo
-                return pushEvents(event)
+                pushEvents(event)
             }else{
-                return Result.Error(Throwable("SDK is not enabled"))
+                Result.Error(Throwable("SDK is not enabled"))
             }
         } catch (e: Exception) {
-            return Result.Error(e)
+            Result.Error(e)
         }
     }
 
@@ -114,7 +114,7 @@ class EventRepository(var secureStorage: SharedPreferenceSecureVault) {
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName, withEventCode)
                 if (activity != null)
-                    event.scrn = activity!!.localClassName.substringAfterLast(delimiter = '.')
+                    event.scrn = activity.localClassName.substringAfterLast(delimiter = '.')
                 event.type = Constant.BO_SYSTEM
                 event.additionalData = eventInfo
                 CoroutineScope(Dispatchers.Default).launch {

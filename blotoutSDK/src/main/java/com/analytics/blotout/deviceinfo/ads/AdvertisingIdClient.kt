@@ -48,7 +48,7 @@ object AdvertisingIdClient {
     }
 
     private class AdvertisingConnection : ServiceConnection {
-        internal var retrieved = false
+        var retrieved = false
         private val queue = LinkedBlockingQueue<IBinder>(1)
 
         val binder: IBinder
