@@ -18,12 +18,12 @@ class CommonUtils {
 
     fun getAsciiCustomIntSum(input: String, isCaseSenstive: Boolean): Int {
         var input = input
-        input = if (isCaseSenstive) input else input.toLowerCase()
+        input = if (isCaseSenstive) input else input.lowercase(Locale.getDefault())
         var sum = 0
         if (isPureAscii(input)) {
             for (index in 0 until input.length) {
                 val c = input[index]
-                sum += c.toInt()
+                sum += c.code
             }
         }
         return sum
@@ -42,7 +42,7 @@ class CommonUtils {
         var event = event
         var sum = 0
         try {
-            event = if (caseSensitive) event else event.toLowerCase()
+            event = if (caseSensitive) event else event.lowercase(Locale.getDefault())
             val stringToHash = event
             val messageDigest = MessageDigest.getInstance("MD5")
             messageDigest.update(stringToHash.toByteArray())
@@ -51,9 +51,9 @@ class CommonUtils {
             for (index in 0 until md5String.length) {
                 val c = md5String[index]
                 if (Character.isDigit(c)) {
-                    sum = sum + Character.getNumericValue(c)
+                    sum += Character.getNumericValue(c)
                 } else {
-                    sum = sum + c.toInt() + index
+                    sum += c.code + index
                 }
             }
         } catch (e: NoSuchAlgorithmException) {
@@ -67,7 +67,7 @@ class CommonUtils {
             var halfbyte: Int = data[i] shl 4 and 0x0F
             var two_halfs = 0
             do {
-                if (0 <= halfbyte && halfbyte <= 9) buf.append(('0'.toInt() + halfbyte).toChar()) else buf.append(('a'.toInt() + (halfbyte - 10)).toChar())
+                if (0 <= halfbyte && halfbyte <= 9) buf.append(('0'.code + halfbyte).toChar()) else buf.append(('a'.code + (halfbyte - 10)).toChar())
                 halfbyte = data[i] and 0x0F
             } while (two_halfs++ < 1)
         }
@@ -87,7 +87,7 @@ class CommonUtils {
         var deviceId = ""
         try {
             deviceId = DependencyInjectorImpl.getInstance().getSecureStorageService().fetchString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY)
-            if (deviceId != null && deviceId.length > 0) {
+            if (deviceId != null && deviceId.isNotEmpty()) {
                 return deviceId
             } else {
 
@@ -99,9 +99,7 @@ class CommonUtils {
                 stringBuilder.append(generateNumber())
                 stringBuilder.append(DateTimeUtils().get13DigitNumberObjTimeStamp())
                 val guidString: String = convertTo64CharUUID(EncryptionUtils().sha256(stringBuilder.toString()))!!
-                deviceId = guidString ?: UUID.nameUUIDFromBytes(stringBuilder.toString().toByteArray()).toString()
-                //check for if SHA256 conversion failed
-                deviceId = deviceId ?: getUUID()!!
+                deviceId = guidString
                 DependencyInjectorImpl.getInstance().getSecureStorageService().storeString(Constant.BO_ANALYTICS_USER_UNIQUE_KEY, deviceId)
             }
         } catch (e: java.lang.Exception) {
@@ -116,7 +114,7 @@ class CommonUtils {
 
     fun convertTo64CharUUID(stringToConvert: String?): String? {
         try {
-            if (stringToConvert != null && stringToConvert.length > 0) {
+            if (stringToConvert != null && stringToConvert.isNotEmpty()) {
                 val str: String = stringToConvert
                 val lengthsOfPart = ArrayList(Arrays.asList(16, 8, 8, 8, 24))
                 val parts = ArrayList<String?>()

@@ -85,11 +85,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             val start = Debug.threadCpuTimeNanos()
             for (i in 0..999999) continue
             val stop = Debug.threadCpuTimeNanos()
-            return if (stop - start < 10000000) {
-                false
-            } else {
-                true
-            }
+            return stop - start >= 10000000
         } catch (e: Exception) {
         }
         return false

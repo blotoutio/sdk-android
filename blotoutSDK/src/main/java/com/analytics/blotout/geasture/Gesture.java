@@ -31,7 +31,7 @@ public class Gesture {
   private boolean moving;
   private int clicks = 0;
 
-  private Handler handler;
+  private final Handler handler;
   private GestureListener listener;
   private Emitter<GestureEvent> emitter;
 

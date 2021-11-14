@@ -31,7 +31,7 @@ class DeviceInfo(private val context: Context) {
             return if (model.startsWith(manufacturer)) {
                 model
             } else {
-                manufacturer + " " + model
+                "$manufacturer $model"
             }
         }
 

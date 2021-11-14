@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Base64
 import android.util.Log
+import java.util.*
 import kotlin.collections.HashMap
 
 
@@ -32,14 +33,14 @@ fun Long.sizeFormatter(): String {
      return java.lang.Long.toString(size)
     }
 
-fun String.getMessageIDForEvent(): String? {
+fun String.getMessageIDForEvent(): String {
     var base64Encoded = Base64.encodeToString(toByteArray(charset("UTF-8")), Base64.NO_WRAP)
     var trimForExtraChar = base64Encoded.substringBefore("=")
     return trimForExtraChar+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
 }
 
 fun String.codeForDevEvent(): Int  {
-    if (this.isNullOrEmpty()) {
+    if (this.isEmpty()) {
         return 0
     }
 
@@ -55,12 +56,12 @@ fun Context.getVersion():String?{
 }
 
 fun stringToIntSum(eventName: String): Int  {
-    var eventNameL = eventName.toLowerCase()
+    var eventNameL = eventName.lowercase(Locale.getDefault())
     var sha1String = EncryptionUtils().sha1(eventNameL)
     var sum = 0
     for (index in 0 until sha1String!!.length) {
         val c: Char = sha1String.get(index)
-        sum = sum + c.toInt()
+        sum += c.code
     }
     return sum.toInt()
 
@@ -77,8 +78,8 @@ fun String.encrypt(publicKey:String):HashMap<String,Any>{
     var encryptedData = Base64.encodeToString(encryptionManager.encrypt(this.toByteArray()), Base64.NO_WRAP)
     var encryptedSecretKey = EncryptionUtils().encryptText(secretKey.toByteArray(), publicKey)
     var personalInformation = HashMap<String,Any>()
-    personalInformation.put("data" , encryptedData)
-    personalInformation.put("iv", EncryptionUtils.CRYPTO_IVX_STRING)
-    personalInformation.put("key ",encryptedSecretKey!!)
+    personalInformation["data"] = encryptedData
+    personalInformation["iv"] = EncryptionUtils.CRYPTO_IVX_STRING
+    personalInformation["key "] = encryptedSecretKey!!
     return personalInformation
 }

@@ -13,13 +13,13 @@ import javax.crypto.spec.SecretKeySpec
 class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) {
 
     companion object {
-        val ALGORITHM_AES_CBC_PKCS5Padding = "AES/CBC/PKCS5Padding"
+        const val ALGORITHM_AES_CBC_PKCS5Padding = "AES/CBC/PKCS5Padding"
         private val CRYPTO_IVX = "Q0BG17E2819IWZYQ".toByteArray()
-        val CRYPTO_IVX_STRING = "Q0BG17E2819IWZYQ"
-        val TAG = "SimpleCrypto"
-        val MODE_128BIT = 128
-        val MODE_256BIT = 256
-        val MODE_DEFAULT = 1
+        const val CRYPTO_IVX_STRING = "Q0BG17E2819IWZYQ"
+        const val TAG = "SimpleCrypto"
+        const val MODE_128BIT = 128
+        const val MODE_256BIT = 256
+        const val MODE_DEFAULT = 1
     }
 
     private val BASE64_FLAGS = Base64.NO_WRAP

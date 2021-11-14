@@ -1,5 +1,6 @@
 package com.analytics.blotout
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.android.installreferrer.api.ReferrerDetails
@@ -17,10 +18,11 @@ import com.analytics.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.DateTimeUtils
 
-class DependencyInjectorImpl private constructor(private val context: Context,
-                                                 secureStorageService: SharedPreferenceSecureVault,
-                                                 hostConfiguration: HostConfiguration,
-                                                 eventDatabase: EventDatabase) : DependencyInjector {
+class DependencyInjectorImpl private constructor(
+    context: Context,
+    secureStorageService: SharedPreferenceSecureVault,
+    hostConfiguration: HostConfiguration,
+    eventDatabase: EventDatabase) : DependencyInjector {
 
 
     private val mSecureStorageService = secureStorageService

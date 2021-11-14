@@ -1,4 +1,4 @@
-package com.analytics.blotout
+package com.blotout
 
 import android.app.Application
 import android.content.Context
@@ -22,8 +22,9 @@ class BloutoutDeviceInfoTest {
     lateinit var context: Application
     lateinit var deviceInfo: DeviceInfo
     lateinit var windowManagerMock:WindowManager
-    lateinit var display: Display;
-    lateinit var resources:Resources;
+    lateinit var display: Display
+    lateinit var resources:Resources
+
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)

@@ -13,7 +13,7 @@ class ConfigurationDataManagerImpl(private val service: RemoteApiService) : Conf
     }
 
     override fun publishEvents(events: Events, handler: ApiDataProvider<Any?>) {
-        service.postEvents(events)?.enqueue(handler)
+        service.postEvents(events).enqueue(handler)
     }
 
 }
