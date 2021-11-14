@@ -48,7 +48,7 @@ dependencies {
 
     //Loading animations
     implementation 'com.wang.avi:library:1.0.5'
-    implementation 'com.nineoldandroids:library:2.4.0'
+    //implementation 'com.nineoldandroids:library:2.4.0'
     implementation project(':blotoutSDK')
     //implementation 'com.github.blotoutio:sdk-android:0.9.0'
 }

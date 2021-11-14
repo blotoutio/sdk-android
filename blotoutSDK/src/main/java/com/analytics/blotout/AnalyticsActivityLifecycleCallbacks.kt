@@ -1,5 +1,6 @@
 package com.analytics.blotout
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.ComponentCallbacks2
@@ -8,15 +9,17 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.DefaultLifecycleObserver
 import com.analytics.blotout.geasture.Gesture
 import com.analytics.blotout.geasture.GestureListener
 import com.analytics.blotout.repository.EventRepository
-import com.analytics.blotout.repository.impl.SharedPreferenceSecureVaultImpl
+import com.analytics.blotout.repository.data.SharedPreferenceSecureVault
 import com.analytics.blotout.util.Constant
 import kotlinx.coroutines.*
+import java.lang.Exception
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -24,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class AnalyticsActivityLifecycleCallbacks(
     private var eventRepository: EventRepository,
-    private var secureStorage: SharedPreferenceSecureVaultImpl
+    private var secureStorage: SharedPreferenceSecureVault
 ) :
     Application.ActivityLifecycleCallbacks,
     ComponentCallbacks2,
@@ -38,26 +41,39 @@ class AnalyticsActivityLifecycleCallbacks(
     private var gesture: Gesture? = null
     private var activityReference: WeakReference<Activity>? = null
 
+
+    companion object {
+        private const val TAG = "LifecycleCallbacks"
+    }
+
     init {
-        numberOfActivities = AtomicInteger(1)
-        firstLaunch = AtomicBoolean(false)
-        trackedApplicationLifecycleEvents = AtomicBoolean(false)
-        gesture = Gesture()
-        gesture!!.addListener(this)
+        try {
+            numberOfActivities = AtomicInteger(1)
+            firstLaunch = AtomicBoolean(false)
+            trackedApplicationLifecycleEvents = AtomicBoolean(false)
+            gesture = Gesture()
+            gesture?.addListener(this)
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        if (!trackedApplicationLifecycleEvents!!.getAndSet(true)) {
-            numberOfActivities!!.set(0)
-            firstLaunch!!.set(true)
-            trackApplicationLifecycleEvents(activity)
-            trackDeepLink(activity)
+        try {
+            if (!trackedApplicationLifecycleEvents!!.getAndSet(true)) {
+                numberOfActivities!!.set(0)
+                firstLaunch!!.set(true)
+                trackApplicationLifecycleEvents(activity)
+                trackDeepLink(activity)
+            }
+            activityReference = WeakReference(activity)
+            val view = activity.window.decorView.rootView
+            view.setOnTouchListener(this)
+            handleUncaughtException()
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
-        activityReference = WeakReference(activity)
-        val view = activity.window.decorView.rootView
-        view.setOnTouchListener(this)
-        handleUncaughtException()
     }
 
     private fun dispatchTouchEvent(event: MotionEvent?): Boolean {
@@ -70,42 +86,55 @@ class AnalyticsActivityLifecycleCallbacks(
         return try {
             packageManager.getPackageInfo(context.packageName, 0)
         } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(TAG,e.toString())
             null
         }
     }
 
     override fun onActivityStarted(activity: Activity) {
-        eventRepository.prepareSystemEvent(
-            activity,
-            Constant.BO_APPLICATION_OPENED,
-            null,
-            Constant.BO_EVENT_APPLICATION_OPENED
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activity,
+                Constant.BO_APPLICATION_OPENED,
+                null,
+                Constant.BO_EVENT_APPLICATION_OPENED
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onActivityResumed(activity: Activity) {
-        eventRepository.prepareSystemEvent(
-            activity,
-            Constant.BO_VISIBILITY_VISIBLE,
-            null,
-            Constant.BO_EVENT_VISIBILITY_VISIBLE
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activity,
+                Constant.BO_VISIBILITY_VISIBLE,
+                null,
+                Constant.BO_EVENT_VISIBILITY_VISIBLE
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
 
     }
 
     override fun onActivityPaused(activity: Activity) {
-        eventRepository.prepareSystemEvent(
-            activity,
-            Constant.BO_VISIBILITY_HIDDEN,
-            null,
-            Constant.BO_EVENT_VISIBILITY_HIDDEN
-        )
-        eventRepository.prepareSystemEvent(
-            activity,
-            Constant.BO_APPLICATION_BACKGROUNDED,
-            null,
-            Constant.BO_EVENT_APPLICATION_BACKGROUNDED
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activity,
+                Constant.BO_VISIBILITY_HIDDEN,
+                null,
+                Constant.BO_EVENT_VISIBILITY_HIDDEN
+            )
+            eventRepository.prepareSystemEvent(
+                activity,
+                Constant.BO_APPLICATION_BACKGROUNDED,
+                null,
+                Constant.BO_EVENT_APPLICATION_BACKGROUNDED
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onActivityStopped(activity: Activity) {
@@ -134,83 +163,104 @@ class AnalyticsActivityLifecycleCallbacks(
     }
 
     private fun trackDeepLink(activity: Activity) {
-        val intent = activity.intent
-        if (intent == null || intent.data == null) {
-            return
-        }
-        val properties = hashMapOf<String, Any>()
-        val uri = intent.data
-        for (parameter in uri!!.queryParameterNames) {
-            val value = uri.getQueryParameter(parameter)
-            if (value != null && !value.trim { it <= ' ' }.isEmpty()) {
-                properties[parameter] = value
+        try {
+            val intent = activity.intent
+            if (intent == null || intent.data == null) {
+                return
             }
+            val properties = hashMapOf<String, Any>()
+            val uri = intent.data
+            for (parameter in uri!!.queryParameterNames) {
+                val value = uri.getQueryParameter(parameter)
+                if (value != null && !value.trim { it <= ' ' }.isEmpty()) {
+                    properties[parameter] = value
+                }
+            }
+            properties["url"] = uri.toString()
+            eventRepository.prepareSystemEvent(
+                activity,
+                Constant.BO_DEEP_LINK_OPENED,
+                properties,
+                Constant.BO_EVENT_DEEP_LINK_OPENED
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
-        properties["url"] = uri.toString()
-        eventRepository.prepareSystemEvent(
-            activity,
-            Constant.BO_DEEP_LINK_OPENED,
-            properties,
-            Constant.BO_EVENT_DEEP_LINK_OPENED
-        )
     }
 
     private fun trackApplicationLifecycleEvents(activity: Activity) {
-        val packageInfo: PackageInfo? = getPackageInfo(activity)
-        val currentVersion = packageInfo?.versionName
+        try {
+            val packageInfo: PackageInfo? = getPackageInfo(activity)
+            val currentVersion = packageInfo?.versionName
 
-        val previousVersion = secureStorage.fetchString((Constant.BO_VERSION_KEY))
-        if (previousVersion.isEmpty()) {
-            eventRepository.prepareSystemEvent(
-                activity,
-                Constant.BO_APPLICATION_INSTALLED,
-                null,
-                Constant.BO_EVENT_APPLICATION_INSTALLED
-            )
+            val previousVersion = secureStorage.fetchString((Constant.BO_VERSION_KEY))
+            if (previousVersion.isEmpty()) {
+                eventRepository.prepareSystemEvent(
+                    activity,
+                    Constant.BO_APPLICATION_INSTALLED,
+                    null,
+                    Constant.BO_EVENT_APPLICATION_INSTALLED
+                )
 
-        } else if (previousVersion != currentVersion) {
-            eventRepository.prepareSystemEvent(
-                activity,
-                Constant.BO_APPLICATION_UPDATED,
-                null,
-                Constant.BO_EVENT_APPLICATION_UPDATED
-            )
+            } else if (previousVersion != currentVersion) {
+                eventRepository.prepareSystemEvent(
+                    activity,
+                    Constant.BO_APPLICATION_UPDATED,
+                    null,
+                    Constant.BO_EVENT_APPLICATION_UPDATED
+                )
+            }
+
+            secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion)
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
-
-        secureStorage.storeString(Constant.BO_VERSION_KEY, currentVersion)
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         dispatchTouchEvent(event)
         return true
     }
 
     override fun onPress(motionEvent: MotionEvent?) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_CLICK_NAME,
-            null,
-            Constant.BO_EVENT_CLICK
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_CLICK_NAME,
+                null,
+                Constant.BO_EVENT_CLICK
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onTap(motionEvent: MotionEvent?) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_TOUCH_NAME,
-            null,
-            Constant.BO_EVENT_TOUCH
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_TOUCH_NAME,
+                null,
+                Constant.BO_EVENT_TOUCH
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onDrag(motionEvent: MotionEvent?) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_SCROLL_NAME,
-            null,
-            Constant.BO_EVENT_SCROLL
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_SCROLL_NAME,
+                null,
+                Constant.BO_EVENT_SCROLL
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onMove(motionEvent: MotionEvent?) {
@@ -218,30 +268,42 @@ class AnalyticsActivityLifecycleCallbacks(
     }
 
     override fun onRelease(motionEvent: MotionEvent?) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_KEY_RELEASE_NAME,
-            null,
-            Constant.BO_EVENT_KEY_RELEASE
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_KEY_RELEASE_NAME,
+                null,
+                Constant.BO_EVENT_KEY_RELEASE
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onLongPress(motionEvent: MotionEvent?) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_LONG_TOUCH_NAME,
-            null,
-            Constant.BO_EVENT_LONG_TOUCH
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_LONG_TOUCH_NAME,
+                null,
+                Constant.BO_EVENT_LONG_TOUCH
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     override fun onMultiTap(motionEvent: MotionEvent?, clicks: Int) {
-        eventRepository.prepareSystemEvent(
-            activityReference!!.get(),
-            Constant.BO_EVENT_MULTI_CLICK_NAME,
-            null,
-            Constant.BO_EVENT_MULTI_CLICK
-        )
+        try {
+            eventRepository.prepareSystemEvent(
+                activityReference!!.get(),
+                Constant.BO_EVENT_MULTI_CLICK_NAME,
+                null,
+                Constant.BO_EVENT_MULTI_CLICK
+            )
+        } catch (e: Exception) {
+            Log.e(TAG,e.toString())
+        }
     }
 
     /**

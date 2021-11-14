@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.analytics.blotout.BlotoutAnalytics;
+import com.analytics.blotout.model.Result;
 import com.blotout.sampleapp.R;
 
 import java.util.HashMap;
@@ -55,7 +56,6 @@ public class SplashActivity extends FragmentActivity {
         HashMap<String,Object> eventInfo = new HashMap<>();
         eventInfo.put("Get Blotout Demo",0);
         BlotoutAnalytics.INSTANCE.capture("custom",eventInfo);
-
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_EMAIL, "sales@blotout.io");
         intent.putExtra(Intent.EXTRA_SUBJECT, "Get Demo");

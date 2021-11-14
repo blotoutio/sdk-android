@@ -1,8 +1,7 @@
 package com.analytics.blotout
 
-import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
+import android.util.Log
 import com.android.installreferrer.api.ReferrerDetails
 import com.analytics.blotout.data.database.EventDatabase
 import com.analytics.blotout.network.HostConfiguration
@@ -14,12 +13,11 @@ import com.analytics.blotout.repository.ManifestRepository
 import com.analytics.blotout.repository.data.ConfigurationDataManager
 import com.analytics.blotout.repository.data.SharedPreferenceSecureVault
 import com.analytics.blotout.repository.impl.DataManagerImpl
-import com.analytics.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.DateTimeUtils
 
 class DependencyInjectorImpl private constructor(
-    context: Context,
+    application: Application,
     secureStorageService: SharedPreferenceSecureVault,
     hostConfiguration: HostConfiguration,
     eventDatabase: EventDatabase) : DependencyInjector {
@@ -28,34 +26,27 @@ class DependencyInjectorImpl private constructor(
     private val mSecureStorageService = secureStorageService
     private val mHostConfiguration = hostConfiguration
     private val mEventDatabase = eventDatabase
-    private val mContext = context
+    private val mApplication = application
     var mReferrerDetails: ReferrerDetails? = null
 
 
 
     companion object {
+        private const val TAG ="DependencyInjectorImpl"
         private lateinit var instance: DependencyInjectorImpl
         private var sessionID :Long = 0
         private lateinit var eventRepository :EventRepository
 
+        @Synchronized
         fun init(
                 application: Application,
-                blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration
+                secureStorageService: SharedPreferenceSecureVault,
+                hostConfiguration: HostConfiguration
         ) :Boolean{
             try {
-                val secureVault = SharedPreferenceSecureVaultImpl(application.getSharedPreferences("vault", Context.MODE_PRIVATE), "crypto")
-                var hostConfiguration = HostConfiguration(baseUrl = blotoutAnalyticsConfiguration.endPointUrl, baseKey = blotoutAnalyticsConfiguration.blotoutSDKKey)
-                eventRepository = EventRepository(secureVault)
-                var activityLifeCycleCallback = AnalyticsActivityLifecycleCallbacks(eventRepository, secureVault)
-                application.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
-                instance = DependencyInjectorImpl(application, secureVault, hostConfiguration, EventDatabase.invoke(application))
-                sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
-                blotoutAnalyticsConfiguration.save()
-                eventRepository.prepareSystemEvent(null, Constant.BO_SDK_START, null, Constant.BO_EVENT_SDK_START)
-                eventRepository.publishEvent()
-                InstallRefferal().startClient(application)
-
+                instance = DependencyInjectorImpl(application, secureStorageService, hostConfiguration, EventDatabase.invoke(application))
             }catch (e:Exception){
+                Log.d(TAG,e.localizedMessage!!)
                 return false
             }
             return true
@@ -80,8 +71,7 @@ class DependencyInjectorImpl private constructor(
     private val mManifestRepository = ManifestRepository(dataManager.getConfigurationDataManager())
 
     override fun getRemoteAPIService(): RemoteApiService {
-        val mRemoteApiService = RemoteApiClient(getHostService()).getRemoteApiService()
-        return mRemoteApiService
+        return RemoteApiClient(getHostService()).getRemoteApiService()
     }
 
     override fun getHostService():HostConfiguration{
@@ -89,8 +79,8 @@ class DependencyInjectorImpl private constructor(
 
     }
 
-    override fun getContext(): Context {
-        return mContext
+    override fun getApplication():Application {
+        return mApplication
     }
 
     override fun getConfigurationManager(): ConfigurationDataManager {
@@ -103,5 +93,25 @@ class DependencyInjectorImpl private constructor(
 
     override fun getSecureStorageService(): SharedPreferenceSecureVault {
         return mSecureStorageService
+    }
+
+    fun initialize(){
+        try {
+            sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
+            eventRepository = EventRepository(mSecureStorageService)
+            val activityLifeCycleCallback =
+                AnalyticsActivityLifecycleCallbacks(eventRepository, mSecureStorageService)
+            mApplication.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
+            eventRepository.prepareSystemEvent(
+                null,
+                Constant.BO_SDK_START,
+                null,
+                Constant.BO_EVENT_SDK_START
+            )
+            eventRepository.publishEvent()
+            InstallRefferal().startClient(mApplication)
+        }catch (e:Throwable){
+            Log.d(TAG,e.localizedMessage!!)
+        }
     }
 }

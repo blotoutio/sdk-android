@@ -1,6 +1,7 @@
 package com.analytics.blotout
 
 import android.app.Application
+import com.analytics.blotout.model.CompletionHandler
 import org.junit.Assert
 
 import org.junit.Test
@@ -32,7 +33,16 @@ class ExampleInstrumentedTest {
         Mockito.`when`(context.applicationContext).thenReturn(context)
         blotoutAnalyticsConfiguration.blotoutSDKKey = "KHPREXFRED7HMGB"
         blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
-        BlotoutAnalytics.getInstance()?.init(context,blotoutAnalyticsConfiguration)
+        BlotoutAnalytics.init(
+            application = context,
+            blotoutAnalyticsConfiguration = blotoutAnalyticsConfiguration,object: CompletionHandler{
+                override fun onSuccess() {
+                }
+
+                override fun onError() {
+                }
+
+            })
     }
 
     @Test

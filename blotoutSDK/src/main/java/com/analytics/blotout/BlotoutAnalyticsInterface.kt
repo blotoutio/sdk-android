@@ -6,7 +6,7 @@ import com.analytics.blotout.model.MapIDData
 
 interface BlotoutAnalyticsInterface {
 
-    fun init(context: Application, blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration,completionHandler: CompletionHandler)
+    fun init(application: Application, blotoutAnalyticsConfiguration: BlotoutAnalyticsConfiguration,completionHandler: CompletionHandler)
 
     fun enable( enabled:Boolean)
 
