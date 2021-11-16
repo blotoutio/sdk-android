@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Debug
+import android.util.Log
 import com.analytics.blotout.util.CommonUtils
 import java.io.BufferedReader
 import java.io.File
@@ -18,7 +19,7 @@ import java.util.*
 
 class DeviceAndAppFraudController(private val context: Context) {
 
-    private val TAG = "BODeviceAndAppFraudController"
+    private val TAG = "FraudController"
 
 
 
@@ -60,6 +61,7 @@ class DeviceAndAppFraudController(private val context: Context) {
                 isAppCompromisedCalculated = true
                 isAppCompromisedValue
             } catch (e: Exception) {
+                Log.e(TAG,e.toString())
                 isAppCompromisedValue
             }
         } else {
@@ -72,6 +74,7 @@ class DeviceAndAppFraudController(private val context: Context) {
         try {
             return context.applicationContext.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -87,6 +90,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             val stop = Debug.threadCpuTimeNanos()
             return stop - start >= 10000000
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -96,6 +100,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             val buildTags = Build.TAGS
             return buildTags != null && buildTags.contains("test-keys")
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -104,6 +109,7 @@ class DeviceAndAppFraudController(private val context: Context) {
         try {
             return CommonUtils().isEmulator()
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -113,6 +119,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             val file = File("/system/app/Superuser.apk")
             file.exists()
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
             false
         }
     }
@@ -130,6 +137,7 @@ class DeviceAndAppFraudController(private val context: Context) {
                 }
             }
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
             return false
         }
         return false
@@ -139,6 +147,7 @@ class DeviceAndAppFraudController(private val context: Context) {
         try {
             return isPackageInstalled("eu.chainfire.supersu", context)
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -147,6 +156,7 @@ class DeviceAndAppFraudController(private val context: Context) {
         try {
             return findBinary("su") || executeCommand(arrayOf("/system/xbin/which", "su")) || executeCommand(arrayOf("which", "su"))
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -159,6 +169,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             pm.getPackageInfo(packagename!!, PackageManager.GET_ACTIVITIES)
             true
         } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(TAG,e.toString())
             false
         }
     }
@@ -215,6 +226,7 @@ class DeviceAndAppFraudController(private val context: Context) {
                 }
             }
         } catch (e: SocketException) {
+            Log.e(TAG,e.toString())
         }
         return false
     }
@@ -228,6 +240,7 @@ class DeviceAndAppFraudController(private val context: Context) {
             val `is` = conn.inputStream
             conn.usingProxy()
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
             false
         }
     }

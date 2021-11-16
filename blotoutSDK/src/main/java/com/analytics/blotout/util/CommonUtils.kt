@@ -57,6 +57,7 @@ class CommonUtils {
                 }
             }
         } catch (e: NoSuchAlgorithmException) {
+            Log.e(TAG, e.toString())
         }
         return sum
     }

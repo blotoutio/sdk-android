@@ -2,6 +2,7 @@ package com.analytics.blotout.util
 
 import android.util.Base64
 import android.util.Log
+import com.analytics.blotout.data.database.EventDatabaseService
 import java.security.KeyFactory
 import java.security.MessageDigest
 import java.security.spec.X509EncodedKeySpec
@@ -42,6 +43,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
         return try {
              toHex(encrypt(v.toByteArray()))
         } catch (e: Exception) {
+            Log.e(TAG,e.toString())
              v
         }
     }

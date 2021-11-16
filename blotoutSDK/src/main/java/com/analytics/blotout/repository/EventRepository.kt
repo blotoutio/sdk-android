@@ -3,6 +3,7 @@ package com.analytics.blotout.repository
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import com.analytics.blotout.DependencyInjectorImpl
 import com.analytics.blotout.data.database.EventDatabaseService
 import com.analytics.blotout.data.database.entity.EventEntity
@@ -15,85 +16,111 @@ import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.lang.reflect.Field
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
 
-    private suspend fun prepareMetaData() = suspendCoroutine<Result<Meta>> {    continuation->
-         try {
-                val meta = Meta()
-                val context = DependencyInjectorImpl.getInstance().getContext()
-                val deviceAndAppFraudController = DeviceAndAppFraudController(context)
-                meta.sdkv = "".getVersion()
-                meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
-                meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
-                meta.plf = Constant.BO_Android_All
-                meta.osv = Build.VERSION.RELEASE
-                meta.appv = context.getVersion()
-                meta.dmft = Build.MANUFACTURER
-                meta.dm = Build.MODEL
-                val fields: Array<Field> = Build.VERSION_CODES::class.java.fields
-                val osName: String = fields[Build.VERSION.SDK_INT].name
-                meta.osn = osName
-                meta.referrer =
-                    DependencyInjectorImpl.getInstance().mReferrerDetails?.installReferrer
-                meta.jbrkn = DeviceInfo(context).isDeviceRooted
-                meta.vpn = deviceAndAppFraudController.isVPN()
-                meta.dcomp = deviceAndAppFraudController.isDeviceCompromised()
-                meta.acomp = deviceAndAppFraudController.isAppCompromised()
-                continuation.resume(Result.Success(meta))
-            } catch (e: Exception) {
-                 continuation.resume(Result.Error(e))
-            }
-        }
+    companion object {
+        private const val TAG = "EventRepository"
+    }
 
-    suspend fun preparePersonalEvent(eventName: String, eventInfo: HashMap<String, Any>, isPHI: Boolean):Result<String>{
+    private suspend fun prepareMetaData() = suspendCoroutine<Result<Meta>> { continuation ->
+        try {
+            val meta = Meta()
+            val context = DependencyInjectorImpl.getInstance().getApplication()
+            val deviceAndAppFraudController = DeviceAndAppFraudController(context)
+            meta.sdkv = "".getVersion()
+            meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
+            meta.userIdCreated = CommonUtils().getUserBirthTimeStamp()
+            meta.plf = Constant.BO_Android_All
+            meta.osv = Build.VERSION.RELEASE
+            meta.appv = context.getVersion()
+            meta.dmft = Build.MANUFACTURER
+            meta.dm = Build.MODEL
+            val fields: Array<Field> = Build.VERSION_CODES::class.java.fields
+            val osName: String = fields[Build.VERSION.SDK_INT].name
+            meta.osn = osName
+            meta.referrer =
+                DependencyInjectorImpl.getInstance().mReferrerDetails?.installReferrer
+            meta.jbrkn = DeviceInfo(context).isDeviceRooted
+            meta.vpn = deviceAndAppFraudController.isVPN()
+            meta.dcomp = deviceAndAppFraudController.isDeviceCompromised()
+            meta.acomp = deviceAndAppFraudController.isAppCompromised()
+            continuation.resume(Result.Success(meta))
+        } catch (e: Exception) {
+            continuation.resume(Result.Error(e))
+            Log.e(TAG, e.localizedMessage!!)
+        }
+    }
+
+    suspend fun preparePersonalEvent(
+        eventName: String,
+        eventInfo: HashMap<String, Any>,
+        isPHI: Boolean
+    ): Result<String> {
         try {
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName, 0)
                 when (isPHI) {
                     true -> {
                         event.type = Constant.BO_PHI
-                        event.additionalData = DependencyInjectorImpl.getInstance().getManifestRepository().sdkPHIPublicKey?.let { Gson().toJson(eventInfo).encrypt(it) }
+                        event.additionalData = DependencyInjectorImpl.getInstance()
+                            .getManifestRepository().sdkPHIPublicKey?.let {
+                            Gson().toJson(eventInfo).encrypt(it)
+                        }
                     }
                     else -> {
                         event.type = Constant.BO_PII
-                        event.additionalData = DependencyInjectorImpl.getInstance().getManifestRepository().sdkPIIPublicKey?.let { Gson().toJson(eventInfo).encrypt(it) }
+                        event.additionalData = DependencyInjectorImpl.getInstance()
+                            .getManifestRepository().sdkPIIPublicKey?.let {
+                            Gson().toJson(eventInfo).encrypt(it)
+                        }
                     }
                 }
                 return pushEvents(event)
-            }else{
+            } else {
                 return Result.Error(Throwable("SDK is not enabled"))
             }
         } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage!!)
             return Result.Error(e)
         }
     }
 
 
-    suspend fun prepareCodifiedEvent(eventName: String, eventInfo: HashMap<String, Any>, withEventCode: Int):Result<String>{
+    suspend fun prepareCodifiedEvent(
+        eventName: String,
+        eventInfo: HashMap<String, Any>,
+        withEventCode: Int
+    ): Result<String> {
         return try {
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName, withEventCode)
                 event.type = Constant.BO_CODIFIED
                 event.additionalData = eventInfo
                 pushEvents(event)
-            }else{
+            } else {
                 Result.Error(Throwable("SDK is not enabled"))
             }
         } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage!!)
             Result.Error(e)
         }
     }
 
-    fun prepareSystemEvent(activity: Activity?, eventName: String, eventInfo: HashMap<String, Any>?, withEventCode: Int) {
+    fun prepareSystemEvent(
+        activity: Activity?,
+        eventName: String,
+        eventInfo: HashMap<String, Any>?,
+        withEventCode: Int
+    ) {
         try {
-            var manifestRepository = DependencyInjectorImpl.getInstance().getManifestRepository()
+            val manifestRepository = DependencyInjectorImpl.getInstance().getManifestRepository()
             //is all system events allowed
-            var isAllSystemEventsAllowed = manifestRepository.sdkPushSystemEvents
-            when (isAllSystemEventsAllowed) {
+            when (manifestRepository.sdkPushSystemEvents) {
                 false -> {
                     //now check what system events allowed
                     when (withEventCode) {
@@ -103,7 +130,8 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
 
                         }
                         else -> {
-                            var filterEventCode = manifestRepository.sdkSystemEevntsAllowed?.filter { it.key == withEventCode }
+                            val filterEventCode =
+                                manifestRepository.sdkSystemEevntsAllowed?.filter { it.key == withEventCode }
                             if (filterEventCode.isNullOrEmpty())
                                 return
                         }
@@ -118,29 +146,34 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
                 event.type = Constant.BO_SYSTEM
                 event.additionalData = eventInfo
                 CoroutineScope(Dispatchers.Default).launch {
-                    when(pushEvents(event)){
-                        is Result.Success -> {}
-                        is Result.Error->{}
+                    when (pushEvents(event)) {
+                        is Result.Success -> {
+                        }
+                        is Result.Error -> {
+                        }
                     }
                 }
             }
         } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage!!)
         }
     }
 
     private suspend fun pushEvents(event: Event): Result<String> {
         return try {
             val events = Events()
-            when(val metaPreparationResult = prepareMetaData()){
+            when (val metaPreparationResult = prepareMetaData()) {
                 is Result.Success -> events.meta = metaPreparationResult.data
+                else -> Result.Error(IOException())
             }
-            var eventList = mutableListOf<Event>()
+            val eventList = mutableListOf<Event>()
             eventList.add(event)
             events.events = eventList
-            var eventEntity = EventEntity(Gson().toJson(events))
+            val eventEntity = EventEntity(Gson().toJson(events))
             EventDatabaseService().insertEvent(eventEntity)
             Result.Success("")
-        }catch (e:Exception){
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage!!)
             Result.Error(e)
         }
     }
@@ -148,7 +181,8 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
     fun Activity.getScreenName(): String {
         val packageManager = this.packageManager
         return packageManager.getActivityInfo(
-                this.componentName, PackageManager.GET_META_DATA).loadLabel(packageManager).toString()
+            this.componentName, PackageManager.GET_META_DATA
+        ).loadLabel(packageManager).toString()
     }
 
     fun publishEvent() {
@@ -158,7 +192,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
     private fun prepareEvents(eventName: String, withEventCode: Int): Event {
         val event = Event()
         try {
-            val context = DependencyInjectorImpl.getInstance().getContext()
+            val context = DependencyInjectorImpl.getInstance().getApplication()
             event.mid = eventName.getMessageIDForEvent()
             event.userid = CommonUtils().getUserID()
             event.evn = eventName
@@ -166,7 +200,9 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             event.evt = DateTimeUtils().get13DigitNumberObjTimeStamp()
             event.evcs = if (withEventCode != 0) withEventCode else eventName.codeForDevEvent()
             event.sessionId = DependencyInjectorImpl.getSessionId().toString()
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+            Log.e(TAG, e.localizedMessage!!)
+        }
         return event
     }
 
