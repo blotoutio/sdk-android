@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.FragmentActivity;
 
 import com.analytics.blotout.BlotoutAnalytics;
+import com.analytics.blotout.model.MapIDData;
 import com.analytics.blotout.model.Result;
 import com.blotout.sampleapp.R;
 
@@ -67,6 +68,11 @@ public class SplashActivity extends FragmentActivity {
         HashMap<String,Object> eventInfo = new HashMap<>();
         eventInfo.put("Join Blotout Slack",0);
         BlotoutAnalytics.INSTANCE.capture("custom",eventInfo);
+
+        MapIDData mapData = new MapIDData();
+        mapData.setExternalID("1234");
+        mapData.setProvider("Google");
+        BlotoutAnalytics.INSTANCE.mapID(mapData, null);
     }
 
 }

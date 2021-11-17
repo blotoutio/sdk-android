@@ -62,6 +62,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
         }
     }
 
+    @Synchronized
     override fun enable(enabled: Boolean) {
         try {
             DependencyInjectorImpl.getInstance().getSecureStorageService()
@@ -71,22 +72,29 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
         }
     }
 
+    @Synchronized
     override fun capture(eventName: String, eventInfo: HashMap<String, Any>){
         CoroutineScope(Dispatchers.Default).launch {
             try {
+
                 val eventsRepository =
-                    EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-                var result = eventsRepository.prepareCodifiedEvent(
-                    eventName = eventName,
-                    eventInfo = eventInfo,
-                    withEventCode = 0
-                )
+                    EventRepository(
+                        DependencyInjectorImpl.getInstance().getSecureStorageService()
+                    )
+                var result = eventInfo.let {
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = eventName,
+                        eventInfo = eventInfo,
+                        withEventCode = 0
+                    )
+                }
             } catch (e: Exception) {
-                Log.e(TAG,e.localizedMessage)
+                Log.e(TAG, e.toString())
             }
         }
     }
 
+    @Synchronized
     override fun capturePersonal(
         eventName: String,
         eventInfo: HashMap<String, Any>,
@@ -95,26 +103,32 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val eventsRepository =
-                    EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+                    EventRepository(
+                        DependencyInjectorImpl.getInstance().getSecureStorageService()
+                    )
                 var result = eventsRepository.preparePersonalEvent(eventName, eventInfo, isPHI)
             } catch (e: Exception) {
-                Log.e(TAG,e.toString())
+                Log.e(TAG, e.toString())
             }
         }
     }
 
+    @Synchronized
     override fun mapID(mapIDData: MapIDData, withInformation: HashMap<String, Any>?) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
-                withInformation?.put(Constant.BO_EVENT_MAP_ID, mapIDData.externalID)
-                withInformation?.put(Constant.BO_EVENT_MAP_Provider, mapIDData.provider)
+                val _withInformation = withInformation ?: hashMapOf()
+                _withInformation[Constant.BO_EVENT_MAP_ID] = mapIDData.externalID
+                _withInformation[Constant.BO_EVENT_MAP_Provider] = mapIDData.provider
                 val eventsRepository =
                     EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
-                var result = eventsRepository.prepareCodifiedEvent(
-                    eventName = Constant.BO_EVENT_MAP_ID,
-                    eventInfo = withInformation!!,
-                    withEventCode = Constant.BO_DEV_EVENT_MAP_ID
-                )
+                var result =
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_MAP_ID,
+                        eventInfo = _withInformation,
+                        withEventCode = Constant.BO_DEV_EVENT_MAP_ID
+                    )
+
             } catch (e: Exception) {
                 Log.e(TAG,e.toString())
             }
