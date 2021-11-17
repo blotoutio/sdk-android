@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'maven-publish'
 }
 
@@ -41,14 +40,8 @@ android {
 allprojects{
     repositories{
         maven {url 'https://jitpack.io'}
-        jcenter()
     }
 }
-
-configurations {
-    ktlint
-}
-
 afterEvaluate {
     publishing {
         publications {
@@ -78,7 +71,7 @@ dependencies {
 
     implementation 'com.android.installreferrer:installreferrer:2.1'
 
-    kapt deps.androidx_room_compiler
+    annotationProcessor deps.androidx_room_compiler
     implementation deps.androidx_room_runtime
     implementation deps.androidx_room_ktx
 
@@ -98,24 +91,5 @@ dependencies {
     testImplementation deps.mockito_android
     testImplementation deps.junit
     testImplementation deps.coroutine_test
-
-    ktlint "com.pinterest:ktlint:0.42.1"
 }
 
-task ktlint(type: JavaExec, group: "verification") {
-    description = "Check Kotlin code style."
-    main = "com.pinterest.ktlint.Main"
-    classpath = configurations.ktlint
-    args "src/**/*.kt"
-    // to generate report in checkstyle format prepend following args:
-    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
-    // see https://github.com/pinterest/ktlint#usage for more
-}
-check.dependsOn ktlint
-
-task ktlintFormat(type: JavaExec, group: "formatting") {
-    description = "Fix Kotlin code style deviations."
-    main = "com.pinterest.ktlint.Main"
-    classpath = configurations.ktlint
-    args "-F", "src/**/*.kt"
-}
