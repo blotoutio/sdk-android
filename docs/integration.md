@@ -32,7 +32,17 @@ import com.blotout.analytics.BlotoutAnalytics;
 BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
 blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
 blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
-BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration);
+BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration,new CompletionHandler() {
+    @Override
+    public void onSuccess() {
+
+    }
+
+    @Override
+    public void onError() {
+
+    }
+});
 
 ```
 
@@ -42,6 +52,16 @@ var blotoutAnalyticsConfiguration = BlotoutAnalyticsConfiguration()
 blotoutAnalyticsConfiguration.blotoutSDKKey = "EADAH5FV8B5MMVZ"
 blotoutAnalyticsConfiguration.endPointUrl = "https://stage.blotout.io/sdk/"
 
-BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration)
+BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration,object : CompletionHandler() {
+    @Override
+    fun onSuccess() {
+
+    }
+
+    @Override
+    fun onError() {
+
+    }
+});
 
 ```
