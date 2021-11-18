@@ -10,6 +10,7 @@ The `init` method is used for initializing SDK. This sets all required configura
 |---|---|---|---|
 | `applicationContext` | `Object` | Application Context |
 | `blotoutAnalyticsConfiguration` | `BlotoutAnalyticsConfiguration` | This Model contains information related to SDK initialization |
+| `comletionHandler` | `CompletionHandler`| Return callback for sdk success and failure|
 
 ## BlotoutAnalyticsConfiguration
 
@@ -24,8 +25,19 @@ The `init` method is used for initializing SDK. This sets all required configura
 BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
 blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
 blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
+CompletionHandler comletionHandler = new CompletionHandler{
+    @Override
+    fun onSuccess() {
 
-BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration);
+    }
+
+    @Override
+    fun onError() {
+
+    }
+}
+
+BlotoutAnalytics.INSTANCE.init(this,blotoutAnalyticsConfiguration,comletionHandler);
 ```
 
 ## capture
