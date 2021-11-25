@@ -63,20 +63,13 @@ object Constant {
     const val BO_SYSTEM = "system"
     const val BO_CODIFIED = "codified"
 
-
-    const val BO_DEV_EVENT_MAP_ID = 21001
-    const val BO_DEV_EVENT_CUSTOM_KEY= 21100
-
     //transaction events
-    const val BO_EVENT_TRANSACTION = 21002
     const val BO_EVENT_TRANSACTION_NAME = "transaction"
 
     //item events
-    const val BO_EVENT_TRANSACTION_ITEM = 21003
     const val BO_EVENT_TRANSACTION_ITEM_NAME = "item"
 
-    //transaction events
-    const val BO_EVENT_PERSONA = 21004
+    //Persona events
     const val BO_EVENT_PERSONA_NAME = "persona"
 
     const val BO_SDK_REST_API_MANIFEST_PULL_PATH = "v1/manifest/pull"

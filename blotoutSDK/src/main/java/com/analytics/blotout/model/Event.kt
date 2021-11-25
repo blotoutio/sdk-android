@@ -21,9 +21,6 @@ data class Event(
         @Expose
         var evn: String? = null,
 
-        @SerializedName("evcs")
-        @Expose
-        var evcs: Int? = null,
 
         @SerializedName("type")
         @Expose
