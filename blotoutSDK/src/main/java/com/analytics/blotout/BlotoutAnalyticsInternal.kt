@@ -176,9 +176,9 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                     EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
                 var result =
                     eventsRepository.prepareCodifiedEvent(
-                        eventName = Constant.BO_EVENT_TRANSACTION_NAME,
+                        eventName = Constant.BO_EVENT_TRANSACTION_ITEM_NAME,
                         eventInfo = _withInformation,
-                        withEventCode = Constant.BO_EVENT_TRANSACTION
+                        withEventCode = Constant.BO_EVENT_TRANSACTION_ITEM
                     )
 
             } catch (e: Exception) {
@@ -197,9 +197,9 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                     EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
                 var result =
                     eventsRepository.prepareCodifiedEvent(
-                        eventName = Constant.BO_EVENT_TRANSACTION_NAME,
+                        eventName = Constant.BO_EVENT_PERSONA_NAME,
                         eventInfo = _withInformation,
-                        withEventCode = Constant.BO_EVENT_TRANSACTION
+                        withEventCode = Constant.BO_EVENT_PERSONA
                     )
 
             } catch (e: Exception) {
