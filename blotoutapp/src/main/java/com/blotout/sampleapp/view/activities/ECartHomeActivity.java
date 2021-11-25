@@ -1,7 +1,6 @@
 package com.blotout.sampleapp.view.activities;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.analytics.blotout.BlotoutAnalytics;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.analytics.blotout.model.Persona;
+import com.analytics.blotout.model.TransactionData;
 import com.blotout.sampleapp.R;
 import com.blotout.sampleapp.domain.helper.Connectivity;
 import com.blotout.sampleapp.domain.mining.AprioriFrequentItemsetGenerator;
@@ -32,6 +31,8 @@ import com.blotout.sampleapp.util.TinyDB;
 import com.blotout.sampleapp.util.Utils;
 import com.blotout.sampleapp.util.Utils.AnimationType;
 import com.blotout.sampleapp.view.fragment.HomeFragment;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.math.BigDecimal;
@@ -52,10 +53,7 @@ public class ECartHomeActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
 
     private TextView checkOutAmount, itemCountTextView;
-    private TextView offerBanner;
     private AVLoadingIndicatorView progressBar;
-
-    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class ECartHomeActivity extends AppCompatActivity {
 
         //	makeFakeVolleyJsonArrayRequest();
 
-        offerBanner = ((TextView) findViewById(R.id.new_offers_banner));
+        TextView offerBanner = ((TextView) findViewById(R.id.new_offers_banner));
 
         itemCountTextView = (TextView) findViewById(R.id.item_count);
         itemCountTextView.setSelected(true);
@@ -83,22 +81,18 @@ public class ECartHomeActivity extends AppCompatActivity {
         offerBanner.setSelected(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.nav_drawer);
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
 
         progressBar = (AVLoadingIndicatorView) findViewById(R.id.loading_bar);
 
-        checkOutAmount.setOnClickListener(new OnClickListener() {
+        checkOutAmount.setOnClickListener(v -> {
 
-            @Override
-            public void onClick(View v) {
+            Utils.vibrate(getApplicationContext());
 
-                Utils.vibrate(getApplicationContext());
+            Utils.switchContent(R.id.frag_container,
+                    Utils.SHOPPING_LIST_TAG, ECartHomeActivity.this,
+                    AnimationType.SLIDE_UP);
 
-                Utils.switchContent(R.id.frag_container,
-                        Utils.SHOPPING_LIST_TAG, ECartHomeActivity.this,
-                        AnimationType.SLIDE_UP);
-
-            }
         });
 
 
@@ -107,36 +101,28 @@ public class ECartHomeActivity extends AppCompatActivity {
                     .getListOfProductsInShoppingList()) {
 
                 updateCheckOutAmount(
-                        BigDecimal.valueOf(Long.valueOf(product.getSellMRP())),
+                        BigDecimal.valueOf(Long.parseLong(product.getSellMRP())),
                         true);
             }
         }
 
         findViewById(R.id.item_counter).setOnClickListener(
-                new OnClickListener() {
+                v -> {
 
-                    @Override
-                    public void onClick(View v) {
+                    Utils.vibrate(getApplicationContext());
+                    Utils.switchContent(R.id.frag_container,
+                            Utils.SHOPPING_LIST_TAG,
+                            ECartHomeActivity.this, AnimationType.SLIDE_UP);
 
-                        Utils.vibrate(getApplicationContext());
-                        Utils.switchContent(R.id.frag_container,
-                                Utils.SHOPPING_LIST_TAG,
-                                ECartHomeActivity.this, AnimationType.SLIDE_UP);
-
-                    }
                 });
 
         findViewById(R.id.checkout).setOnClickListener(
-                new OnClickListener() {
+                v -> {
 
-                    @Override
-                    public void onClick(View v) {
+                    Utils.vibrate(getApplicationContext());
 
-                        Utils.vibrate(getApplicationContext());
+                    showPurchaseDialog();
 
-                        showPurchaseDialog();
-
-                    }
                 });
 
         Utils.switchFragmentWithAnimation(R.id.frag_container,
@@ -146,45 +132,48 @@ public class ECartHomeActivity extends AppCompatActivity {
         toggleBannerVisibility();
 
         mNavigationView
-                .setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                .setNavigationItemSelectedListener(menuItem -> {
 
-                        menuItem.setChecked(true);
-                        switch (menuItem.getItemId()) {
-                            case R.id.home:
+                    menuItem.setChecked(true);
+                    switch (menuItem.getItemId()) {
+                        case R.id.home:
 
-                                mDrawerLayout.closeDrawers();
+                            mDrawerLayout.closeDrawers();
 
-                                Utils.switchContent(R.id.frag_container,
-                                        Utils.HOME_FRAGMENT,
-                                        ECartHomeActivity.this,
-                                        AnimationType.SLIDE_LEFT);
+                            Utils.switchContent(R.id.frag_container,
+                                    Utils.HOME_FRAGMENT,
+                                    ECartHomeActivity.this,
+                                    AnimationType.SLIDE_LEFT);
 
-                                return true;
+                            return true;
 
-                            case R.id.my_cart:
+                        case R.id.my_cart:
 
-                                mDrawerLayout.closeDrawers();
+                            mDrawerLayout.closeDrawers();
 
-                                Utils.switchContent(R.id.frag_container,
-                                        Utils.SHOPPING_LIST_TAG,
-                                        ECartHomeActivity.this,
-                                        AnimationType.SLIDE_LEFT);
-                                return true;
+                            Utils.switchContent(R.id.frag_container,
+                                    Utils.SHOPPING_LIST_TAG,
+                                    ECartHomeActivity.this,
+                                    AnimationType.SLIDE_LEFT);
+                            return true;
 
-                            case R.id.apriori_result:
+                        case R.id.apriori_result:
 
-                                mDrawerLayout.closeDrawers();
+                            mDrawerLayout.closeDrawers();
 
-                                startActivity(new Intent(ECartHomeActivity.this, APrioriResultActivity.class));
+                            startActivity(new Intent(ECartHomeActivity.this, APrioriResultActivity.class));
 
-                                return true;
-                            default:
-                                return true;
-                        }
+                            return true;
+                        default:
+                            return true;
                     }
                 });
+
+
+        Persona persona = new Persona("123", "mike","John",
+                null,"",null,"test@gmail.com",
+                null,"97562311345","","",Integer.getInteger("452010"),"","",30);
+        BlotoutAnalytics.INSTANCE.persona(persona,null);
 
     }
 
@@ -201,9 +190,8 @@ public class ECartHomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                return true;
+        if (item.getItemId() == R.id.action_settings) {
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -320,70 +308,62 @@ public class ECartHomeActivity extends AppCompatActivity {
 
         exitScreenDialog.setPositiveButton(
                 "Place Order",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        //finish();
-                        dialog.cancel();
+                (dialog, id) -> {
+                    //finish();
+                    dialog.cancel();
 
-                        ArrayList<String> productId = new ArrayList<String>();
+                    ArrayList<String> productId = new ArrayList<String>();
 
-                        for (Product productFromShoppingList : CenterRepository.getCenterRepository().getListOfProductsInShoppingList()) {
+                    for (Product productFromShoppingList : CenterRepository.getCenterRepository().getListOfProductsInShoppingList()) {
 
-                            //add product ids to array
-                            productId.add(productFromShoppingList.getProductId());
-                        }
+                        //add product ids to array
+                        productId.add(productFromShoppingList.getProductId());
 
-                        //pass product id array to Apriori ALGO
-                        CenterRepository.getCenterRepository()
-                                .addToItemSetList(new HashSet<>(productId));
 
-                        //Do Minning
-                        FrequentItemsetData<String> data = generator.generate(
-                                CenterRepository.getCenterRepository().getItemSetList()
-                                , MINIMUM_SUPPORT);
-
-                        for (Set<String> itemset : data.getFrequentItemsetList()) {
-                            Log.e("APriori", "Item Set : " +
-                                    itemset + "Support : " +
-                                    data.getSupport(itemset));
-                        }
-
-                        //clear all list item
-                        CenterRepository.getCenterRepository().getListOfProductsInShoppingList().clear();
-
-                        toggleBannerVisibility();
-
-                        itemCount = 0;
-                        itemCountTextView.setText(String.valueOf(0));
-                        checkoutAmount = new BigDecimal(BigInteger.ZERO);
-                        checkOutAmount.setText(Money.rupees(checkoutAmount).toString());
-
+                        TransactionData transactionData = new TransactionData(productFromShoppingList.getProductId(),
+                                null,productFromShoppingList.getMRP(),null,
+                                Integer.getInteger(productFromShoppingList.getDiscount()),null,null);
+                        BlotoutAnalytics.INSTANCE.transaction(transactionData,null);
                     }
+
+                    //pass product id array to Apriori ALGO
+                    CenterRepository.getCenterRepository()
+                            .addToItemSetList(new HashSet<>(productId));
+
+                    //Do Minning
+                    FrequentItemsetData<String> data = generator.generate(
+                            CenterRepository.getCenterRepository().getItemSetList()
+                            , MINIMUM_SUPPORT);
+
+                    for (Set<String> itemset : data.getFrequentItemsetList()) {
+                        Log.e("APriori", "Item Set : " +
+                                itemset + "Support : " +
+                                data.getSupport(itemset));
+                    }
+
+                    //clear all list item
+                    CenterRepository.getCenterRepository().getListOfProductsInShoppingList().clear();
+
+                    toggleBannerVisibility();
+
+                    itemCount = 0;
+                    itemCountTextView.setText(String.valueOf(0));
+                    checkoutAmount = new BigDecimal(BigInteger.ZERO);
+                    checkOutAmount.setText(Money.rupees(checkoutAmount).toString());
+
                 });
 
         exitScreenDialog.setNegativeButton(
                 "Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
+                (dialog, id) -> dialog.cancel());
 
-        exitScreenDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                HashMap<String,Object> eventInfo = new HashMap<>();
-                eventInfo.put("Order status","Order Placed Successfully");
-                BlotoutAnalytics.INSTANCE.capture("Order status",eventInfo);
-                Snackbar.make(ECartHomeActivity.this.getWindow().getDecorView().findViewById(android.R.id.content)
-                        , "Order Placed Successfully, Happy Shopping !!", Snackbar.LENGTH_LONG)
-                        .setAction("View Apriori Output", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(ECartHomeActivity.this, APrioriResultActivity.class));
-                            }
-                        }).show();
-            }
+        exitScreenDialog.setOnDismissListener(dialog -> {
+            HashMap<String,Object> eventInfo = new HashMap<>();
+            eventInfo.put("Order status","Order Placed Successfully");
+            BlotoutAnalytics.INSTANCE.capture("Order status",eventInfo);
+            Snackbar.make(ECartHomeActivity.this.getWindow().getDecorView().findViewById(android.R.id.content)
+                    , "Order Placed Successfully, Happy Shopping !!", Snackbar.LENGTH_LONG)
+                    .setAction("View Apriori Output", view -> startActivity(new Intent(ECartHomeActivity.this, APrioriResultActivity.class))).show();
         });
 
         AlertDialog alert11 = exitScreenDialog.create();

@@ -20,6 +20,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.analytics.blotout.BlotoutAnalytics;
+import com.analytics.blotout.model.Item;
 import com.blotout.sampleapp.R;
 import com.blotout.sampleapp.model.CenterRepository;
 import com.blotout.sampleapp.model.entities.Money;
@@ -39,6 +40,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 // TODO: Auto-generated Javadoc
@@ -164,6 +166,12 @@ public class ProductDetailsFragment extends Fragment {
                                                     .getListOfProductsInShoppingList()
                                                     .get(productListNumber)
                                                     .getSellMRP())), true);
+                            Product product = CenterRepository.getCenterRepository().getListOfProductsInShoppingList().get(0);
+                            ArrayList<String> category = new ArrayList<>();
+                            category.add("Mobile");
+                            Item itemData = new Item(product.getProductId(), product.getItemName(),
+                                    null,category,Integer.getInteger(product.getMRP()),null,Integer.getInteger(product.getQuantity()));
+                            BlotoutAnalytics.INSTANCE.item(itemData,null);
 
                         } else {
 

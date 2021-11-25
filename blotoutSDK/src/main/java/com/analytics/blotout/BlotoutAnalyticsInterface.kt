@@ -1,8 +1,7 @@
 package com.analytics.blotout
 
 import android.app.Application
-import com.analytics.blotout.model.CompletionHandler
-import com.analytics.blotout.model.MapIDData
+import com.analytics.blotout.model.*
 
 interface BlotoutAnalyticsInterface {
 
@@ -17,4 +16,10 @@ interface BlotoutAnalyticsInterface {
     fun mapID(mapIDData: MapIDData, withInformation:HashMap<String,Any>?)
 
     fun getUserId():String
+
+    fun transaction(transactionData: TransactionData, withInformation:HashMap<String,Any>?)
+
+    fun item(itemData: Item, withInformation:HashMap<String,Any>?)
+
+    fun persona(personaData: Persona, withInformation:HashMap<String,Any>?)
 }

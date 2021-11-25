@@ -68,7 +68,9 @@ class DependencyInjectorImpl private constructor(
     private val dataManager : DataManagerImpl by lazy{
         DataManagerImpl(this)
     }
-    private val mManifestRepository = ManifestRepository(dataManager.getConfigurationDataManager())
+    private val mManifestRepository : ManifestRepository by lazy{
+        ManifestRepository(dataManager.getConfigurationDataManager())
+    }
 
     override fun getRemoteAPIService(): RemoteApiService {
         return RemoteApiClient(getHostService()).getRemoteApiService()
