@@ -14,7 +14,7 @@ public class MySampleApplication extends Application {
     public void onCreate() {
         super.onCreate();
         BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
-        blotoutAnalyticsConfiguration.setBlotoutSDKKey("X5THPQXV3K5D9GA");
+        blotoutAnalyticsConfiguration.setBlotoutSDKKey("4JN7CGWHSRPSUSD");
         blotoutAnalyticsConfiguration.setEndPointUrl("https://sandbox.blotout.io/sdk/");
         BlotoutAnalytics.INSTANCE.init(this, blotoutAnalyticsConfiguration, new CompletionHandler() {
             @Override

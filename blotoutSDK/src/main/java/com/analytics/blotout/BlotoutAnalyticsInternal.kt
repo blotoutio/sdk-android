@@ -3,17 +3,17 @@ package com.analytics.blotout
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.analytics.blotout.model.CompletionHandler
-import com.analytics.blotout.model.MapIDData
-import com.analytics.blotout.model.Result
+import com.analytics.blotout.model.*
 import com.analytics.blotout.network.HostConfiguration
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.repository.impl.SharedPreferenceSecureVaultImpl
 import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.Errors
+import com.analytics.blotout.util.serializeToMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.Exception
 
 open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
@@ -143,6 +143,69 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
             Log.e(TAG,e.toString())
         }
         return ""
+    }
+
+    @Synchronized
+    override fun transaction(transactionData: TransactionData, withInformation: HashMap<String, Any>?) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val _withInformation = withInformation ?: hashMapOf()
+                _withInformation.putAll(transactionData.serializeToMap())
+                val eventsRepository =
+                    EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+                var result =
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_TRANSACTION_NAME,
+                        eventInfo = _withInformation,
+                        withEventCode = Constant.BO_EVENT_TRANSACTION
+                    )
+
+            } catch (e: Exception) {
+                Log.e(TAG,e.toString())
+            }
+        }
+    }
+
+    @Synchronized
+    override fun item(itemData: Item, withInformation: HashMap<String, Any>?) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val _withInformation = withInformation ?: hashMapOf()
+                _withInformation.putAll(itemData.serializeToMap())
+                val eventsRepository =
+                    EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+                var result =
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_TRANSACTION_ITEM_NAME,
+                        eventInfo = _withInformation,
+                        withEventCode = Constant.BO_EVENT_TRANSACTION_ITEM
+                    )
+
+            } catch (e: Exception) {
+                Log.e(TAG,e.toString())
+            }
+        }
+    }
+
+    @Synchronized
+    override fun persona(personaData: Persona , withInformation: HashMap<String, Any>?) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val _withInformation = withInformation ?: hashMapOf()
+                _withInformation.putAll(personaData.serializeToMap())
+                val eventsRepository =
+                    EventRepository(DependencyInjectorImpl.getInstance().getSecureStorageService())
+                var result =
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_PERSONA_NAME,
+                        eventInfo = _withInformation,
+                        withEventCode = Constant.BO_EVENT_PERSONA
+                    )
+
+            } catch (e: Exception) {
+                Log.e(TAG,e.toString())
+            }
+        }
     }
 
 }
