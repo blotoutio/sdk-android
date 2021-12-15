@@ -37,4 +37,9 @@ class Meta {
     @Expose
     var user_agent: String? = null
 
+    @SerializedName("page_title")
+    @Expose
+    var page_title: String? = null
+
+
 }

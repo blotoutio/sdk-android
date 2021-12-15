@@ -27,6 +27,8 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
         private const val TAG = "EventRepository"
     }
 
+    lateinit var visibleActivity: Activity
+
     private suspend fun prepareMetaData() = suspendCoroutine<Result<Meta>> { continuation ->
         try {
             val meta = Meta()
@@ -41,6 +43,9 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             meta.vpn = deviceAndAppFraudController.isVPN()
             meta.dcomp = deviceAndAppFraudController.isDeviceCompromised()
             meta.acomp = deviceAndAppFraudController.isAppCompromised()
+            if (this::visibleActivity.isInitialized) {
+                meta.page_title = visibleActivity.getScreenName()
+            }
             continuation.resume(Result.Success(meta))
         } catch (e: Exception) {
             continuation.resume(Result.Error(e))
@@ -109,6 +114,9 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
         withEventCode: Int
     ) {
         try {
+            if (activity != null) {
+                visibleActivity = activity
+            }
             val manifestRepository = DependencyInjectorImpl.getInstance().getManifestRepository()
             //is all system events allowed
             when (manifestRepository.sdkPushSystemEvents) {
