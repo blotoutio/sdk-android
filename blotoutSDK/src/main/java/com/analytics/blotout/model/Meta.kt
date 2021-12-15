@@ -37,4 +37,8 @@ class Meta {
     @Expose
     var user_agent: String? = null
 
+    @SerializedName("appv")
+    @Expose
+    var appv: String? = null
+
 }

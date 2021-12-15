@@ -35,6 +35,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             meta.sdkv = "".getVersion()
             meta.tzOffset = DateTimeUtils().getCurrentTimezoneOffsetInMin()
             meta.user_agent = DeviceInfo(context).userAgent
+            meta.appv = context.getVersion()
             meta.referrer =
                 DependencyInjectorImpl.getInstance().mReferrerDetails?.installReferrer
             meta.jbrkn = DeviceInfo(context).isDeviceRooted
