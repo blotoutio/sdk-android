@@ -84,8 +84,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 var result = eventInfo.let {
                     eventsRepository.prepareCodifiedEvent(
                         eventName = eventName,
-                        eventInfo = eventInfo,
-                        withEventCode = 0
+                        eventInfo = eventInfo
                     )
                 }
             } catch (e: Exception) {
@@ -125,8 +124,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 var result =
                     eventsRepository.prepareCodifiedEvent(
                         eventName = Constant.BO_EVENT_MAP_ID,
-                        eventInfo = _withInformation,
-                        withEventCode = Constant.BO_DEV_EVENT_MAP_ID
+                        eventInfo = _withInformation
                     )
 
             } catch (e: Exception) {
@@ -156,8 +154,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 var result =
                     eventsRepository.prepareCodifiedEvent(
                         eventName = Constant.BO_EVENT_TRANSACTION_NAME,
-                        eventInfo = _withInformation,
-                        withEventCode = Constant.BO_EVENT_TRANSACTION
+                        eventInfo = _withInformation
                     )
 
             } catch (e: Exception) {
@@ -177,8 +174,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 var result =
                     eventsRepository.prepareCodifiedEvent(
                         eventName = Constant.BO_EVENT_TRANSACTION_ITEM_NAME,
-                        eventInfo = _withInformation,
-                        withEventCode = Constant.BO_EVENT_TRANSACTION_ITEM
+                        eventInfo = _withInformation
                     )
 
             } catch (e: Exception) {
@@ -198,8 +194,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 var result =
                     eventsRepository.prepareCodifiedEvent(
                         eventName = Constant.BO_EVENT_PERSONA_NAME,
-                        eventInfo = _withInformation,
-                        withEventCode = Constant.BO_EVENT_PERSONA
+                        eventInfo = _withInformation
                     )
 
             } catch (e: Exception) {

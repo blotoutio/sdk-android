@@ -39,13 +39,6 @@ fun String.getMessageIDForEvent(): String {
     return trimForExtraChar+"-"+CommonUtils().getUUID()+"-"+DateTimeUtils().get13DigitNumberObjTimeStamp()
 }
 
-fun String.codeForDevEvent(): Int  {
-    if (this.isEmpty()) {
-        return 0
-    }
-
-    return generateSubCode(stringToIntSum(this))
-}
 
 fun String.getVersion():String{
     return this + Constant.BOSDK_MAJOR_VERSION +"."+Constant.BOSDK_MINOR_VERSION+"."+Constant.BOSDK_PATCH_VERSION
@@ -67,9 +60,6 @@ fun stringToIntSum(eventName: String): Int  {
 
 }
 
-fun generateSubCode(eventSum: Int): Int  {
-    return Constant.BO_DEV_EVENT_CUSTOM_KEY +(eventSum % 8899)
-}
 
 fun String.encrypt(publicKey:String):HashMap<String,Any>{
     var secretKey: String = CommonUtils().getUUID()!!

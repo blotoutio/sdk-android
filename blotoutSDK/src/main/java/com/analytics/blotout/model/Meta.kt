@@ -13,39 +13,6 @@ class Meta {
     @Expose
     var tzOffset: Int? = null
 
-    @SerializedName("user_id_created")
-    @Expose
-    var userIdCreated:Long? = null
-
-    @SerializedName("plf")
-    @Expose
-    var plf: Int? = null
-
-
-    @SerializedName("osv")
-    @Expose
-    var osv: String? = null
-
-    @SerializedName("appv")
-    @Expose
-    var appv: String? = null
-
-    @SerializedName("dmft")
-    @Expose
-    var dmft: String? = null
-
-    @SerializedName("dm")
-    @Expose
-    var dm: String? = null
-
-    @SerializedName("bnme")
-    @Expose
-    var bnme: String? = null
-
-    @SerializedName("osn")
-    @Expose
-    var osn: String? = null
-
     @SerializedName("jbrkn")
     @Expose
     var jbrkn: Boolean? = null
@@ -65,5 +32,17 @@ class Meta {
     @SerializedName("acomp")
     @Expose
     var acomp: Boolean? = null
+
+    @SerializedName("user_agent")
+    @Expose
+    var user_agent: String? = null
+
+    @SerializedName("appv")
+    @Expose
+    var appv: String? = null
+
+    @SerializedName("page_title")
+    @Expose
+    var page_title: String? = null
 
 }
