@@ -1,12 +1,17 @@
 package com.analytics.blotout.repository
 
 import android.util.Log
+import com.analytics.blotout.DependencyInjectorImpl
+import com.analytics.blotout.deviceinfo.device.DeviceInfo
+import com.analytics.blotout.model.ErrorCodes.ERROR_CODE_MANIFEST_NOT_AVAILABLE
+import com.analytics.blotout.model.InternalError
 import com.analytics.blotout.model.ManifestConfigurationResponse
 import com.analytics.blotout.model.Result
 import com.analytics.blotout.model.VariableOption
 import com.analytics.blotout.network.ApiDataProvider
 import com.analytics.blotout.repository.data.ConfigurationDataManager
 import com.analytics.blotout.util.Constant
+import com.google.gson.Gson
 import retrofit2.Call
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -20,37 +25,26 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
      var sdkSystemEevntsAllowed : List<VariableOption>? = null
 
 
-    suspend fun fetchManifestConfiguration() = suspendCoroutine<Result<String>> { continuation ->
-        run {
-
-            configurationDataManager.downloadManifestConfiguration(object :
-                ApiDataProvider<ManifestConfigurationResponse?>() {
-                override fun onFailed(
-                    errorCode: Int,
-                    message: String,
-                    call: Call<ManifestConfigurationResponse?>
-                ) {
-                    Log.d("onFailed", errorCode.toString())
-                    Log.d("onFailed", message)
-                    continuation.resume(Result.Error(Throwable(message)))
-
+    suspend fun fetchManifestConfiguration() : Result<String> {
+            when (val result = configurationDataManager.downloadManifestConfiguration()) {
+                is Result.Success -> {
+                    DependencyInjectorImpl.getInstance().getSecureStorageService()
+                        .storeString(Gson().toJson(result.data), Constant.MANIFEST_DATA)
+                    return initManifestConfiguration(result.data)
                 }
-
-                override fun onError(t: Throwable, call: Call<ManifestConfigurationResponse?>) {
-                    Log.d("onError", t.message.toString())
-                    continuation.resume(Result.Error(t))
-                }
-
-                override fun onSuccess(manifestConfigurationResponse: ManifestConfigurationResponse?) {
-                    Log.d(
-                        "onSuccess",
-                        manifestConfigurationResponse?.variables?.get(0)?.variableName!!
+                else -> {
+                    val manifestConfiguration = Gson().fromJson(
+                        DependencyInjectorImpl.getInstance().getSecureStorageService()
+                            .fetchString(Constant.MANIFEST_DATA),
+                        ManifestConfigurationResponse::class.java
                     )
-                    continuation.resume(initManifestConfiguration(manifestConfigurationResponse))
+                    manifestConfiguration?.let {
+                        return initManifestConfiguration(manifestConfiguration)
+                    }?: run {
+                        return Result.Error(InternalError(code = ERROR_CODE_MANIFEST_NOT_AVAILABLE))
+                    }
                 }
-
-            })
-        }
+            }
     }
 
     fun initManifestConfiguration(manifestConfigurationResponse: ManifestConfigurationResponse):Result<String> {

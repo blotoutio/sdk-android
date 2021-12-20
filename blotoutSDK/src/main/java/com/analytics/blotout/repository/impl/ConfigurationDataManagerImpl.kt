@@ -8,8 +8,8 @@ import com.analytics.blotout.repository.data.ConfigurationDataManager
 class ConfigurationDataManagerImpl(private val service: RemoteApiService) : ConfigurationDataManager {
 
 
-    override fun downloadManifestConfiguration(handler: ApiDataProvider<ManifestConfigurationResponse?>) {
-        service.getSDKManifest()?.enqueue(handler)
+    override suspend fun downloadManifestConfiguration(): Result<ManifestConfigurationResponse> {
+        return service.getSDKManifest()
     }
 
     override fun publishEvents(events: Events, handler: ApiDataProvider<Any?>) {

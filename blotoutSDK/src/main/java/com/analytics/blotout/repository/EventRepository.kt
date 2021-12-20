@@ -49,7 +49,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             }
             continuation.resume(Result.Success(meta))
         } catch (e: Exception) {
-            continuation.resume(Result.Error(e))
+            continuation.resume(Result.Error(InternalError(code = ErrorCodes.ERROR_CODE_SDK_INTERNAL_ERROR, msg = e.localizedMessage!!)))
             Log.e(TAG, e.localizedMessage!!)
         }
     }
@@ -80,11 +80,11 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
                 }
                 return pushEvents(event)
             } else {
-                return Result.Error(Throwable("SDK is not enabled"))
+                return Result.Error(InternalError(code=ErrorCodes.ERROR_CODE_SDK_NOT_ENABLED,msg="SDK is not enabled"))
             }
         } catch (e: Exception) {
             Log.e(TAG, e.localizedMessage!!)
-            return Result.Error(e)
+            return Result.Error(InternalError(code = ErrorCodes.ERROR_CODE_SDK_INTERNAL_ERROR, msg = e.localizedMessage!!))
         }
     }
 
@@ -100,11 +100,11 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
                 event.additionalData = eventInfo
                 pushEvents(event)
             } else {
-                Result.Error(Throwable("SDK is not enabled"))
+                Result.Error(InternalError(code=ErrorCodes.ERROR_CODE_SDK_NOT_ENABLED,msg="SDK is not enabled"))
             }
         } catch (e: Exception) {
             Log.e(TAG, e.localizedMessage!!)
-            Result.Error(e)
+            Result.Error(InternalError(code = ErrorCodes.ERROR_CODE_SDK_INTERNAL_ERROR, msg = e.localizedMessage!!))
         }
     }
 
@@ -164,7 +164,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             val events = Events()
             when (val metaPreparationResult = prepareMetaData()) {
                 is Result.Success -> events.meta = metaPreparationResult.data
-                else -> Result.Error(IOException())
+                is Result.Error -> Result.Error(metaPreparationResult.errorData)
             }
             val eventList = mutableListOf<Event>()
             eventList.add(event)
@@ -174,7 +174,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             Result.Success("")
         } catch (e: Exception) {
             Log.e(TAG, e.localizedMessage!!)
-            Result.Error(e)
+            Result.Error(InternalError(code = ErrorCodes.ERROR_CODE_SDK_INTERNAL_ERROR, msg = e.localizedMessage!!))
         }
     }
 

@@ -13,7 +13,7 @@ class RemoteApiClient(private val hostConfiguration: HostConfiguration) {
 
     private fun getAdapter(): Retrofit {
         return Retrofit.Builder().run{
-            baseUrl(hostConfiguration.baseUrl)
+            baseUrl(hostConfiguration.baseUrl!!)
             addConverterFactory(GsonConverterFactory.create())
             addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             addCallAdapterFactory(RetryCallAdapterFactory.create())
