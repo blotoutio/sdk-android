@@ -2,6 +2,7 @@ package com.analytics.blotout.util
 
 object Constant {
 
+    const val MANIFEST_DATA = "manifest_data"
     const val IS_SDK_ENABLE = "IS_SDK_ENABLE"
     const val BO_ANALYTICS_USER_BIRTH_TIME_STAMP = "BO_ANALYTICS_USER_BIRTH_TIME_STAMP"
     const val SDK_KEY = "sdk_key"

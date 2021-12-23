@@ -18,12 +18,12 @@ public class MySampleApplication extends Application {
         blotoutAnalyticsConfiguration.setEndPointUrl("https://sandbox.blotout.io/sdk/");
         BlotoutAnalytics.INSTANCE.init(this, blotoutAnalyticsConfiguration, new CompletionHandler() {
             @Override
-            public void onSuccess() {
+            public void onError(int code, String msg) {
 
             }
 
             @Override
-            public void onError() {
+            public void onSuccess() {
 
             }
         });

@@ -40,10 +40,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
             )
         when (blotoutAnalyticsConfiguration.validateRequest()) {
             Errors.ERROR_KEY_NOT_PROPER -> {
-                throw Exception("SDK key is invalid")
+                completionHandler.onError(code=ErrorCodes.ERROR_CODE_SDK_KEY_NOT_PROPER, msg = "SDK key is invalid")
             }
             Errors.ERROR_URL_NOT_PROPER -> {
-                throw  Exception("End point url is invalid")
+                completionHandler.onError(code=ErrorCodes.ERROR_CODE_END_POINT_URL_NOT_PROPER, msg = "End point url is invalid")
             }
             else -> {
                 val result = DependencyInjectorImpl.getInstance().getManifestRepository()
@@ -54,7 +54,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                             completionHandler.onSuccess()
                         }
                         is Result.Error->{
-                            completionHandler.onError()
+                            completionHandler.onError(code=result.errorData.code, msg = result.errorData.msg)
                         }
                     }
                 }
