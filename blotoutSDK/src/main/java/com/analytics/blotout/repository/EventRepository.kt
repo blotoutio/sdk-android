@@ -109,12 +109,13 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
     }
 
     fun prepareSystemEvent(
-        activity: Activity?,
-        eventName: String,
-        eventInfo: HashMap<String, Any>?,
-        withEventCode: Int
+            activity: Activity?,
+            eventName: String,
+            eventInfo: HashMap<String, Any>?,
+            withEventCode: Int
     ) {
         try {
+            val eventInfo = eventInfo ?: hashMapOf<String,Any>()
             if (activity != null) {
                 visibleActivity = activity
             }
@@ -138,6 +139,9 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
                     }
 
                 }
+            }
+            if (this::visibleActivity.isInitialized) {
+                eventInfo[Constant.BO_EVENT_KEY_PATH_NAME] = visibleActivity.getScreenName()
             }
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName)

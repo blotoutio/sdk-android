@@ -8,4 +8,5 @@ object ErrorCodes {
     const val ERROR_CODE_MANIFEST_NOT_AVAILABLE =3
     const val ERROR_CODE_SDK_NOT_ENABLED =4
     const val ERROR_CODE_SDK_INTERNAL_ERROR =5
+    const val ERROR_CODE_NETWORK_ERROR =6
 }
