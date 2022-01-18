@@ -7,6 +7,6 @@ import com.analytics.blotout.repository.data.DataManager
 class DataManagerImpl(private val dependencyInjector: DependencyInjector) : DataManager {
 
     override fun getConfigurationDataManager(): ConfigurationDataManager {
-        return ConfigurationDataManagerImpl(dependencyInjector.getRemoteAPIService())
+        return ConfigurationDataManagerImpl(dependencyInjector.getRemoteAPIDataSource())
     }
 }

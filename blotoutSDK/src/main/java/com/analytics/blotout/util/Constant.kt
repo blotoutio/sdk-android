@@ -48,6 +48,7 @@ object Constant {
     const val BO_EVENT_LONG_TOUCH_NAME= "longtouch"
     const val BO_EVENT_KEY_RELEASE = 11117
     const val BO_EVENT_KEY_RELEASE_NAME= "keyrelease"
+    const val BO_EVENT_KEY_PATH_NAME= "path"
 
 
 

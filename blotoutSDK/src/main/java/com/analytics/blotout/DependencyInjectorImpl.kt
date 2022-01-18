@@ -6,6 +6,7 @@ import com.android.installreferrer.api.ReferrerDetails
 import com.analytics.blotout.data.database.EventDatabase
 import com.analytics.blotout.network.HostConfiguration
 import com.analytics.blotout.network.RemoteApiClient
+import com.analytics.blotout.network.RemoteApiDataSource
 import com.analytics.blotout.network.RemoteApiService
 import com.analytics.blotout.referral.InstallRefferal
 import com.analytics.blotout.repository.EventRepository
@@ -72,8 +73,8 @@ class DependencyInjectorImpl private constructor(
         ManifestRepository(dataManager.getConfigurationDataManager())
     }
 
-    override fun getRemoteAPIService(): RemoteApiService {
-        return RemoteApiClient(getHostService()).getRemoteApiService()
+    override fun getRemoteAPIDataSource(): RemoteApiDataSource {
+        return RemoteApiDataSource(RemoteApiClient(getHostService()).getRemoteApiService())
     }
 
     override fun getHostService():HostConfiguration{
