@@ -54,7 +54,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId 'com.analytics.blotout'
-                version '0.9.1'
+                version '0.10.0'
                 artifactId 'Blotout'
             }
         }
