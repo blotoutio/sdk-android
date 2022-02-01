@@ -21,7 +21,7 @@ The `init` method is used for initializing SDK. This sets all required configura
 
 
 #### Example
-```kotlin
+```java
 BlotoutAnalyticsConfiguration blotoutAnalyticsConfiguration = new BlotoutAnalyticsConfiguration();
 blotoutAnalyticsConfiguration.setBlotoutSDKKey("EADAH5FV8B5MMVZ");
 blotoutAnalyticsConfiguration.setEndPointUrl("https://stage.blotout.io/sdk/");
@@ -52,7 +52,7 @@ The `capture` method is used to record developer events. This allows you to send
 | `eventInfo` | `Object` | Optional | You can provide some additional data to this event. There is no limitation as this is just a key-value pair send to the server. |
 
 #### Example
-```kotlin
+```Java
 HashMap<String,Object> eventInfo = new HashMap<>();
 eventInfo.put("SKU","12345");
 BlotoutAnalytics.INSTANCE.capture("custom event", eventInfo);
@@ -73,13 +73,13 @@ In Blotout managed or deployed Infrastructure, PII and PHI events data is encryp
 | `isPHI` | `Boolean` | Optional | You can specify specific event type to an event|
 
 #### Example
-```kotlin
+```Java
 HashMap<String,Object> PIIInfo = new HashMap<>();
 eventInfo.put("emailId","developers@blotout.io");
 BlotoutAnalytics.INSTANCE.capturePersonal("pii event", PIIInfo, true);
 ```
 
-```kotlin
+```Java
 HashMap<String,Object> PHIInfo = new HashMap<>();
 eventInfo.put("bloodType","A+");
 BlotoutAnalytics.INSTANCE.capturePersonal("phi event", PHIInfo, true);
@@ -93,7 +93,7 @@ Returns user ID as `string`.
 
 #### Example
 ```kotlin
-String userId = BlotoutAnalytics.INSTANCE.getUserId()
+var userId = BlotoutAnalytics.INSTANCE.getUserId()
 ```
 
 ## enable
@@ -107,3 +107,6 @@ The `enable` method allows you to enable/disable the sending of analytics data. 
 ```kotlin
 BlotoutAnalytics.INSTANCE.enable(true)
 ```
+
+
+
