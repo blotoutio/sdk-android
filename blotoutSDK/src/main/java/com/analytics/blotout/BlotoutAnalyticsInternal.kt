@@ -144,7 +144,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun transaction(transactionData: TransactionData, withInformation: HashMap<String, Any>?) {
+    override fun transaction(transactionData: TransactionData, withInformation: HashMap<String, Any>) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val _withInformation = withInformation ?: hashMapOf()
@@ -164,7 +164,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun item(itemData: Item, withInformation: HashMap<String, Any>?) {
+    override fun item(itemData: Item, withInformation: HashMap<String, Any>) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val _withInformation = withInformation ?: hashMapOf()
@@ -184,7 +184,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun persona(personaData: Persona , withInformation: HashMap<String, Any>?) {
+    override fun persona(personaData: Persona , withInformation: HashMap<String, Any>) {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 val _withInformation = withInformation ?: hashMapOf()

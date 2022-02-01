@@ -145,8 +145,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             }
             if (secureStorage.fetchBoolean(Constant.IS_SDK_ENABLE)) {
                 val event = prepareEvents(eventName)
-                if (activity != null)
-                    event.scrn = activity.localClassName.substringAfterLast(delimiter = '.')
+                    event.scrn = activity?.localClassName?.substringAfterLast(delimiter = '.')
                 event.type = Constant.BO_SYSTEM
                 event.additionalData = eventInfo
                 CoroutineScope(Dispatchers.Default).launch {
