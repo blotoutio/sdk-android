@@ -1,11 +1,12 @@
 package com.analytics.blotout.data.database
 
 import android.util.Log
-import com.analytics.blotout.BlotoutAnalytics
 import com.analytics.blotout.DependencyInjectorImpl
 import com.analytics.blotout.data.database.entity.EventEntity
 import com.analytics.blotout.model.Events
 import com.analytics.blotout.network.ApiDataProvider
+import com.analytics.blotout.repository.EventRepository
+import com.analytics.blotout.util.Constant
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +18,7 @@ import retrofit2.Call
 class EventDatabaseService {
 
     private var evenDao = DependencyInjectorImpl.getInstance().getEventDatabase().eventDao()
+    private var eventRepository: EventRepository = DependencyInjectorImpl.getEventRepository()
 
     companion object {
         private const val TAG = "EventDatabaseService"
@@ -75,7 +77,12 @@ class EventDatabaseService {
                             is JsonSyntaxException, is IllegalStateException -> {
                                 val malformedLog = hashMapOf<String, Any>()
                                 malformedLog.put(it.id.toString(), it.eventData)
-                                BlotoutAnalytics.capture("Malformed Log", malformedLog)
+                                eventRepository.prepareSystemEvent(
+                                        null,
+                                        Constant.BO_EVENT_ERROR_NAME,
+                                        malformedLog,
+                                        Constant.BO_EVENT_ERROR
+                                )
                                 evenDao.deleteEvent(it)
                             }
                         }
