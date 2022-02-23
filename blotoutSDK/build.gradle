@@ -43,6 +43,11 @@ allprojects{
     repositories{
         maven {url 'https://jitpack.io'}
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'org.xerial:sqlite-jdbc:3.34.0'
+        }
+    }
 }
 
 
@@ -54,7 +59,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId 'com.analytics.blotout'
-                version '0.10.0'
+                version '0.10.2'
                 artifactId 'Blotout'
             }
         }
