@@ -5,6 +5,10 @@ header_pages:
   - basic_apis.md
   - defined_events.md
   - system_events.md
+  - migration.md
+
+plugins:
+  - jekyll-tabs
 
 minima:
   skin: dark
