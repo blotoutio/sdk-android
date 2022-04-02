@@ -127,33 +127,14 @@ class DeviceInfo(private val context: Context) {
 
     val screenHeight: Int
         get() {
-            var height = 0
-            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val display = wm.defaultDisplay
-            if (Build.VERSION.SDK_INT > 12) {
-                val size = Point()
-                display.getSize(size)
-                height = size.y
-            } else {
-                height = display.height
-            }
-            return height
+            val displayMetrics = context.getResources().getDisplayMetrics()
+            return displayMetrics.heightPixels
         }
 
-    // deprecated
     val screenWidth: Int
         get() {
-            var width = 0
-            val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            val display = wm.defaultDisplay
-            if (Build.VERSION.SDK_INT > 12) {
-                val size = Point()
-                display.getSize(size)
-                width = size.x
-            } else {
-                width = display.width
-            }
-            return width
+            val displayMetrics = context.getResources().getDisplayMetrics();
+            return displayMetrics.widthPixels
         }
 
 
