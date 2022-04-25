@@ -173,7 +173,7 @@ public class ECartHomeActivity extends AppCompatActivity {
         Persona persona = new Persona("123", "mike","John",
                 null,"",null,"test@gmail.com",
                 null,"97562311345","","",Integer.getInteger("452010"),"","",30);
-        BlotoutAnalytics.INSTANCE.persona(persona,null);
+        BlotoutAnalytics.INSTANCE.persona(persona,new HashMap<>());
 
     }
 
