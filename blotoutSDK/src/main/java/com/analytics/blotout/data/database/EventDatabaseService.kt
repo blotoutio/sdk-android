@@ -3,12 +3,14 @@ package com.analytics.blotout.data.database
 import android.util.Log
 import com.analytics.blotout.DependencyInjectorImpl
 import com.analytics.blotout.data.database.entity.EventEntity
+import com.analytics.blotout.model.ErrorCodes
 import com.analytics.blotout.model.Events
 import com.analytics.blotout.network.ApiDataProvider
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.util.Constant
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -38,7 +40,11 @@ class EventDatabaseService {
 
     fun getEvents() {
 
-        CoroutineScope(Dispatchers.Default).launch {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            //completionHandler.onError(code= ErrorCodes.ERROR_CODE_NETWORK_ERROR, msg = exception.localizedMessage)
+        }
+
+        CoroutineScope(Dispatchers.Default+handler).launch {
 
             val idTable = ArrayList<Int>()
             evenDao.getEvents().collect { data ->

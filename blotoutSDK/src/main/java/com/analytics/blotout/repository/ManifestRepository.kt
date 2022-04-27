@@ -1,20 +1,14 @@
 package com.analytics.blotout.repository
 
-import android.util.Log
 import com.analytics.blotout.DependencyInjectorImpl
-import com.analytics.blotout.deviceinfo.device.DeviceInfo
 import com.analytics.blotout.model.ErrorCodes.ERROR_CODE_MANIFEST_NOT_AVAILABLE
 import com.analytics.blotout.model.InternalError
 import com.analytics.blotout.model.ManifestConfigurationResponse
 import com.analytics.blotout.model.Result
 import com.analytics.blotout.model.VariableOption
-import com.analytics.blotout.network.ApiDataProvider
 import com.analytics.blotout.repository.data.ConfigurationDataManager
 import com.analytics.blotout.util.Constant
 import com.google.gson.Gson
-import retrofit2.Call
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class ManifestRepository(private val configurationDataManager: ConfigurationDataManager) {
 
