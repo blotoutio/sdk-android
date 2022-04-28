@@ -17,9 +17,9 @@ interface BlotoutAnalyticsInterface {
 
     fun getUserId():String
 
-    fun transaction(transactionData: TransactionData, withInformation:HashMap<String,Any>)
+    fun transaction(transactionData: TransactionData, withInformation:HashMap<String,Any>?)
 
-    fun item(itemData: Item, withInformation:HashMap<String,Any>)
+    fun item(itemData: Item, withInformation:HashMap<String,Any>?)
 
-    fun persona(personaData: Persona, withInformation:HashMap<String,Any>)
+    fun persona(personaData: Persona, withInformation:HashMap<String,Any>?)
 }

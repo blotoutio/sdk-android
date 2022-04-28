@@ -11,7 +11,7 @@ import retrofit2.http.*
 interface RemoteApiService {
 
     @POST(Constant.BO_SDK_REST_API_MANIFEST_PULL_PATH)
-    suspend fun getSDKManifest(): Response<ManifestConfigurationResponse>
+    fun getSDKManifest(): Call<ManifestConfigurationResponse>
 
     @POST(Constant.BO_SDK_REST_API_EVENTS_PUSH_PATH)
     fun postEvents(@Body body: Events) : Call<Any>
