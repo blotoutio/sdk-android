@@ -82,7 +82,7 @@ object Constant {
 
     const val BOSDK_MAJOR_VERSION = 0
     const val BOSDK_MINOR_VERSION = 10
-    const val BOSDK_PATCH_VERSION = 2
+    const val BOSDK_PATCH_VERSION = 3
 
 
     const val BO_PII = "pii"
