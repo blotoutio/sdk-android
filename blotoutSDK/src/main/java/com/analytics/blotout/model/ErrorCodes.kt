@@ -9,4 +9,5 @@ object ErrorCodes {
     const val ERROR_CODE_SDK_NOT_ENABLED =4
     const val ERROR_CODE_SDK_INTERNAL_ERROR =5
     const val ERROR_CODE_NETWORK_ERROR =6
+    const val ERROR_CODE_UNKNOWN_ERROR =7
 }

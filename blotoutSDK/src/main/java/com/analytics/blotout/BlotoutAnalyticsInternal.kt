@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import com.analytics.blotout.model.*
 import com.analytics.blotout.model.CompletionHandler
+import com.analytics.blotout.network.ApiDataProvider
 import com.analytics.blotout.network.HostConfiguration
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.repository.impl.SharedPreferenceSecureVaultImpl
@@ -12,6 +13,7 @@ import com.analytics.blotout.util.Constant
 import com.analytics.blotout.util.Errors
 import com.analytics.blotout.util.serializeToMap
 import kotlinx.coroutines.*
+import retrofit2.Call
 import java.lang.Exception
 
 open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
@@ -28,7 +30,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
         completionHandler: CompletionHandler
     ) {
         val handler = CoroutineExceptionHandler { _, exception ->
-            completionHandler.onError(code=ErrorCodes.ERROR_CODE_NETWORK_ERROR, msg = exception.localizedMessage)
+            completionHandler.onError(code=ErrorCodes.ERROR_CODE_NETWORK_ERROR, msg = exception.localizedMessage!!)
         }
         CoroutineScope(Dispatchers.IO+handler).launch {
 
@@ -48,18 +50,30 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                 completionHandler.onError(code=ErrorCodes.ERROR_CODE_END_POINT_URL_NOT_PROPER, msg = "End point url is invalid")
             }
             else -> {
-                val result = DependencyInjectorImpl.getInstance().getManifestRepository()
-                        .fetchManifestConfiguration()
-                    when(result){
-                        is Result.Success->{
-                            isSdkinitiliazed = true
-                            DependencyInjectorImpl.getInstance().initialize()
-                            completionHandler.onSuccess()
-                        }
-                        is Result.Error->{
-                            completionHandler.onError(code=result.errorData.code, msg = result.errorData.msg)
-                        }
-                    }
+                DependencyInjectorImpl.getInstance().getManifestRepository()
+                        .fetchManifestConfiguration(object : ApiDataProvider<ManifestConfigurationResponse?>() {
+                            override fun onFailed(
+                                errorCode: Int,
+                                message: String,
+                                call: Call<ManifestConfigurationResponse?>
+                            ) {
+                                completionHandler.onError(code=errorCode, msg = message)
+                            }
+
+                            override fun onError(
+                                t: Throwable,
+                                call: Call<ManifestConfigurationResponse?>
+                            ) {
+                                completionHandler.onError(code=ErrorCodes.ERROR_CODE_NETWORK_ERROR, msg = t.localizedMessage!!)
+                            }
+
+                            override fun onSuccess(data: ManifestConfigurationResponse?) {
+                                isSdkinitiliazed = true
+                                DependencyInjectorImpl.getInstance().initialize()
+                                completionHandler.onSuccess()
+                            }
+
+                        })
                 }
             }
         }
@@ -87,7 +101,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         EventRepository(
                             DependencyInjectorImpl.getInstance().getSecureStorageService()
                         )
-                    var result = eventInfo.let {
+                    eventInfo.let {
                         eventsRepository.prepareCodifiedEvent(
                             eventName = eventName,
                             eventInfo = eventInfo
@@ -115,7 +129,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                     EventRepository(
                         DependencyInjectorImpl.getInstance().getSecureStorageService()
                     )
-                var result = eventsRepository.preparePersonalEvent(eventName, eventInfo, isPHI)
+                eventsRepository.preparePersonalEvent(eventName, eventInfo, isPHI)
             } catch (e: Exception) {
                 Log.e(TAG, e.toString())
 
@@ -137,11 +151,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         EventRepository(
                             DependencyInjectorImpl.getInstance().getSecureStorageService()
                         )
-                    var result =
-                        eventsRepository.prepareCodifiedEvent(
-                            eventName = Constant.BO_EVENT_MAP_ID,
-                            eventInfo = _withInformation
-                        )
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_MAP_ID,
+                        eventInfo = _withInformation
+                    )
 
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -161,7 +174,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun transaction(transactionData: TransactionData, withInformation: HashMap<String, Any>) {
+    override fun transaction(transactionData: TransactionData, withInformation: HashMap<String, Any>?) {
         val sdkEnable = DependencyInjectorImpl.getInstance().getSecureStorageService()
             .fetchBoolean(Constant.IS_SDK_ENABLE)
         if(sdkEnable && isSdkinitiliazed) {
@@ -173,11 +186,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         EventRepository(
                             DependencyInjectorImpl.getInstance().getSecureStorageService()
                         )
-                    var result =
-                        eventsRepository.prepareCodifiedEvent(
-                            eventName = Constant.BO_EVENT_TRANSACTION_NAME,
-                            eventInfo = _withInformation
-                        )
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_TRANSACTION_NAME,
+                        eventInfo = _withInformation
+                    )
 
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -187,7 +199,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun item(itemData: Item, withInformation: HashMap<String, Any>) {
+    override fun item(itemData: Item, withInformation: HashMap<String, Any>?) {
         val sdkEnable = DependencyInjectorImpl.getInstance().getSecureStorageService()
             .fetchBoolean(Constant.IS_SDK_ENABLE)
         if(sdkEnable && isSdkinitiliazed) {
@@ -199,11 +211,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         EventRepository(
                             DependencyInjectorImpl.getInstance().getSecureStorageService()
                         )
-                    var result =
-                        eventsRepository.prepareCodifiedEvent(
-                            eventName = Constant.BO_EVENT_TRANSACTION_ITEM_NAME,
-                            eventInfo = _withInformation
-                        )
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_TRANSACTION_ITEM_NAME,
+                        eventInfo = _withInformation
+                    )
 
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
@@ -213,7 +224,7 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
     }
 
     @Synchronized
-    override fun persona(personaData: Persona , withInformation: HashMap<String, Any>) {
+    override fun persona(personaData: Persona , withInformation: HashMap<String, Any>?) {
         val sdkEnable = DependencyInjectorImpl.getInstance().getSecureStorageService()
             .fetchBoolean(Constant.IS_SDK_ENABLE)
         if(sdkEnable && isSdkinitiliazed) {
@@ -225,11 +236,10 @@ open class BlotoutAnalyticsInternal : BlotoutAnalyticsInterface {
                         EventRepository(
                             DependencyInjectorImpl.getInstance().getSecureStorageService()
                         )
-                    var result =
-                        eventsRepository.prepareCodifiedEvent(
-                            eventName = Constant.BO_EVENT_PERSONA_NAME,
-                            eventInfo = _withInformation
-                        )
+                    eventsRepository.prepareCodifiedEvent(
+                        eventName = Constant.BO_EVENT_PERSONA_NAME,
+                        eventInfo = _withInformation
+                    )
 
                 } catch (e: Exception) {
                     Log.e(TAG, e.toString())
