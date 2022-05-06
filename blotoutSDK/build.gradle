@@ -59,7 +59,7 @@ afterEvaluate {
             release(MavenPublication) {
                 from components.release
                 groupId 'com.analytics.blotout'
-                version '0.10.3'
+                version '0.10.4'
                 artifactId 'Blotout'
             }
         }
@@ -87,6 +87,7 @@ dependencies {
     implementation deps.retrofit_gson_converter
     implementation deps.okhttp
     implementation deps.okhttp_logging_interceptor
+    implementation deps.okhttpUrlConnection
     implementation deps.rxRetrofitAdapter
 
     implementation deps.androidx_room_ktx
