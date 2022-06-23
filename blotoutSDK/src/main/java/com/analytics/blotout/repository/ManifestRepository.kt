@@ -21,7 +21,7 @@ class ManifestRepository(private val configurationDataManager: ConfigurationData
      var sdkSystemEevntsAllowed : List<VariableOption>? = null
 
 
-    suspend fun fetchManifestConfiguration(callback: ApiDataProvider<ManifestConfigurationResponse?>) {
+     fun fetchManifestConfiguration(callback: ApiDataProvider<ManifestConfigurationResponse?>) {
             configurationDataManager.downloadManifestConfiguration(object : ApiDataProvider<ManifestConfigurationResponse?>() {
                 override fun onFailed(
                     errorCode: Int,

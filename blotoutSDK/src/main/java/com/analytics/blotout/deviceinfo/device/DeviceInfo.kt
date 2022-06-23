@@ -17,6 +17,10 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.webkit.WebSettings
 import android.webkit.WebView
+import com.analytics.blotout.DependencyInjectorImpl
+import com.google.android.gms.appset.AppSet
+import com.google.android.gms.appset.AppSetIdInfo
+import com.google.android.gms.tasks.Task
 
 
 import java.io.File
@@ -249,6 +253,15 @@ class DeviceInfo(private val context: Context) {
             }
         }
         return false
+    }
+    fun getAppBasedUserID() {
+        val client = AppSet.getClient(context)
+        val task: Task<AppSetIdInfo> = client.appSetIdInfo
+
+        task.addOnSuccessListener {
+            val scope: Int = it.scope
+            DependencyInjectorImpl.getInstance().appSetIdInfo = it.id
+        }
     }
 
 }

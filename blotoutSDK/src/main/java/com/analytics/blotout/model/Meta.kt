@@ -45,4 +45,8 @@ class Meta {
     @Expose
     var page_title: String? = null
 
+    @SerializedName("user_app_guid")
+    @Expose
+    var user_app_guid:String?=""
+
 }

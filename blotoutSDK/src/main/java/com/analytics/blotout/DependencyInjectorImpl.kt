@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.android.installreferrer.api.ReferrerDetails
 import com.analytics.blotout.data.database.EventDatabase
+import com.analytics.blotout.deviceinfo.device.DeviceInfo
 import com.analytics.blotout.network.HostConfiguration
 import com.analytics.blotout.network.RemoteApiClient
 import com.analytics.blotout.network.RemoteApiDataSource
@@ -29,6 +30,7 @@ class DependencyInjectorImpl private constructor(
     private val mEventDatabase = eventDatabase
     private val mApplication = application
     var mReferrerDetails: ReferrerDetails? = null
+    var appSetIdInfo:String?=""
 
 
 
@@ -113,6 +115,7 @@ class DependencyInjectorImpl private constructor(
             )
             eventRepository.publishEvent()
             InstallRefferal().startClient(mApplication)
+            DeviceInfo(mApplication).getAppBasedUserID()
         }catch (e:Throwable){
             Log.d(TAG,e.localizedMessage!!)
         }

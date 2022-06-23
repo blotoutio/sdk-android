@@ -47,6 +47,7 @@ class EventRepository(private var secureStorage: SharedPreferenceSecureVault) {
             if (this::visibleActivity.isInitialized) {
                 meta.page_title = visibleActivity.getScreenName()
             }
+            meta.user_app_guid = DependencyInjectorImpl.getInstance().appSetIdInfo
             continuation.resume(Result.Success(meta))
         } catch (e: Exception) {
             continuation.resume(Result.Error(InternalError(code = ErrorCodes.ERROR_CODE_SDK_INTERNAL_ERROR, msg = e.localizedMessage!!)))
