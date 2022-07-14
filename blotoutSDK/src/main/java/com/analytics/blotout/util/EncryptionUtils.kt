@@ -2,7 +2,6 @@ package com.analytics.blotout.util
 
 import android.util.Base64
 import android.util.Log
-import com.analytics.blotout.data.database.EventDatabaseService
 import java.security.KeyFactory
 import java.security.MessageDigest
 import java.security.spec.X509EncodedKeySpec
@@ -20,8 +19,9 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
         const val TAG = "SimpleCrypto"
         const val MODE_128BIT = 128
         const val MODE_256BIT = 256
-        const val MODE_DEFAULT = 1
     }
+
+    private val HEX = "0123456789ABCDEF"
 
     private val BASE64_FLAGS = Base64.NO_WRAP
 
@@ -101,7 +101,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
         return decryptString(encrypted).toInt()
     }
 
-    fun decryptBoolean(encrypted: String): Boolean? {
+    fun decryptBoolean(encrypted: String): Boolean {
         return java.lang.Boolean.parseBoolean(decryptString(encrypted))
     }
 
@@ -115,7 +115,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
 
     private fun encrypt(raw: ByteArray, clear: ByteArray): ByteArray {
         return try {
-            val skeySpec = SecretKeySpec(raw, "AES")
+            val skeySpec = SecretKeySpec(raw, ALGORITHM_AES_CBC_PKCS5Padding)
             val ivSpec = IvParameterSpec(CRYPTO_IVX)
             val cipher = Cipher.getInstance(algorithm)
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, ivSpec)
@@ -128,7 +128,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
 
     private fun decrypt(raw: ByteArray, encrypted: ByteArray): ByteArray {
         return try {
-            val skeySpec = SecretKeySpec(raw, "AES")
+            val skeySpec = SecretKeySpec(raw, ALGORITHM_AES_CBC_PKCS5Padding)
             val ivSpec = IvParameterSpec(CRYPTO_IVX)
             val cipher = Cipher.getInstance(algorithm)
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, ivSpec)
@@ -169,7 +169,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
         }
     }
 
-    private val HEX = "0123456789ABCDEF"
+
 
     private fun appendHex(sb: StringBuffer, b: Byte) {
         sb.append(HEX.toCharArray()[b shl 4 and 0x0f]).append(HEX.toCharArray()[b and 0x0f])
@@ -284,11 +284,7 @@ class EncryptionUtils(algorithm: String="", passphrase: String="", mode: Int=0) 
     ///Methods related to PHI and PII Data encryption
     fun encryptText(msg: ByteArray?, base64PublicKeyString: String?): String? {
         return try {
-
-            /////prepare key from base64String at SDK received from server
             val publicKey = KeyFactory.getInstance("RSA").generatePublic(X509EncodedKeySpec(Base64.decode(base64PublicKeyString, Base64.NO_WRAP)))
-
-            ///encryption at SDK end
             val rsaCipher = Cipher.getInstance("RSA")
             rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey)
             Base64.encodeToString(rsaCipher.doFinal(msg), Base64.NO_WRAP)
