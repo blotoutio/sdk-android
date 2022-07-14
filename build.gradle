@@ -69,8 +69,14 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
+}
+
+
+tasks.register("AndroidCI") { // 1
+    dependsOn(":blotoutapp:lint")  // 2 ==> CUSTOMIZE THIS LINE
+    group = "custom"      // 3
+    description = "\$./gradlew Android CI # runs on GitHub Action" //3
 }
 
 task clean(type: Delete) {
