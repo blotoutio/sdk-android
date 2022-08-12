@@ -18,8 +18,10 @@ import com.analytics.blotout.geasture.GestureListener
 import com.analytics.blotout.repository.EventRepository
 import com.analytics.blotout.repository.data.SharedPreferenceSecureVault
 import com.analytics.blotout.util.Constant
-import kotlinx.coroutines.*
-import java.lang.Exception
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
@@ -60,13 +62,15 @@ class AnalyticsActivityLifecycleCallbacks(
 
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        //Log.d(TAG, "onActivityCreated")
         try {
             if (!trackedApplicationLifecycleEvents!!.getAndSet(true)) {
                 numberOfActivities!!.set(0)
                 firstLaunch!!.set(true)
                 trackApplicationLifecycleEvents(activity)
-                trackDeepLink(activity)
+
             }
+            trackDeepLink(activity)
             activityReference = WeakReference(activity)
             val view = activity.window.decorView.rootView
             view.setOnTouchListener(this)
@@ -163,6 +167,7 @@ class AnalyticsActivityLifecycleCallbacks(
     }
 
     private fun trackDeepLink(activity: Activity) {
+        //Log.d(TAG,"Deep link Open")
         try {
             val intent = activity.intent
             if (intent == null || intent.data == null) {
@@ -177,6 +182,7 @@ class AnalyticsActivityLifecycleCallbacks(
                 }
             }
             properties["url"] = uri.toString()
+            //Log.d(TAG,""+properties)
             eventRepository.prepareSystemEvent(
                 activity,
                 Constant.BO_DEEP_LINK_OPENED,

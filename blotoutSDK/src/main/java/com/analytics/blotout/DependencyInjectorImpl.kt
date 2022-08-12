@@ -48,6 +48,7 @@ class DependencyInjectorImpl private constructor(
         ) :Boolean{
             try {
                 instance = DependencyInjectorImpl(application, secureStorageService, hostConfiguration, EventDatabase.invoke(application))
+                instance.earlyInit()
             }catch (e:Exception){
                 Log.d(TAG,e.localizedMessage!!)
                 return false
@@ -100,13 +101,20 @@ class DependencyInjectorImpl private constructor(
         return mSecureStorageService
     }
 
+    fun earlyInit(){
+        try {
+        sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
+        eventRepository = EventRepository(mSecureStorageService)
+        val activityLifeCycleCallback =
+            AnalyticsActivityLifecycleCallbacks(eventRepository, mSecureStorageService)
+        mApplication.registerActivityLifecycleCallbacks(activityLifeCycleCallback)}
+        catch (e:Throwable){
+                Log.d(TAG,e.localizedMessage!!)
+        }
+    }
+
     fun initialize(){
         try {
-            sessionID = DateTimeUtils().get13DigitNumberObjTimeStamp()
-            eventRepository = EventRepository(mSecureStorageService)
-            val activityLifeCycleCallback =
-                AnalyticsActivityLifecycleCallbacks(eventRepository, mSecureStorageService)
-            mApplication.registerActivityLifecycleCallbacks(activityLifeCycleCallback)
             eventRepository.prepareSystemEvent(
                 null,
                 Constant.BO_SDK_START,
